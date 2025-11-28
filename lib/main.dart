@@ -3,9 +3,17 @@ import 'package:flutterhackthema/base_ui.dart';
 import 'package:flutterhackthema/src/component_test_page.dart';
 import 'package:flutterhackthema/src/gourmet/gourmet_component_test_page.dart';
 import 'package:flutterhackthema/src/home_page.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+/// アプリケーションのエントリーポイント
+///
+/// Riverpodの[ProviderScope]でアプリ全体をラップして状態管理を有効化
 void main() {
-  runApp(const MainApp());
+  runApp(
+    const ProviderScope(
+      child: MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {

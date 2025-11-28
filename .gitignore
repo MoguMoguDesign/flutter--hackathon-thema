@@ -43,3 +43,22 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Android Gradle and IDE files
+/android/.gradle/
+/android/.idea/
+android/local.properties
+
+# Firebase
+firebase-debug.log
+firebase-debug.*.log
+.firebase/
+
+# Serena MCP server cache
+.serena/cache/
+
+# MCP Configuration (environment-specific)
+.mcp.json
+
+# FVM Version Manager
+.fvm/flutter_sdk
