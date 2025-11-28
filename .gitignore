@@ -57,5 +57,8 @@ firebase-debug.*.log
 # Serena MCP server cache
 .serena/cache/
 
+# MCP Configuration (environment-specific)
+.mcp.json
+
 # FVM Version Manager
 .fvm/flutter_sdk

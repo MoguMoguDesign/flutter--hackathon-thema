@@ -35,7 +35,14 @@ fvm flutter pub get
 
 # Initial code generation
 fvm flutter pub run build_runner build --delete-conflicting-outputs
+
+# MCP Configuration (if using Claude Code with Serena)
+# Copy template and edit with your absolute project path
+cp .mcp.json.example .mcp.json
+# Then edit .mcp.json to set your project path
 ```
+
+**Note**: `.mcp.json` is environment-specific and excluded from Git. Each developer must configure their own copy.
 
 ### Development Workflow
 

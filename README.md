@@ -147,7 +147,19 @@ fvm flutter pub get
 fvm flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
-#### 5. アプリを起動
+#### 5. MCP設定（オプション - Claude Code使用時）
+
+```bash
+# .mcp.json.example をコピーして .mcp.json を作成
+cp .mcp.json.example .mcp.json
+
+# エディタで .mcp.json を開き、プロジェクトの絶対パスを設定
+# 例: "/Users/yourname/path/to/flutter--hackathon-thema"
+```
+
+**注意**: `.mcp.json` は個人の環境設定ファイルのため、Gitで管理されません。
+
+#### 6. アプリを起動
 
 ```bash
 fvm flutter run
