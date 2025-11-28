@@ -466,14 +466,6 @@ fvm install
 fvm use
 ```
 
-## 👥 開発チーム
-
-- プロジェクトリード: @ookuboitsuki
-- アーキテクト: Claude Code
-- 開発者: コントリビューター
-
----
-
 ## 🔗 リンク
 
 - **GitHub リポジトリ**: [flutter--hackathon-thema](https://github.com/yourusername/flutter--hackathon-thema)
