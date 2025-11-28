@@ -44,6 +44,16 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Android Gradle and IDE files
+/android/.gradle/
+/android/.idea/
+android/local.properties
+
+# Firebase
+firebase-debug.log
+firebase-debug.*.log
+.firebase/
+
 # Serena MCP server cache
 .serena/cache/
 
