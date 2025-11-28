@@ -276,11 +276,87 @@ git commit -m "refactor(shared): ボタンコンポーネントを改善"
 
 ### 開発ワークフロー
 
-1. **ブランチ作成**: 適切なブランチ名を使用（`feature/`, `fix/`, `refactor/`）
-2. **開発**: コーディング規約とアーキテクチャガイドラインに従う
-3. **品質チェック**: `fvm flutter analyze` と `fvm flutter test` をパス
-4. **コミット**: Angular スタイルのコミットメッセージを使用
-5. **プルリクエスト**: PR テンプレートに従って記載
+本プロジェクトでは、体系的な4フェーズ開発ワークフローを採用しています。
+
+#### 📋 INVESTIGATE フェーズ（要求理解）
+
+```bash
+# .claude/commands/investigate.md を使用
+# 目的: 要求の背景・制約・実装方向を理解
+```
+
+**実施内容**:
+- 要求の背景と目的の明確化
+- 既存コードの調査と分析
+- 三層アーキテクチャへの適合性確認
+- 技術スタックとの整合性検証
+- `feature/<topic>` ブランチの作成
+
+**成果物**: `docs/investigate/investigate_{TIMESTAMP}.md`
+
+#### 🎯 PLAN フェーズ（実装戦略計画）
+
+```bash
+# .claude/commands/plan.md を使用
+# 目的: 実装戦略の決定とタスク分解
+```
+
+**実施内容**:
+- INVESTIGATE フェーズの結果に基づく実装戦略の策定
+- 詳細なタスク分解と優先順位設定
+- ファイル変更計画（新規作成・修正・削除）
+- テスト戦略の確立（ユニット・ウィジェット・統合）
+- リスク分析と対策の検討
+
+**成果物**: `docs/plan/plan_{TIMESTAMP}.md`
+
+#### ⚙️ IMPLEMENT フェーズ（コード実装）
+
+```bash
+# .claude/commands/implement.md を使用
+# 目的: 計画に基づく高品質なコード実装
+```
+
+**実施内容**:
+- PLAN フェーズで策定した計画に基づく実装
+- アーキテクチャガイドラインの厳守
+- テストの作成と実行
+- 必須コマンドの実行:
+  - `fvm flutter pub run build_runner build --delete-conflicting-outputs`
+  - `fvm flutter analyze`
+  - `dart format --set-exit-if-changed .`
+  - `fvm flutter test`
+- Angular スタイルのコミット作成
+- Draft PR の作成・更新
+
+**成果物**: `docs/implement/implement_{TIMESTAMP}.md`, Draft PR
+
+#### ✅ TEST フェーズ（品質検証）
+
+```bash
+# .claude/commands/test.md を使用
+# 目的: 実装品質の包括的検証
+```
+
+**実施内容**:
+- 実装済みコードの包括的テスト実行
+- ユニットテスト（必須）
+- ウィジェットテスト（必須）
+- 統合テスト（オプション）
+- テストカバレッジの確認
+- 静的解析とコードフォーマットの検証
+
+**成果物**: `docs/test/test_{TIMESTAMP}.md`
+
+#### ワークフロー図
+
+```
+INVESTIGATE → PLAN → IMPLEMENT → TEST
+   ↓            ↓         ↓         ↓
+[調査結果]   [計画書]  [実装+PR]  [検証結果]
+                 ↑         ↑         ↓
+                 └─────────┴────[修正必要時]
+```
 
 詳細なガイドラインは [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) と [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md) を参照してください。
 
@@ -423,6 +499,7 @@ fvm use
 - ✅ Serenaオンボーディング情報を7つのカテゴリに再構築
 - ✅ ドキュメント構成を整理（CONTRIBUTING.md削除）
 - ✅ README.mdを最新の技術スタックに合わせて更新
+- ✅ 4フェーズ開発ワークフロー導入（INVESTIGATE → PLAN → IMPLEMENT → TEST）
 
 ---
 
