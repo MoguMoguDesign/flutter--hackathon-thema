@@ -1,0 +1,59 @@
+# Serena project configuration for Flutter Hackathon Theme project
+
+# Programming language used in the project
+language: Dart
+
+# Whether to ignore all files listed in .gitignore
+ignore_all_files_in_gitignore: true
+
+# Additional paths to ignore (build artifacts, cache, etc.)
+ignored_paths:
+  - build/
+  - .dart_tool/
+  - .flutter-plugins
+  - .flutter-plugins-dependencies
+  - .packages
+  - .pub-cache/
+  - .pub/
+  - ios/Pods/
+  - ios/.symlinks/
+  - android/.gradle/
+  - android/app/build/
+  - linux/flutter/ephemeral/
+  - macos/Flutter/ephemeral/
+  - windows/flutter/ephemeral/
+  - .serena/cache/
+
+# Lock editing capabilities when true
+read_only: false
+
+# List of disabled tools (empty to enable all)
+excluded_tools: []
+
+# Project-specific instructions for Claude Code
+initial_prompt: |
+  This is a Flutter project for a hackathon theme.
+
+  Tech Stack:
+  - Flutter SDK 3.9.2+
+  - Dart language
+  - Material Design
+  - Key packages: google_fonts, flutter_svg, flutter_hooks, gap, async
+
+  Development Guidelines:
+  - Follow Flutter best practices and conventions
+  - Use flutter_hooks for state management
+  - Maintain consistent code style per analysis_options.yaml
+  - Test changes before committing
+  - Run `flutter analyze` to check for issues
+  - Run `flutter test` to verify functionality
+
+  Common Commands:
+  - flutter run: Start the app in development mode
+  - flutter build: Build the app for production
+  - flutter analyze: Static analysis
+  - flutter test: Run tests
+  - flutter pub get: Install dependencies
+
+# Project identifier
+project_name: flutter-hackathon-thema
