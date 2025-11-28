@@ -466,37 +466,6 @@ fvm install
 fvm use
 ```
 
----
-
-## 🤝 コントリビューション
-
-コントリビューションを歓迎します！
-
-### 基本的な流れ
-
-1. このリポジトリをフォーク
-2. Feature ブランチを作成（`git checkout -b feature/amazing-feature`）
-3. 変更をコミット（`git commit -m 'feat: Add amazing feature'`）
-4. ブランチにプッシュ（`git push origin feature/amazing-feature`）
-5. プルリクエストを作成
-
-### 開発時の注意点
-
-- **アーキテクチャ**: 三層アーキテクチャ（App → Feature → Shared）を厳守
-- **コーディング規約**: [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md) に従う
-- **コミットメッセージ**: Angular スタイルを使用
-- **品質チェック**: `fvm flutter analyze` と `fvm flutter test` を必ず実行
-
-詳細なガイドラインは上記ドキュメントを参照してください。
-
----
-
-## 📄 ライセンス
-
-このプロジェクトはプライベートプロジェクトです。
-
----
-
 ## 👥 開発チーム
 
 - プロジェクトリード: @ookuboitsuki
