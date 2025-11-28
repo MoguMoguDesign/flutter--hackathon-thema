@@ -12,7 +12,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// ```
 Widget createTestApp({
   required Widget child,
-  List<Override> overrides = const [],
+  dynamic overrides = const [],
 }) {
   return ProviderScope(
     overrides: overrides,
@@ -30,7 +30,7 @@ Widget createTestApp({
 /// final value = container.read(myProvider);
 /// ```
 ProviderContainer createContainer({
-  List<Override> overrides = const [],
+  dynamic overrides = const [],
 }) {
   return ProviderContainer(overrides: overrides);
 }
