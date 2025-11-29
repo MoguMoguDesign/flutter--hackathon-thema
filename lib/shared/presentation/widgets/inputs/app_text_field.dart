@@ -105,7 +105,6 @@ class AppTextField extends StatelessWidget {
                 borderRadius: BorderRadius.circular(borderRadius),
                 borderSide: const BorderSide(color: Colors.black, width: 3.0),
               ),
-              counterText: '',
             ),
           ),
         ),
