@@ -41,11 +41,15 @@ class AppProgressBar extends StatelessWidget {
             ? LinearProgressIndicator(
                 value: progress,
                 backgroundColor: Colors.grey.shade300,
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.black),
+                valueColor: const AlwaysStoppedAnimation<Color>(
+                  Color(0xFFE53935),
+                ),
               )
             : LinearProgressIndicator(
                 backgroundColor: Colors.grey.shade300,
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.black),
+                valueColor: const AlwaysStoppedAnimation<Color>(
+                  Color(0xFFE53935),
+                ),
               ),
       ),
     );

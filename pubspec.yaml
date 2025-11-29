@@ -74,3 +74,4 @@ flutter:
   # 画像などのアセットファイル
   assets:
     - assets/images/
+    - assets/animations/

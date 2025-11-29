@@ -154,22 +154,40 @@ class GeneratingPage extends HookConsumerWidget {
                     ),
                   ],
                   const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Container(
-                      width: double.infinity,
-                      height: 280,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Center(
-                        child: isError
-                            ? _ErrorContent(onRetry: handleRetry)
-                            : const _PulsingAnimation(),
+                  if (!isError)
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 224,
+                          height: 280,
+                          child: Image.asset(
+                            'assets/animations/loading.gif',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'AIが描いています...',
+                          style: TextStyle(fontSize: 14, color: Colors.white70),
+                        ),
+                      ],
+                    ),
+                  if (isError)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Container(
+                        width: double.infinity,
+                        height: 280,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Center(
+                          child: _ErrorContent(onRetry: handleRetry),
+                        ),
                       ),
                     ),
-                  ),
                   const Spacer(),
                   if (!isError)
                     Padding(
@@ -213,43 +231,6 @@ class _ErrorContent extends StatelessWidget {
           style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
         ),
       ],
-    );
-  }
-}
-
-/// ローディングアニメーション
-class _PulsingAnimation extends HookWidget {
-  const _PulsingAnimation();
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = useAnimationController(
-      duration: const Duration(milliseconds: 1500),
-    );
-
-    useEffect(() {
-      controller.repeat(reverse: true);
-      return null;
-    }, [controller]);
-
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Opacity(
-          opacity: 0.3 + (controller.value * 0.7),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.brush, size: 48, color: Colors.grey.shade500),
-              const SizedBox(height: 12),
-              Text(
-                'AIが描いています...',
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
