@@ -55,7 +55,7 @@ jobs:
           working-directory: ./build/web
           vercel-args: '--prod'
         if: success() && github.event_name == 'push'
-      
+
       - name: Comment deployment URL
         uses: actions/github-script@v7
         if: success() && github.event_name == 'push'

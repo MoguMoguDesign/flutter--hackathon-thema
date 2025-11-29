@@ -85,27 +85,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup FVM
         uses: kuhnroyal/flutter-fvm-config-action@v2
         id: fvm-config-action
-      
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
           channel: ${{ steps.fvm-config-action.outputs.FLUTTER_CHANNEL }}
           cache: true
-      
+
       - name: Get dependencies
         run: flutter pub get
-      
+
       - name: Generate code
         run: flutter pub run build_runner build --delete-conflicting-outputs
-      
+
       - name: Build Web
         run: flutter build web --release --web-renderer canvaskit
-      
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
