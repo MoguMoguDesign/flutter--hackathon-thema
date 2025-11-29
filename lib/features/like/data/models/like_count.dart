@@ -8,7 +8,7 @@ part 'like_count.g.dart';
 /// 俳句ごとのいいね数をキャッシュするために使用します。
 /// パフォーマンス向上のため、頻繁に参照されるいいね数を事前に集計して保持します。
 @freezed
-class LikeCount with _$LikeCount {
+sealed class LikeCount with _$LikeCount {
   const factory LikeCount({
     /// 俳句ID
     required String haikuId,

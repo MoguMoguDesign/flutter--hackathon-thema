@@ -16,12 +16,8 @@ T _$identity<T>(T value) => value;
 mixin _$LikeCount {
 
 /// 俳句ID
- String get haikuId;
-
-/// いいね総数
- int get count;
-
-/// 最終更新日時
+ String get haikuId;/// いいね総数
+ int get count;/// 最終更新日時
  DateTime get updatedAt;
 /// Create a copy of LikeCount
 /// with the given fields replaced by the non-null parameter values.
@@ -124,10 +120,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _LikeCount():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -186,10 +179,7 @@ return $default(_that.haikuId,_that.count,_that.updatedAt);case _:
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String haikuId,  int count,  DateTime updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _LikeCount():
-return $default(_that.haikuId,_that.count,_that.updatedAt);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.haikuId,_that.count,_that.updatedAt);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

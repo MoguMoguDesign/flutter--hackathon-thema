@@ -8,7 +8,7 @@ part 'user.g.dart';
 /// 匿名ログインで使用するユーザー情報。
 /// ニックネームのみで登録可能で、ユーザーIDは自動生成されます。
 @freezed
-class User with _$User {
+sealed class User with _$User {
   const factory User({
     /// ユーザーID（UUIDで自動生成）
     required String id,

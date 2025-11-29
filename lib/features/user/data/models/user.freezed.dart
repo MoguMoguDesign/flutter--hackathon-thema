@@ -16,21 +16,11 @@ T _$identity<T>(T value) => value;
 mixin _$User {
 
 /// ユーザーID（UUIDで自動生成）
- String get id;
-
-/// ニックネーム（ユーザーが入力）
- String get nickname;
-
-/// 作成日時
- DateTime get createdAt;
-
-/// 最終更新日時
- DateTime get updatedAt;
-
-/// プロフィール画像URL（オプション）
- String? get profileImageUrl;
-
-/// 自己紹介（オプション）
+ String get id;/// ニックネーム（ユーザーが入力）
+ String get nickname;/// 作成日時
+ DateTime get createdAt;/// 最終更新日時
+ DateTime get updatedAt;/// プロフィール画像URL（オプション）
+ String? get profileImageUrl;/// 自己紹介（オプション）
  String? get bio;
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
@@ -136,10 +126,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _User():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -198,10 +185,7 @@ return $default(_that.id,_that.nickname,_that.createdAt,_that.updatedAt,_that.pr
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String nickname,  DateTime createdAt,  DateTime updatedAt,  String? profileImageUrl,  String? bio)  $default,) {final _that = this;
 switch (_that) {
 case _User():
-return $default(_that.id,_that.nickname,_that.createdAt,_that.updatedAt,_that.profileImageUrl,_that.bio);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.id,_that.nickname,_that.createdAt,_that.updatedAt,_that.profileImageUrl,_that.bio);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

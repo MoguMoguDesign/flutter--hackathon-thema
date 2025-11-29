@@ -8,7 +8,7 @@ part 'haiku.g.dart';
 /// 俳句の文字と画像を含む投稿データ。
 /// いいね関連のフィールドは含まず、シンプルな投稿データのみを保持します。
 @freezed
-class Haiku with _$Haiku {
+sealed class Haiku with _$Haiku {
   const factory Haiku({
     /// 俳句ID（UUIDで自動生成）
     required String id,

@@ -16,39 +16,17 @@ T _$identity<T>(T value) => value;
 mixin _$Haiku {
 
 /// 俳句ID（UUIDで自動生成）
- String get id;
-
-/// 投稿者のユーザーID
- String get userId;
-
-/// 投稿者のニックネーム（キャッシュ用）
- String get authorNickname;
-
-/// 俳句の文字（完全な文章）
- String get text;
-
-/// 上の句（5文字）
- String get firstLine;
-
-/// 中の句（7文字）
- String get secondLine;
-
-/// 下の句（5文字）
- String get thirdLine;
-
-/// 俳句の画像URL
- String get imageUrl;
-
-/// 作成日時
- DateTime get createdAt;
-
-/// 最終更新日時
- DateTime get updatedAt;
-
-/// タグ（オプション）
- List<String> get tags;
-
-/// 季語（オプション）
+ String get id;/// 投稿者のユーザーID
+ String get userId;/// 投稿者のニックネーム（キャッシュ用）
+ String get authorNickname;/// 俳句の文字（完全な文章）
+ String get text;/// 上の句（5文字）
+ String get firstLine;/// 中の句（7文字）
+ String get secondLine;/// 下の句（5文字）
+ String get thirdLine;/// 俳句の画像URL
+ String get imageUrl;/// 作成日時
+ DateTime get createdAt;/// 最終更新日時
+ DateTime get updatedAt;/// タグ（オプション）
+ List<String> get tags;/// 季語（オプション）
  String? get seasonWord;
 /// Create a copy of Haiku
 /// with the given fields replaced by the non-null parameter values.
@@ -160,10 +138,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _Haiku():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -222,10 +197,7 @@ return $default(_that.id,_that.userId,_that.authorNickname,_that.text,_that.firs
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String userId,  String authorNickname,  String text,  String firstLine,  String secondLine,  String thirdLine,  String imageUrl,  DateTime createdAt,  DateTime updatedAt,  List<String> tags,  String? seasonWord)  $default,) {final _that = this;
 switch (_that) {
 case _Haiku():
-return $default(_that.id,_that.userId,_that.authorNickname,_that.text,_that.firstLine,_that.secondLine,_that.thirdLine,_that.imageUrl,_that.createdAt,_that.updatedAt,_that.tags,_that.seasonWord);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.id,_that.userId,_that.authorNickname,_that.text,_that.firstLine,_that.secondLine,_that.thirdLine,_that.imageUrl,_that.createdAt,_that.updatedAt,_that.tags,_that.seasonWord);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

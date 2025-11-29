@@ -16,15 +16,9 @@ T _$identity<T>(T value) => value;
 mixin _$Like {
 
 /// いいねID（UUIDで自動生成）
- String get id;
-
-/// いいねしたユーザーのID
- String get userId;
-
-/// いいねされた俳句のID
- String get haikuId;
-
-/// いいねした日時
+ String get id;/// いいねしたユーザーのID
+ String get userId;/// いいねされた俳句のID
+ String get haikuId;/// いいねした日時
  DateTime get createdAt;
 /// Create a copy of Like
 /// with the given fields replaced by the non-null parameter values.
@@ -128,10 +122,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _Like():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -190,10 +181,7 @@ return $default(_that.id,_that.userId,_that.haikuId,_that.createdAt);case _:
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String userId,  String haikuId,  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Like():
-return $default(_that.id,_that.userId,_that.haikuId,_that.createdAt);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.id,_that.userId,_that.haikuId,_that.createdAt);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

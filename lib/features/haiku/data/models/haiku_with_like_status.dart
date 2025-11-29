@@ -8,7 +8,7 @@ part 'haiku_with_like_status.freezed.dart';
 /// いいね機能が有効な場合のみ使用します。
 /// いいね機能が無効な場合は、Haikuエンティティを直接使用してください。
 @freezed
-class HaikuWithLikeStatus with _$HaikuWithLikeStatus {
+sealed class HaikuWithLikeStatus with _$HaikuWithLikeStatus {
   const factory HaikuWithLikeStatus({
     /// 俳句本体
     required Haiku haiku,
