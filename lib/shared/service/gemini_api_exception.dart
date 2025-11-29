@@ -63,3 +63,16 @@ final class InvalidResponseException extends GeminiApiException {
   /// 不正なレスポンス形式エラーを作成する
   const InvalidResponseException([super.message = 'Invalid response format']);
 }
+
+/// API キー未設定エラー
+///
+/// GEMINI_API_KEY 環境変数が設定されていない場合に発生する。
+/// ビルド時に --dart-define=GEMINI_API_KEY=xxx を指定する必要がある。
+final class ApiKeyMissingException extends GeminiApiException {
+  /// API キー未設定エラーを作成する
+  const ApiKeyMissingException([
+    super.message =
+        'GEMINI_API_KEY is not configured. '
+        'Please set the environment variable using --dart-define.',
+  ]);
+}

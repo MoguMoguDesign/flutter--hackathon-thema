@@ -65,6 +65,7 @@ class GeminiService {
   /// Returns: 生成された画像のbase64データとMIMEタイプ
   ///
   /// Throws:
+  /// - [ApiKeyMissingException] API キーが設定されていない場合
   /// - [NetworkException] ネットワークエラー発生時
   /// - [TimeoutException] タイムアウト発生時（60秒）
   /// - [ApiErrorException] API がエラーを返した場合
@@ -73,6 +74,9 @@ class GeminiService {
     required String prompt,
     String aspectRatio = '4:5',
   }) async {
+    // API キーの設定を確認
+    _validateApiKey();
+
     // 元のAPI URL
     final apiUrl =
         '${ApiConfig.geminiBaseUrl}/models/${ApiConfig.geminiImageModel}:'
@@ -189,6 +193,15 @@ class GeminiService {
   /// リソースを解放する
   void dispose() {
     _httpClient.close();
+  }
+
+  /// API キーの設定を確認する
+  ///
+  /// API キーが設定されていない場合は [ApiKeyMissingException] をスローする。
+  void _validateApiKey() {
+    if (!ApiConfig.hasGeminiApiKey) {
+      throw const ApiKeyMissingException();
+    }
   }
 }
 
