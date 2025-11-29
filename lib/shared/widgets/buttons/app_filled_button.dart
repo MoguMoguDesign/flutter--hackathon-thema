@@ -114,7 +114,7 @@ class AppFilledButton extends StatelessWidget {
           ),
         ).copyWith(
           overlayColor: WidgetStateProperty.all(
-            const Color(0xFF2C0305).withOpacity(0.2),
+            const Color(0xFF2C0305).withValues(alpha: 0.2),
           ),
         );
 
@@ -123,7 +123,7 @@ class AppFilledButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(height / 2),
         boxShadow: [
           BoxShadow(
-            color: bgColor.withOpacity(0.3),
+            color: bgColor.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

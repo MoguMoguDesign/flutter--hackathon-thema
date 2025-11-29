@@ -118,7 +118,7 @@ class AppOutlinedButton extends StatelessWidget {
           ),
         ).copyWith(
           overlayColor: WidgetStateProperty.all(
-            const Color(0xFF2C0305).withOpacity(0.2),
+            const Color(0xFF2C0305).withValues(alpha: 0.2),
           ),
         );
 
@@ -127,7 +127,7 @@ class AppOutlinedButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(height / 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
