@@ -6,4 +6,3 @@ library;
 export 'src/constants/app_colors.dart';
 export 'src/constants/app_gradients.dart';
 export 'src/constants/app_text_styles.dart';
-export 'src/widgets/_export.dart';

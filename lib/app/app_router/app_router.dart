@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutterhackthema/src/component_test_page.dart';
-import 'package:flutterhackthema/src/gourmet/gourmet_component_test_page.dart';
-import 'package:flutterhackthema/src/home_page.dart';
 import 'package:go_router/go_router.dart';
 
 /// アプリケーション全体のルーティング設定
@@ -24,17 +21,7 @@ class AppRouter {
         GoRoute(
           path: '/',
           name: 'home',
-          builder: (context, state) => const HomePage(),
-        ),
-        GoRoute(
-          path: '/tcg-components',
-          name: 'tcg-components',
-          builder: (context, state) => const ComponentTestPage(),
-        ),
-        GoRoute(
-          path: '/gourmet-components',
-          name: 'gourmet-components',
-          builder: (context, state) => const GourmetComponentTestPage(),
+          builder: (context, state) => const Scaffold(),
         ),
       ],
       // エラー時のフォールバック画面
