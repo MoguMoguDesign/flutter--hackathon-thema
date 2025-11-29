@@ -56,7 +56,12 @@ class ClaudeRulesChecker:
 
         for marker in required_markers:
             if marker not in content:
-                self.errors.append(f"{file_path}: Missing required header marker: '{marker}'")
+                # On feature branches, make header compliance a warning instead of error
+                # to allow gradual adoption of the header system
+                if self.is_feature_branch:
+                    self.warnings.append(f"{file_path}: Missing required header marker: '{marker}'")
+                else:
+                    self.errors.append(f"{file_path}: Missing required header marker: '{marker}'")
                 return False
 
         return True
