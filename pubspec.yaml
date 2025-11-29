@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: '>=3.9.0 <4.0.0'
+  sdk: '>=3.8.0 <4.0.0'
   flutter: '>=3.24.0'
 
 dependencies:
@@ -34,6 +34,9 @@ dependencies:
   logger: ^2.6.2
   uuid: ^4.5.2
 
+  # Storage
+  shared_preferences: ^2.3.4
+
 dev_dependencies:
   # Testing
   flutter_test:
@@ -47,7 +50,7 @@ dev_dependencies:
   go_router_builder: ^4.1.0
 
   # Linting
-  very_good_analysis: ^10.0.0
+  very_good_analysis: ^9.0.0
   riverpod_lint: ^3.0.3
   custom_lint: ^0.8.0
 
