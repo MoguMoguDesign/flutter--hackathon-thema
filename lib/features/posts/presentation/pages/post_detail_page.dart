@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
+import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/presentation/widgets/navigation/app_header.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 import '../../data/models/post.dart';
 
 /// 投稿詳細画面。
-///
-/// 俳句×画像の詳細を表示し、SNSシェア機能を提供する。
-/// ワイヤーフレーム: `詳細ページ.png`
 class PostDetailPage extends StatelessWidget {
-  /// 投稿詳細画面を作成する。
-  ///
-  /// [postId] は表示する投稿のID。
   const PostDetailPage({required this.postId, super.key});
 
-  /// 表示する投稿のID
   final String postId;
 
   @override
   Widget build(BuildContext context) {
-    // モックデータから投稿を取得
     final posts = Post.mockPosts();
     final post = posts.firstWhere(
       (p) => p.id == postId,
@@ -27,11 +20,10 @@ class PostDetailPage extends StatelessWidget {
     );
 
     void handleBack() {
-      context.go('/posts');
+      const PostsRoute().go(context);
     }
 
     void handleShareToX() {
-      // モック: X（Twitter）シェア
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Xでシェアする機能は準備中です'),
@@ -41,7 +33,6 @@ class PostDetailPage extends StatelessWidget {
     }
 
     void handleShareToInstagram() {
-      // モック: Instagramシェア
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Instagramでシェアする機能は準備中です'),
@@ -55,15 +46,12 @@ class PostDetailPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ヘッダー
             const AppHeader(serviceName: 'サービス名'),
-            // 戻るボタン
             Align(
               alignment: Alignment.centerLeft,
               child: AppBackButton(onPressed: handleBack),
             ),
             const SizedBox(height: 16),
-            // 画像
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ClipRRect(
@@ -106,18 +94,15 @@ class PostDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            // 作者名といいね
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // 作者名
                   Text(
                     '${post.nickname} 作',
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
-                  // いいね
                   Row(
                     children: [
                       Icon(
@@ -139,17 +124,15 @@ class PostDetailPage extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            // Xでポストするボタン
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: _SnsShareButton(
-                icon: Icons.close, // X（旧Twitter）のアイコン代替
+                icon: Icons.close,
                 label: 'Xでポストする',
                 onPressed: handleShareToX,
               ),
             ),
             const SizedBox(height: 12),
-            // Instagramに投稿するボタン
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: _SnsShareButton(
@@ -166,7 +149,6 @@ class PostDetailPage extends StatelessWidget {
   }
 }
 
-/// SNSシェアボタンコンポーネント。
 class _SnsShareButton extends StatelessWidget {
   const _SnsShareButton({
     required this.icon,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
+import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/presentation/widgets/buttons/primary_button.dart';
 import '../../../../shared/presentation/widgets/buttons/secondary_button.dart';
 import '../../../../shared/presentation/widgets/dialogs/confirm_dialog.dart';
@@ -7,16 +8,7 @@ import '../../../../shared/presentation/widgets/navigation/app_header.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 
 /// プレビュー・投稿確認画面。
-///
-/// 生成された画像をプレビューし、投稿または再生成を選択する。
-/// ワイヤーフレーム: `プレビュー 投稿する.png`
 class PreviewPage extends StatelessWidget {
-  /// プレビュー画面を作成する。
-  ///
-  /// [firstLine] は上の句。
-  /// [secondLine] は中の句。
-  /// [thirdLine] は下の句。
-  /// [imageUrl] は生成された画像のURL。
   const PreviewPage({
     required this.firstLine,
     required this.secondLine,
@@ -25,16 +17,9 @@ class PreviewPage extends StatelessWidget {
     super.key,
   });
 
-  /// 上の句
   final String firstLine;
-
-  /// 中の句
   final String secondLine;
-
-  /// 下の句
   final String thirdLine;
-
-  /// 生成された画像のURL
   final String imageUrl;
 
   @override
@@ -48,29 +33,23 @@ class PreviewPage extends StatelessWidget {
         cancelText: '編集を続ける',
       );
       if (shouldLeave && context.mounted) {
-        context.go('/posts');
+        const PostsRoute().go(context);
       }
     }
 
     void handleRegenerate() {
-      // 再生成: 生成中画面に戻る
-      context.go(
-        '/create/generating',
-        extra: {
-          'firstLine': firstLine,
-          'secondLine': secondLine,
-          'thirdLine': thirdLine,
-        },
-      );
+      GeneratingRoute(
+        firstLine: firstLine,
+        secondLine: secondLine,
+        thirdLine: thirdLine,
+      ).go(context);
     }
 
     void handlePost() {
-      // モック: 投稿完了として投稿一覧に戻る
-      // 実際の実装ではFirestoreに保存する
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('投稿しました！'), backgroundColor: Colors.black),
       );
-      context.go('/posts');
+      const PostsRoute().go(context);
     }
 
     return Scaffold(
@@ -78,15 +57,12 @@ class PreviewPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ヘッダー
             const AppHeader(serviceName: 'サービス名'),
-            // 戻るボタン
             Align(
               alignment: Alignment.centerLeft,
               child: AppBackButton(onPressed: handleBack),
             ),
             const SizedBox(height: 16),
-            // 画像プレビュー
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -139,7 +115,6 @@ class PreviewPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            // 再生成ボタン
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: SecondaryButton(
@@ -149,7 +124,6 @@ class PreviewPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            // 投稿ボタン
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: PrimaryButton(text: 'Mya句に投稿する', onPressed: handlePost),

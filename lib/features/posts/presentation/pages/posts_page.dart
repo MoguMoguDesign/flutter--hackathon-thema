@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
+import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/presentation/widgets/buttons/fab_button.dart';
 import '../../../../shared/presentation/widgets/navigation/app_header.dart';
 import '../../data/models/post.dart';
 import '../widgets/post_card.dart';
 
 /// みんなの投稿一覧画面。
-///
-/// 全ユーザーの俳句×画像投稿をStaggered Gridで表示する。
-/// ワイヤーフレーム: `みんなの投稿.png`
 class PostsPage extends StatelessWidget {
-  /// 投稿一覧画面を作成する。
   const PostsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // モックデータを使用
     final posts = Post.mockPosts();
 
     return Scaffold(
@@ -24,9 +20,7 @@ class PostsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ヘッダー
             const AppHeader(serviceName: 'サービス名'),
-            // 装飾画像エリア
             Padding(
               padding: const EdgeInsets.all(16),
               child: Center(
@@ -50,14 +44,13 @@ class PostsPage extends StatelessWidget {
                 ),
               ),
             ),
-            // Staggered Grid
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: _StaggeredGridView(
                   posts: posts,
                   onPostTap: (post) {
-                    context.go('/posts/${post.id}');
+                    PostDetailRoute(postId: post.id).go(context);
                   },
                 ),
               ),
@@ -67,17 +60,13 @@ class PostsPage extends StatelessWidget {
       ),
       floatingActionButton: FabButton(
         onPressed: () {
-          context.go('/create');
+          const CreateRoute().go(context);
         },
       ),
     );
   }
 }
 
-/// シンプルなStaggered Grid実装。
-///
-/// flutter_staggered_grid_viewパッケージを使わずに
-/// シンプルな2カラムグリッドで実装。
 class _StaggeredGridView extends StatelessWidget {
   const _StaggeredGridView({required this.posts, required this.onPostTap});
 
@@ -86,7 +75,6 @@ class _StaggeredGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 2カラムに分割
     final leftColumn = <Post>[];
     final rightColumn = <Post>[];
 
@@ -117,7 +105,6 @@ class _StaggeredGridView extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                // 右列は少し下にオフセット（Pinterest風）
                 const SizedBox(height: 40),
                 ...rightColumn.map(
                   (post) => Padding(

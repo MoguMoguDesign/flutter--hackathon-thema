@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
+
+import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/presentation/widgets/buttons/primary_button.dart';
 import '../../../../shared/presentation/widgets/dialogs/confirm_dialog.dart';
 import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
@@ -47,7 +48,7 @@ class HaikuInputPage extends HookWidget {
         cancelText: '編集を続ける',
       );
       if (shouldLeave && context.mounted) {
-        context.go('/posts');
+        const PostsRoute().go(context);
       }
     }
 
@@ -72,14 +73,11 @@ class HaikuInputPage extends HookWidget {
         isValid.value = false;
       } else {
         // 3ステップ完了、生成画面へ遷移
-        context.go(
-          '/create/generating',
-          extra: {
-            'firstLine': firstLine.value,
-            'secondLine': secondLine.value,
-            'thirdLine': thirdLine.value,
-          },
-        );
+        GeneratingRoute(
+          firstLine: firstLine.value,
+          secondLine: secondLine.value,
+          thirdLine: thirdLine.value,
+        ).go(context);
       }
     }
 

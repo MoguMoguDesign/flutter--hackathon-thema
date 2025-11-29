@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
+
+import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/presentation/widgets/dialogs/confirm_dialog.dart';
 import '../../../../shared/presentation/widgets/feedback/progress_bar.dart';
 import '../../../../shared/presentation/widgets/navigation/app_header.dart';
@@ -12,10 +13,6 @@ import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 /// ワイヤーフレーム: `生成中....png`
 class GeneratingPage extends HookWidget {
   /// 生成中画面を作成する。
-  ///
-  /// [firstLine] は上の句。
-  /// [secondLine] は中の句。
-  /// [thirdLine] は下の句。
   const GeneratingPage({
     required this.firstLine,
     required this.secondLine,
@@ -23,20 +20,14 @@ class GeneratingPage extends HookWidget {
     super.key,
   });
 
-  /// 上の句
   final String firstLine;
-
-  /// 中の句
   final String secondLine;
-
-  /// 下の句
   final String thirdLine;
 
   @override
   Widget build(BuildContext context) {
     final progress = useState(0.0);
 
-    // モック: 3秒で生成完了をシミュレート
     useEffect(() {
       Future<void> simulateGeneration() async {
         for (var i = 0; i <= 100; i += 5) {
@@ -45,18 +36,13 @@ class GeneratingPage extends HookWidget {
             progress.value = i / 100;
           }
         }
-        // 生成完了後、プレビュー画面へ遷移
         if (context.mounted) {
-          context.go(
-            '/create/preview',
-            extra: {
-              'firstLine': firstLine,
-              'secondLine': secondLine,
-              'thirdLine': thirdLine,
-              // モック画像URL
-              'imageUrl': 'https://picsum.photos/seed/haiku/400/500',
-            },
-          );
+          PreviewRoute(
+            firstLine: firstLine,
+            secondLine: secondLine,
+            thirdLine: thirdLine,
+            imageUrl: 'https://picsum.photos/seed/haiku/400/500',
+          ).go(context);
         }
       }
 
@@ -73,7 +59,7 @@ class GeneratingPage extends HookWidget {
         cancelText: '生成を続ける',
       );
       if (shouldLeave && context.mounted) {
-        context.go('/posts');
+        const PostsRoute().go(context);
       }
     }
 
@@ -82,25 +68,17 @@ class GeneratingPage extends HookWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ヘッダー
             const AppHeader(serviceName: 'サービス名'),
-            // 戻るボタン
             Align(
               alignment: Alignment.centerLeft,
               child: AppBackButton(onPressed: handleBack),
             ),
             const Spacer(),
-            // 生成中テキスト
             const Text(
               '挿絵を生成中...',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 24),
-            // 待機中アニメーションエリア
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Container(
@@ -114,7 +92,6 @@ class GeneratingPage extends HookWidget {
               ),
             ),
             const Spacer(),
-            // プログレスバー
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: AppProgressBar(progress: progress.value),
@@ -127,7 +104,6 @@ class GeneratingPage extends HookWidget {
   }
 }
 
-/// 待機中のパルスアニメーション。
 class _PulsingAnimation extends HookWidget {
   @override
   Widget build(BuildContext context) {
