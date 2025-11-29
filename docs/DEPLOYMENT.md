@@ -88,7 +88,7 @@ python3 -m http.server 8000
 
 1. **ビルド**: GitHub ActionsでFlutter Webをビルド (`build/web/`)
 2. **デプロイ**: Vercel CLIで`build/web/`ディレクトリをVercelにデプロイ
-3. **最適化**: 
+3. **最適化**:
    - CanvasKitレンダラー使用（高品質な描画）
    - アセットのキャッシュ設定（1年）
    - SPA用のリライト設定
