@@ -28,12 +28,15 @@ String? nicknameGuard(
   final String? nickname = ref.read(temporaryNicknameProvider);
 
   // 現在のページがニックネームページかどうかを確認
-  final bool isNicknamePage = state.matchedLocation == Routes.nickname;
+  // TypedGoRouteで生成されたlocationを使用
+  final bool isNicknamePage =
+      state.matchedLocation == const NicknameRoute().location;
 
   // ニックネームが未設定 かつ ニックネームページ以外の場合
   if (nickname == null && !isNicknamePage) {
     // ニックネームページへリダイレクト
-    return Routes.nickname;
+    // TypedGoRouteで生成されたlocationを使用
+    return const NicknameRoute().location;
   }
 
   // リダイレクトなし
