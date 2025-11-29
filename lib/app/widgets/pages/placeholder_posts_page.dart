@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import 'package:flutterhackthema/src/constants/app_colors.dart';
@@ -61,7 +60,8 @@ class PlaceholderPostsPage extends StatelessWidget {
               // 投稿作成画面へ遷移ボタン
               ElevatedButton.icon(
                 onPressed: () {
-                  context.go(Routes.create);
+                  // 型安全なルーティング
+                  const CreateRoute().go(context);
                 },
                 icon: const Icon(Icons.add),
                 label: Text('投稿作成へ', style: AppTextStyles.labelMedium),
