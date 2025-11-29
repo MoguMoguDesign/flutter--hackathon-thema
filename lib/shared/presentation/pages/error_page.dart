@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import 'package:flutterhackthema/src/constants/app_colors.dart';
-import 'package:flutterhackthema/src/constants/app_text_styles.dart';
+import 'package:flutterhackthema/shared/constants/app_colors.dart';
+import 'package:flutterhackthema/shared/constants/app_text_styles.dart';
 
 /// エラー表示画面
 ///
