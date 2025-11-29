@@ -211,6 +211,20 @@ fvm flutter build ios
 fvm flutter build web
 ```
 
+### デプロイ
+
+```bash
+# Vercelへのデプロイ準備
+# mainブランチにマージすると自動デプロイされます
+
+# ローカルでWebビルドを確認
+fvm flutter build web --release
+cd build/web
+python3 -m http.server 8000
+```
+
+詳細は [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) を参照してください。
+
 ---
 
 ## 📂 プロジェクト構造

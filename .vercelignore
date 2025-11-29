@@ -1,0 +1,48 @@
+# Flutter specific
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+!build/web
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# FVM
+.fvm/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Tests
+test/
+coverage/
+
+# Android & iOS
+android/
+ios/
+linux/
+macos/
+windows/
+
+# CI/CD
+.github/
+.ai/
+
+# Others
+Makefile
+analysis_options.yaml
+pubspec.lock
+
