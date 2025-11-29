@@ -8,10 +8,10 @@ import 'package:flutterhackthema/shared/constants/app_text_styles.dart';
 ///
 /// NOTE: これは一時的なプレースホルダー実装です
 ///
-/// Issue #8 完了後に以下へ移行:
-/// - lib/features/post_creation/presentation/pages/preview_page.dart
+/// Issue #8 完了済み: 三層アーキテクチャ基盤が整備されました
+/// 移行先: lib/features/post_creation/presentation/pages/preview_page.dart
 ///
-/// TODO(#8): Issue #8 完了後、このファイルを削除して
+/// TODO(#15): プレビュー機能を実装し、このプレースホルダーを削除して
 /// lib/features/post_creation/presentation/pages/preview_page.dart に置き換える
 ///
 /// 機能:
