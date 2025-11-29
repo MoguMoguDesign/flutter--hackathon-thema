@@ -60,6 +60,9 @@ firebase-debug.*.log
 # MCP Configuration (environment-specific)
 .mcp.json
 
+# Claude Code local settings
+.claude/settings.local.json
+
 # AI Development Tools (auto-generated)
 .ai/project_files.json
 
