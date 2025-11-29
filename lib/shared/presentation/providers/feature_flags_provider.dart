@@ -9,9 +9,7 @@ part 'feature_flags_provider.g.dart';
 class FeatureFlags extends _$FeatureFlags {
   @override
   FeatureFlagsState build() {
-    return const FeatureFlagsState(
-      isLikeFeatureEnabled: false,
-    );
+    return const FeatureFlagsState(isLikeFeatureEnabled: false);
   }
 
   /// いいね機能を有効化
@@ -32,17 +30,13 @@ class FeatureFlags extends _$FeatureFlags {
 
 /// 機能フラグの状態を保持するクラス
 class FeatureFlagsState {
-  const FeatureFlagsState({
-    required this.isLikeFeatureEnabled,
-  });
+  const FeatureFlagsState({required this.isLikeFeatureEnabled});
 
   /// いいね機能が有効かどうか
   final bool isLikeFeatureEnabled;
 
   /// 状態をコピーして新しいインスタンスを作成
-  FeatureFlagsState copyWith({
-    bool? isLikeFeatureEnabled,
-  }) {
+  FeatureFlagsState copyWith({bool? isLikeFeatureEnabled}) {
     return FeatureFlagsState(
       isLikeFeatureEnabled: isLikeFeatureEnabled ?? this.isLikeFeatureEnabled,
     );

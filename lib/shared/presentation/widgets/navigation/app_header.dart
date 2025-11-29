@@ -20,9 +20,7 @@ class AppHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: Colors.grey.shade200),
-        ),
+        border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
       ),
       child: Text(
         serviceName,

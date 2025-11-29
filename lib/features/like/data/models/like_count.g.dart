@@ -7,10 +7,10 @@ part of 'like_count.dart';
 // **************************************************************************
 
 _LikeCount _$LikeCountFromJson(Map<String, dynamic> json) => _LikeCount(
-      haikuId: json['haikuId'] as String,
-      count: (json['count'] as num).toInt(),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-    );
+  haikuId: json['haikuId'] as String,
+  count: (json['count'] as num).toInt(),
+  updatedAt: DateTime.parse(json['updatedAt'] as String),
+);
 
 Map<String, dynamic> _$LikeCountToJson(_LikeCount instance) =>
     <String, dynamic>{
