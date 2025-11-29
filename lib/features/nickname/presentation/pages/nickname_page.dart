@@ -3,9 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:flutterhackthema/app/app_di/nickname_provider.dart';
 import '../../../../shared/presentation/widgets/buttons/primary_button.dart';
 import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
+import '../providers/nickname_provider.dart';
 
 /// ニックネーム入力画面。
 ///
@@ -68,15 +68,17 @@ class NicknamePage extends HookConsumerWidget {
               const SizedBox(height: 24),
               // 決定ボタン
               PrimaryButton(
-                text: '決定して次の行へ',
+                text: 'はじめる',
                 onPressed: isValid.value
-                    ? () {
-                        // ニックネームをProviderに保存
-                        ref
-                            .read(temporaryNicknameProvider.notifier)
+                    ? () async {
+                        // ニックネームをProviderに保存（永続化）
+                        await ref
+                            .read(nicknameProvider.notifier)
                             .setNickname(nicknameController.text.trim());
                         // 投稿一覧画面へ遷移
-                        context.go('/posts');
+                        if (context.mounted) {
+                          context.go('/posts');
+                        }
                       }
                     : null,
               ),
