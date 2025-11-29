@@ -34,7 +34,10 @@ void main() {
           return http.Response(responseBody, 200);
         });
 
-        final service = GeminiService(httpClient: mockClient);
+        final service = GeminiService(
+          httpClient: mockClient,
+          apiKey: 'test-api-key',
+        );
 
         // Act
         final result = await service.generateImage(prompt: 'テストプロンプト');
@@ -68,7 +71,10 @@ void main() {
           return http.Response(responseBody, 200);
         });
 
-        final service = GeminiService(httpClient: mockClient);
+        final service = GeminiService(
+          httpClient: mockClient,
+          apiKey: 'test-api-key',
+        );
 
         // Act
         final result = await service.generateImage(prompt: 'テスト');
@@ -86,7 +92,10 @@ void main() {
           return http.Response('{"error": "quota exceeded"}', 429);
         });
 
-        final service = GeminiService(httpClient: mockClient);
+        final service = GeminiService(
+          httpClient: mockClient,
+          apiKey: 'test-api-key',
+        );
 
         // Act & Assert
         expect(
@@ -103,7 +112,10 @@ void main() {
           return http.Response('[]', 200);
         });
 
-        final service = GeminiService(httpClient: mockClient);
+        final service = GeminiService(
+          httpClient: mockClient,
+          apiKey: 'test-api-key',
+        );
 
         // Act & Assert
         expect(
@@ -123,7 +135,10 @@ void main() {
           return http.Response(responseBody, 200);
         });
 
-        final service = GeminiService(httpClient: mockClient);
+        final service = GeminiService(
+          httpClient: mockClient,
+          apiKey: 'test-api-key',
+        );
 
         // Act & Assert
         expect(
@@ -157,7 +172,10 @@ void main() {
           );
         });
 
-        final service = GeminiService(httpClient: mockClient);
+        final service = GeminiService(
+          httpClient: mockClient,
+          apiKey: 'test-api-key',
+        );
 
         // Act & Assert
         expect(
@@ -174,7 +192,10 @@ void main() {
           throw http.ClientException('Connection failed');
         });
 
-        final service = GeminiService(httpClient: mockClient);
+        final service = GeminiService(
+          httpClient: mockClient,
+          apiKey: 'test-api-key',
+        );
 
         // Act & Assert
         expect(
@@ -191,12 +212,33 @@ void main() {
           return http.Response('invalid json{', 200);
         });
 
-        final service = GeminiService(httpClient: mockClient);
+        final service = GeminiService(
+          httpClient: mockClient,
+          apiKey: 'test-api-key',
+        );
 
         // Act & Assert
         expect(
           () => service.generateImage(prompt: 'テスト'),
           throwsA(isA<InvalidResponseException>()),
+        );
+
+        service.dispose();
+      });
+
+      test('APIキー未設定時にApiKeyMissingExceptionをスロー', () async {
+        // Arrange
+        final mockClient = MockClient((request) async {
+          return http.Response('{}', 200);
+        });
+
+        // apiKey を空文字列で作成
+        final service = GeminiService(httpClient: mockClient, apiKey: '');
+
+        // Act & Assert
+        expect(
+          () => service.generateImage(prompt: 'テスト'),
+          throwsA(isA<ApiKeyMissingException>()),
         );
 
         service.dispose();

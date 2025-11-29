@@ -52,10 +52,21 @@ class GeminiService {
   /// Gemini サービスを作成する
   ///
   /// [httpClient] HTTP クライアント。テスト時にモックを注入可能。
-  GeminiService({http.Client? httpClient})
-    : _httpClient = httpClient ?? http.Client();
+  /// [apiKey] API キー。テスト時にモック用のキーを注入可能。
+  ///         指定しない場合は [ApiConfig.geminiApiKey] を使用する。
+  GeminiService({http.Client? httpClient, String? apiKey})
+    : _httpClient = httpClient ?? http.Client(),
+      _apiKey = apiKey;
 
   final http.Client _httpClient;
+  final String? _apiKey;
+
+  /// 使用する API キーを取得する
+  String get _effectiveApiKey => _apiKey ?? ApiConfig.geminiApiKey;
+
+  /// API キーが設定されているか確認する
+  bool get _hasApiKey =>
+      _apiKey != null ? _apiKey.isNotEmpty : ApiConfig.hasGeminiApiKey;
 
   /// 指定されたプロンプトから画像を生成する
   ///
@@ -80,7 +91,7 @@ class GeminiService {
     // 元のAPI URL
     final apiUrl =
         '${ApiConfig.geminiBaseUrl}/models/${ApiConfig.geminiImageModel}:'
-        'streamGenerateContent?key=${ApiConfig.geminiApiKey}';
+        'streamGenerateContent?key=$_effectiveApiKey';
 
     // Flutter Webの場合はCORSプロキシを経由
     final urlString = kIsWeb
@@ -199,7 +210,7 @@ class GeminiService {
   ///
   /// API キーが設定されていない場合は [ApiKeyMissingException] をスローする。
   void _validateApiKey() {
-    if (!ApiConfig.hasGeminiApiKey) {
+    if (!_hasApiKey) {
       throw const ApiKeyMissingException();
     }
   }
