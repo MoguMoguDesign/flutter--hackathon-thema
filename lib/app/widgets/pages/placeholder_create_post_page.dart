@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import 'package:flutterhackthema/src/constants/app_colors.dart';
@@ -36,7 +35,8 @@ class PlaceholderCreatePostPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () {
-            context.go(Routes.posts);
+            // 型安全なルーティング
+            const PostsRoute().go(context);
           },
         ),
       ),
@@ -68,7 +68,8 @@ class PlaceholderCreatePostPage extends StatelessWidget {
               // プレビュー画面へ遷移ボタン
               ElevatedButton.icon(
                 onPressed: () {
-                  context.go(Routes.preview);
+                  // 型安全なルーティング
+                  const PreviewRoute().go(context);
                 },
                 icon: const Icon(Icons.preview),
                 label: Text('プレビューへ', style: AppTextStyles.labelMedium),
@@ -86,7 +87,8 @@ class PlaceholderCreatePostPage extends StatelessWidget {
               // 投稿一覧へ戻るボタン
               TextButton(
                 onPressed: () {
-                  context.go(Routes.posts);
+                  // 型安全なルーティング
+                  const PostsRoute().go(context);
                 },
                 child: Text(
                   '投稿一覧へ戻る',
