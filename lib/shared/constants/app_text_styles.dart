@@ -8,65 +8,71 @@ import 'app_colors.dart';
 /// ヘッドライン、ラベル、ボディテキストのスタイルを統一的に管理する。
 class AppTextStyles {
   /// アプリケーション全体で使用するフォントファミリー。
-  static String get fontFamily => GoogleFonts.mPlus1p().fontFamily!;
+  static String get fontFamily => GoogleFonts.delaGothicOne().fontFamily!;
 
   /// 大見出し用のテキストスタイル。
   /// 主要なタイトルやページヘッダーで使用される。
   /// 20/Auto サイズ。
-  static TextStyle get headlineLarge => GoogleFonts.mPlus1p(
-    fontWeight: FontWeight.bold,
+  static TextStyle get headlineLarge => GoogleFonts.delaGothicOne(
+    fontWeight: FontWeight.normal,
     fontSize: 20,
     color: AppColors.userPrimary,
-    letterSpacing: -0.28,
+    letterSpacing: 1.2,
+    height: 1.4,
   );
 
   /// 大きなラベル用のテキストスタイル。
   /// セクションヘッダーや重要なラベルで使用される。
   /// 16/24 サイズ。
-  static TextStyle get labelLarge => GoogleFonts.mPlus1p(
-    fontWeight: FontWeight.bold,
+  static TextStyle get labelLarge => GoogleFonts.delaGothicOne(
+    fontWeight: FontWeight.normal,
     fontSize: 16,
-    height: 1.5, // 24px / 16px
+    height: 1.6, // 24px / 16px
     color: AppColors.textBlack,
+    letterSpacing: 1.0,
   );
 
   /// 中サイズのラベル用のテキストスタイル。
   /// ボタンや小見出しで使用される。
-  /// 14/Auto サイズ。
-  static TextStyle get labelMedium => GoogleFonts.mPlus1p(
-    fontWeight: FontWeight.bold,
-    fontSize: 14,
+  /// 18/Auto サイズ。
+  static TextStyle get labelMedium => GoogleFonts.delaGothicOne(
+    fontWeight: FontWeight.normal,
+    fontSize: 18,
     color: AppColors.white,
-    letterSpacing: -0.28,
+    letterSpacing: 1.0,
+    height: 1.3,
   );
 
   /// 小さなラベル用のテキストスタイル。
   /// バッジやタグ、補助的な情報で使用される。
   /// 10/Auto サイズ。
-  static TextStyle get labelSmall => GoogleFonts.mPlus1p(
-    fontWeight: FontWeight.bold,
+  static TextStyle get labelSmall => GoogleFonts.delaGothicOne(
+    fontWeight: FontWeight.normal,
     fontSize: 10,
     color: AppColors.userPrimary,
-    letterSpacing: -0.28,
+    letterSpacing: 0.8,
+    height: 1.4,
   );
 
   /// 中サイズの本文テキストスタイル。
   /// 通常の説明文やコンテンツで使用される。
   /// 16/Auto サイズ。
-  static TextStyle get bodyMedium => GoogleFonts.mPlus1p(
+  static TextStyle get bodyMedium => GoogleFonts.delaGothicOne(
     fontWeight: FontWeight.normal,
     fontSize: 16,
     color: AppColors.white,
-    letterSpacing: -0.28,
+    letterSpacing: 0.8,
+    height: 1.5,
   );
 
   /// 小さな本文テキストスタイル。
   /// 補助的な情報や詳細データで使用される。
   /// 12/Auto サイズ。
-  static TextStyle get bodySmall => GoogleFonts.mPlus1p(
+  static TextStyle get bodySmall => GoogleFonts.delaGothicOne(
     fontWeight: FontWeight.normal,
     fontSize: 12,
     color: AppColors.white,
-    letterSpacing: -0.28,
+    letterSpacing: 0.6,
+    height: 1.5,
   );
 }

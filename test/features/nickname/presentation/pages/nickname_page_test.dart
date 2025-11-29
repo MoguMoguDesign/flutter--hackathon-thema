@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutterhackthema/features/nickname/presentation/pages/nickname_page.dart';
-import 'package:flutterhackthema/shared/presentation/widgets/buttons/primary_button.dart';
+import 'package:flutterhackthema/shared/widgets/buttons/app_filled_button.dart';
 import 'package:flutterhackthema/shared/presentation/widgets/inputs/app_text_field.dart';
 
 void main() {
@@ -49,7 +49,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('はじめる'), findsOneWidget);
-      expect(find.byType(PrimaryButton), findsOneWidget);
+      expect(find.byType(AppFilledButton), findsOneWidget);
     });
 
     testWidgets('button is disabled when input is empty', (
@@ -60,8 +60,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final ElevatedButton button = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
+      final FilledButton button = tester.widget<FilledButton>(
+        find.byType(FilledButton),
       );
       expect(button.onPressed, isNull);
     });
@@ -77,8 +77,8 @@ void main() {
       await tester.enterText(find.byType(TextField), 'TestUser');
       await tester.pump();
 
-      final ElevatedButton button = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
+      final FilledButton button = tester.widget<FilledButton>(
+        find.byType(FilledButton),
       );
       expect(button.onPressed, isNotNull);
     });
@@ -94,8 +94,8 @@ void main() {
       await tester.enterText(find.byType(TextField), '   ');
       await tester.pump();
 
-      final ElevatedButton button = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
+      final FilledButton button = tester.widget<FilledButton>(
+        find.byType(FilledButton),
       );
       expect(button.onPressed, isNull);
     });
@@ -120,8 +120,8 @@ void main() {
 
       expect(find.text('テストユーザー'), findsOneWidget);
 
-      final ElevatedButton button = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
+      final FilledButton button = tester.widget<FilledButton>(
+        find.byType(FilledButton),
       );
       expect(button.onPressed, isNotNull);
     });
@@ -159,8 +159,8 @@ void main() {
       await tester.enterText(find.byType(TextField), '12345678901234567890');
       await tester.pump();
 
-      final ElevatedButton button = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
+      final FilledButton button = tester.widget<FilledButton>(
+        find.byType(FilledButton),
       );
       expect(button.onPressed, isNotNull);
     });
@@ -177,8 +177,8 @@ void main() {
       await tester.enterText(find.byType(TextField), 'A');
       await tester.pump();
 
-      final ElevatedButton button = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
+      final FilledButton button = tester.widget<FilledButton>(
+        find.byType(FilledButton),
       );
       expect(button.onPressed, isNotNull);
     });

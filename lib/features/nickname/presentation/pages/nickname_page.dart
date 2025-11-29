@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../shared/presentation/widgets/buttons/primary_button.dart';
+import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
 import '../providers/nickname_provider.dart';
 
@@ -30,12 +30,13 @@ class NicknamePage extends HookConsumerWidget {
       return () => nicknameController.removeListener(listener);
     }, [nicknameController]);
 
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return AppScaffoldWithBackground(
+      backgroundImage: 'assets/images/start_background.png',
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(flex: 2),
               // サービス名ロゴエリア
@@ -67,8 +68,8 @@ class NicknamePage extends HookConsumerWidget {
               ),
               const SizedBox(height: 24),
               // 決定ボタン
-              PrimaryButton(
-                text: 'はじめる',
+              AppFilledButton(
+                label: 'はじめる',
                 onPressed: isValid.value
                     ? () async {
                         // ニックネームをProviderに保存（永続化）

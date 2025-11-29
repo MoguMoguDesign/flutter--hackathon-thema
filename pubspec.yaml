@@ -37,6 +37,11 @@ dependencies:
   # Storage
   shared_preferences: ^2.3.4
 
+  # Firebase
+  firebase_core: ^4.2.1
+  cloud_firestore: ^6.1.0
+  firebase_storage: ^13.0.4
+
 dev_dependencies:
   # Testing
   flutter_test:
@@ -54,9 +59,14 @@ dev_dependencies:
   riverpod_lint: ^3.0.3
   custom_lint: ^0.8.0
 
-  # Testing Tools (for future use)
+  # Testing Tools
   mockito: ^5.5.0
   flutter_lints: ^6.0.0
+  fake_cloud_firestore: ^4.0.0
 
 flutter:
   uses-material-design: true
+
+  # 画像などのアセットファイル
+  assets:
+    - assets/images/
