@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'package:flutterhackthema/app/app_di/nickname_provider.dart';
 import '../../../../shared/presentation/widgets/buttons/primary_button.dart';
 import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
 
@@ -8,12 +11,12 @@ import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
 ///
 /// ユーザー識別用のニックネームを取得する初期画面。
 /// ワイヤーフレーム: `ニックネーム入力.png`
-class NicknamePage extends HookWidget {
+class NicknamePage extends HookConsumerWidget {
   /// ニックネーム入力画面を作成する。
   const NicknamePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final nicknameController = useTextEditingController();
     final isValid = useState(false);
 
@@ -68,8 +71,11 @@ class NicknamePage extends HookWidget {
                 text: '決定して次の行へ',
                 onPressed: isValid.value
                     ? () {
-                        // ニックネームを保存して次の画面へ遷移
-                        // TODO: localStorageに保存
+                        // ニックネームをProviderに保存
+                        ref
+                            .read(temporaryNicknameProvider.notifier)
+                            .setNickname(nicknameController.text.trim());
+                        // 投稿一覧画面へ遷移
                         context.go('/posts');
                       }
                     : null,
