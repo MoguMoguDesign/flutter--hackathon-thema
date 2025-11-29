@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'app/app_router/app_router.dart';
+
+import 'package:flutterhackthema/app/app_router/app_router.dart';
 
 /// アプリケーションのエントリーポイント
 ///
@@ -10,12 +11,15 @@ void main() {
 }
 
 /// アプリケーションのルートウィジェット
-class MainApp extends StatelessWidget {
+///
+/// go_routerを使用したルーティング設定を適用
+/// ConsumerWidgetを使用してProviderにアクセス可能にする
+class MainApp extends ConsumerWidget {
   /// [MainApp] のコンストラクタ
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       title: 'Mya句',
       theme: ThemeData(
@@ -23,7 +27,7 @@ class MainApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Noto Sans JP',
       ),
-      routerConfig: AppRouter.createRouter(),
+      routerConfig: AppRouter.createRouter(ref),
       debugShowCheckedModeBanner: false,
     );
   }
