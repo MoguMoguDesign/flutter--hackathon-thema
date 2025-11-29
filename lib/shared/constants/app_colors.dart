@@ -25,9 +25,9 @@ class AppColors {
   /// オーバーレイやダイアログの背景として使用される。
   static const Color transparent = Color(0x00000000);
 
-  /// アプリ全体の背景色（オフホワイト）。
+  /// アプリ全体の背景色（ダークグリーン）。
   /// メイン背景として使用される。
-  static const Color background = Color(0xFFFEFEFE);
+  static const Color background = Color(0xFF187360);
 
   /// 薄いグレー色。
   /// セクション背景や薄い境界線として使用される。
@@ -77,17 +77,17 @@ class AppColors {
   /// 一般的なグレー表示に使用される。
   static const Color grey = Color(0xFF9E9E9E);
 
-  /// テキスト用の濃い青色。
+  /// テキスト用の濃いダークレッド色。
   /// 主要なテキストコンテンツで使用される。
-  static const Color textBlack = Color(0xFF000336);
+  static const Color textBlack = Color(0xFF2C0305);
 
   // ==========================================
   // ブランドカラー系統
   // ==========================================
 
-  /// ユーザー用のプライマリカラー（明るい緑）。
+  /// ユーザー用のプライマリカラー（ビビッドピンク）。
   /// ボタンやアクセントカラーとして使用される。
-  static const Color userPrimary = Color(0xFFB4EF03);
+  static const Color userPrimary = Color(0xFFFF0048);
 
   /// 管理者用のプライマリカラー（青）。
   /// 管理者向け機能の UI 要素で使用される。
@@ -115,15 +115,15 @@ class AppColors {
 
   /// エラー状態を示す赤色。
   /// エラーメッセージや削除ボタンで使用される。
-  static const Color error = Color(0xFFEF4444);
+  static const Color error = Color(0xFFFF1744);
 
   /// Flutter デフォルトの赤色。
   /// 一般的な赤色表示に使用される。
-  static const Color red = Color(0xFFF44336);
+  static const Color red = Color(0xFFFF0000);
 
   /// アラート用の赤色。
   /// 警告やエラー、重要なアクションボタンで使用される。
-  static const Color alart = Color(0xFFFF4646);
+  static const Color alart = Color(0xFFFF0033);
 
   // ==========================================
   // 特殊カラー
@@ -163,7 +163,7 @@ class AppColors {
 
   /// ユーザープライマリカラーの透明度版（透明度20%）。
   /// オーバーレイや薄い背景として使用される。
-  static const Color userPrimaryAlpha = Color(0x33B4EF03);
+  static const Color userPrimaryAlpha = Color(0x33FF0048);
 
   /// 管理者カラーの透明度版（透明度20%）。
   /// 管理者向けオーバーレイとして使用される。
@@ -184,4 +184,16 @@ class AppColors {
   /// 非常に濃い色のグラデーション。
   /// グラデーションの終端色として使用される。
   static const Color gradientBlack = Color(0xFF071301);
+
+  /// グレーのグラデーション色（明るめ）。
+  /// グレー系のグラデーション開始色として使用される。
+  static const Color gradientGrayLight = Color(0xFFBDBDBD);
+
+  /// グレーのグラデーション色（中間）。
+  /// グレー系のグラデーション中間色として使用される。
+  static const Color gradientGrayMid = Color(0xFF9E9E9E);
+
+  /// グレーのグラデーション色（濃いめ）。
+  /// グレー系のグラデーション終端色として使用される。
+  static const Color gradientGrayDark = Color(0xFF757575);
 }

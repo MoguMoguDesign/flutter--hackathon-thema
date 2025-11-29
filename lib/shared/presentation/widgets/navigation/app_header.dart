@@ -23,6 +23,13 @@ class AppHeader extends StatelessWidget {
         border: Border(
           bottom: BorderSide(color: Colors.grey.shade200, width: 1),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Text(
         serviceName,

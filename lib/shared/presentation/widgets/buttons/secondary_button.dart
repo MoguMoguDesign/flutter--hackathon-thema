@@ -28,14 +28,24 @@ class SecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: double.infinity,
       height: 56,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.black,
-          side: const BorderSide(color: Colors.black, width: 1.5),
+          side: const BorderSide(color: Colors.black, width: 3.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
           ),

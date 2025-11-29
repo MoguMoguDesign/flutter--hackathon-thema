@@ -22,11 +22,22 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          color: Colors.grey.shade200,
-          child: AspectRatio(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.12),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            color: Colors.grey.shade200,
+            child: AspectRatio(
             aspectRatio: 4 / 5,
             child: Image.network(
               post.imageUrl,
@@ -59,6 +70,7 @@ class PostCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }

@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import '../../constants/app_colors.dart';
+import '../buttons/app_filled_button.dart';
+import '../buttons/app_outlined_button.dart';
+
+/// アプリケーション全体で使用する統一された確認ダイアログ。
+///
+/// ユーザーに確認を求める際に使用するダイアログで、
+/// タイトル、メッセージ、確認ボタン、キャンセルボタンを表示できる。
+class AppConfirmDialog extends StatelessWidget {
+  /// [AppConfirmDialog] のコンストラクタ。
+  ///
+  /// [title] と [message] は必須パラメータ。
+  const AppConfirmDialog({
+    required this.title,
+    required this.message,
+    super.key,
+    this.confirmText = '確認',
+    this.cancelText = 'キャンセル',
+    this.onConfirm,
+    this.onCancel,
+    this.confirmButtonColor,
+    this.isDangerous = false,
+  });
+
+  /// ダイアログのタイトル。
+  final String title;
+
+  /// ダイアログのメッセージ本文。
+  final String message;
+
+  /// 確認ボタンのテキスト。
+  ///
+  /// デフォルトは「確認」。
+  final String confirmText;
+
+  /// キャンセルボタンのテキスト。
+  ///
+  /// デフォルトは「キャンセル」。
+  final String cancelText;
+
+  /// 確認ボタンが押されたときのコールバック。
+  ///
+  /// null の場合、ダイアログを閉じるだけの動作になる。
+  final VoidCallback? onConfirm;
+
+  /// キャンセルボタンが押されたときのコールバック。
+  ///
+  /// null の場合、ダイアログを閉じるだけの動作になる。
+  final VoidCallback? onCancel;
+
+  /// 確認ボタンの色（オプション）。
+  ///
+  /// 指定しない場合、[isDangerous] によって決定される。
+  final Color? confirmButtonColor;
+
+  /// 危険なアクション（削除など）を示すフラグ。
+  ///
+  /// true の場合、確認ボタンが赤色になる。
+  /// デフォルトは false。
+  final bool isDangerous;
+
+  /// ダイアログを表示するヘルパーメソッド。
+  ///
+  /// [context] は必須で、他のパラメータは [AppConfirmDialog] と同じ。
+  /// 戻り値は bool で、確認された場合は true、キャンセルされた場合は false。
+  static Future<bool?> show({
+    required BuildContext context,
+    required String title,
+    required String message,
+    String confirmText = '確認',
+    String cancelText = 'キャンセル',
+    Color? confirmButtonColor,
+    bool isDangerous = false,
+  }) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => AppConfirmDialog(
+        title: title,
+        message: message,
+        confirmText: confirmText,
+        cancelText: cancelText,
+        confirmButtonColor: confirmButtonColor,
+        isDangerous: isDangerous,
+        onConfirm: () => Navigator.of(context).pop(true),
+        onCancel: () => Navigator.of(context).pop(false),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Color effectiveConfirmButtonColor =
+        confirmButtonColor ??
+        (isDangerous ? AppColors.error : AppColors.userPrimary);
+
+    return AlertDialog(
+      backgroundColor: AppColors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      elevation: 8,
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: AppColors.textBlack,
+        ),
+      ),
+      content: Text(
+        message,
+        style: const TextStyle(fontSize: 16, color: AppColors.textGray),
+      ),
+      actions: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            AppFilledButton(
+              onPressed: () {
+                if (onConfirm != null) {
+                  onConfirm!();
+                } else {
+                  Navigator.of(context).pop(true);
+                }
+              },
+              label: confirmText,
+              backgroundColor: effectiveConfirmButtonColor,
+              foregroundColor: AppColors.white,
+              height: 44,
+              width: 240,
+              textStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 12),
+            AppOutlinedButton(
+              onPressed: () {
+                if (onCancel != null) {
+                  onCancel!();
+                } else {
+                  Navigator.of(context).pop(false);
+                }
+              },
+              label: cancelText,
+              foregroundColor: AppColors.textGray,
+              borderColor: AppColors.borderGray,
+              height: 44,
+              width: 240,
+              textStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

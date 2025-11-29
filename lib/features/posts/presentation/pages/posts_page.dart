@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import '../../../../shared/presentation/widgets/buttons/fab_button.dart';
-import '../../../../shared/presentation/widgets/navigation/app_header.dart';
+import '../../../../shared/shared.dart';
 import '../../data/models/post.dart';
 import '../widgets/post_card.dart';
 
@@ -14,61 +13,68 @@ class PostsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final posts = Post.mockPosts();
 
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return AppScaffoldWithBackground(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const AppHeader(serviceName: 'サービス名'),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'なんか\n装飾画像',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.grey.shade600,
+        child: CustomScrollView(
+          slivers: [
+            // スクロール時に消えるヘッダー
+            const AppSliverHeader(),
+            // 装飾画像
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Center(
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'なんか\n装飾画像',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: _StaggeredGridView(
-                  posts: posts,
-                  onPostTap: (post) {
-                    PostDetailRoute(postId: post.id).go(context);
-                  },
-                ),
+            // Staggered Grid
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              sliver: _SliverStaggeredGrid(
+                posts: posts,
+                onPostTap: (post) {
+                  PostDetailRoute(postId: post.id).go(context);
+                },
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FabButton(
-        onPressed: () {
-          const CreateRoute().go(context);
-        },
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 8, right: 8),
+        child: AppFilledButton(
+          label: '句を詠む',
+          leadingIcon: Icons.add,
+          onPressed: () {
+            const CreateRoute().go(context);
+          },
+          width: 160,
+        ),
       ),
     );
   }
 }
 
-class _StaggeredGridView extends StatelessWidget {
-  const _StaggeredGridView({required this.posts, required this.onPostTap});
+class _SliverStaggeredGrid extends StatelessWidget {
+  const _SliverStaggeredGrid({required this.posts, required this.onPostTap});
 
   final List<Post> posts;
   final void Function(Post) onPostTap;
@@ -86,7 +92,7 @@ class _StaggeredGridView extends StatelessWidget {
       }
     }
 
-    return SingleChildScrollView(
+    return SliverToBoxAdapter(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

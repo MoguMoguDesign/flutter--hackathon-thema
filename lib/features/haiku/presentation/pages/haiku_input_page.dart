@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import '../../../../shared/presentation/widgets/buttons/primary_button.dart';
-import '../../../../shared/presentation/widgets/dialogs/confirm_dialog.dart';
+import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
-import '../../../../shared/presentation/widgets/navigation/app_header.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 import '../widgets/haiku_preview.dart';
 import '../widgets/step_indicator.dart';
@@ -40,14 +38,15 @@ class HaikuInputPage extends HookWidget {
     }, [inputController]);
 
     Future<void> handleBack() async {
-      final shouldLeave = await ConfirmDialog.show(
+      final shouldLeave = await AppConfirmDialog.show(
         context: context,
         title: 'TOPに戻りますか？',
         message: '作成中の句は保存されません。',
         confirmText: '変更を破棄してTOPへ',
         cancelText: '編集を続ける',
+        isDangerous: true,
       );
-      if (shouldLeave && context.mounted) {
+      if (shouldLeave == true && context.mounted) {
         const PostsRoute().go(context);
       }
     }
@@ -81,61 +80,72 @@ class HaikuInputPage extends HookWidget {
       }
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return AppScaffoldWithBackground(
       body: SafeArea(
-        child: Column(
-          children: [
+        child: CustomScrollView(
+          slivers: [
             // ヘッダー
-            const AppHeader(serviceName: 'サービス名'),
+            const AppSliverHeader(),
             // 戻るボタン
-            Align(
-              alignment: Alignment.centerLeft,
-              child: AppBackButton(onPressed: handleBack),
+            SliverToBoxAdapter(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: AppBackButton(onPressed: handleBack),
+              ),
             ),
             // タイトル
-            const Text(
-              '句を詠む',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
+            const SliverToBoxAdapter(
+              child: Text(
+                '句を詠む',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
             // 縦書きプレビュー
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: HaikuPreview(
-                firstLine: firstLine.value,
-                secondLine: currentStep.value >= 1 ? secondLine.value : '',
-                thirdLine: currentStep.value >= 2 ? thirdLine.value : '',
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: HaikuPreview(
+                  firstLine: firstLine.value,
+                  secondLine: currentStep.value >= 1 ? secondLine.value : '',
+                  thirdLine: currentStep.value >= 2 ? thirdLine.value : '',
+                ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
             // ステップインジケーター
-            StepIndicator(currentStep: currentStep.value),
-            const SizedBox(height: 24),
+            SliverToBoxAdapter(
+              child: StepIndicator(currentStep: currentStep.value),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
             // 入力フィールド
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: AppTextField(
-                controller: inputController,
-                label: _stepLabels[currentStep.value],
-                hintText: _stepHints[currentStep.value],
-                autofocus: true,
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: AppTextField(
+                  controller: inputController,
+                  label: _stepLabels[currentStep.value],
+                  hintText: _stepHints[currentStep.value],
+                  autofocus: true,
+                ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
             // 決定ボタン
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: PrimaryButton(
-                text: '決定して次の行へ',
-                onPressed: isValid.value ? handleNext : null,
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: AppFilledButton(
+                  label: '決定して次の行へ',
+                  onPressed: isValid.value ? handleNext : null,
+                ),
               ),
             ),
-            const Spacer(),
+            SliverFillRemaining(hasScrollBody: false, child: Container()),
           ],
         ),
       ),
