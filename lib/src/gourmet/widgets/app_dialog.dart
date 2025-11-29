@@ -73,12 +73,8 @@ class AppDialog extends StatelessWidget {
     return AlertDialog(
       titleTextStyle: Theme.of(context).textTheme.titleMedium,
       contentTextStyle: Theme.of(context).textTheme.bodyLarge,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      title: Center(
-        child: Text(titleString),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      title: Center(child: Text(titleString)),
       content: Text(contentString),
       actions: [
         if (hasCancelButton)
@@ -86,10 +82,9 @@ class AppDialog extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               negativeButtonString,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelLarge
-                  ?.copyWith(color: Themes.gray),
+              style: Theme.of(
+                context,
+              ).textTheme.labelLarge?.copyWith(color: Themes.gray),
             ),
           ),
         TextButton(
@@ -102,10 +97,10 @@ class AppDialog extends StatelessWidget {
           child: Text(
             positiveButtonString,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: isDestructiveAction
-                      ? Themes.errorAlertColor
-                      : Themes.mainOrange,
-                ),
+              color: isDestructiveAction
+                  ? Themes.errorAlertColor
+                  : Themes.mainOrange,
+            ),
           ),
         ),
       ],

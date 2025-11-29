@@ -22,10 +22,7 @@ class HomePage extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              AppColors.gradientDarkBlue,
-              AppColors.gradientBlack,
-            ],
+            colors: [AppColors.gradientDarkBlue, AppColors.gradientBlack],
           ),
         ),
         child: SafeArea(

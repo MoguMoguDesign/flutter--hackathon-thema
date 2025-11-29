@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../constants/themes.dart';
 
 class GuruMemoCard extends StatelessWidget {
-  const GuruMemoCard({
-    super.key,
-    required this.child,
-  });
+  const GuruMemoCard({super.key, required this.child});
   final Widget child;
 
   @override
