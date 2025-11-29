@@ -159,10 +159,28 @@ cp .mcp.json.example .mcp.json
 
 **注意**: `.mcp.json` は個人の環境設定ファイルのため、Gitで管理されません。
 
-#### 6. アプリを起動
+#### 6. 環境変数の設定
 
 ```bash
-fvm flutter run
+# .env.example をコピーして .env を作成
+cp .env.example .env
+
+# エディタで .env を開き、Gemini API キーを設定
+# GEMINI_API_KEY=your_api_key_here
+
+# Gemini API キーの取得: https://aistudio.google.com/app/apikey
+```
+
+**注意**: `.env` ファイルは機密情報を含むため、Gitで管理されません。
+
+#### 7. アプリを起動
+
+```bash
+# 環境変数付きで起動
+make run-env
+
+# または直接指定
+fvm flutter run --dart-define=GEMINI_API_KEY=your_api_key_here
 ```
 
 ---
