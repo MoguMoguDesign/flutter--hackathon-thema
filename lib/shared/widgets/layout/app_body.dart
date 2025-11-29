@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 ///
 /// 画面のメインコンテンツエリアを定義し、
 /// 一貫した左右の余白とスクロール動作を提供する。
+/// モバイル以上の画面サイズでは、コンテンツの最大幅を制限して中央に配置する。
 class AppBody extends StatelessWidget {
   /// [AppBody] のコンストラクタ。
   ///
@@ -31,6 +32,7 @@ class AppBody extends StatelessWidget {
     super.key,
     this.padding,
     this.isScrollable = true,
+    this.maxWidth = 600.0,
   });
 
   /// デフォルトの水平パディング値。
@@ -38,6 +40,12 @@ class AppBody extends StatelessWidget {
 
   /// デフォルトの垂直パディング値。
   static const double defaultVerticalPadding = 16.0;
+
+  /// モバイル以上の画面サイズでの最大コンテンツ幅。
+  ///
+  /// デフォルトは600px。
+  /// この幅を超える画面では、コンテンツが中央に配置される。
+  final double maxWidth;
 
   /// Body 内に表示する子ウィジェット。
   final Widget child;
@@ -62,12 +70,18 @@ class AppBody extends StatelessWidget {
           vertical: defaultVerticalPadding,
         );
 
-    final Widget content = Padding(padding: effectivePadding, child: child);
+    // レスポンシブレイアウト: 最大幅を制限して中央に配置
+    final Widget responsiveContent = Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: Padding(padding: effectivePadding, child: child),
+      ),
+    );
 
     if (isScrollable) {
-      return SingleChildScrollView(child: content);
+      return SingleChildScrollView(child: responsiveContent);
     }
 
-    return content;
+    return responsiveContent;
   }
 }

@@ -18,18 +18,20 @@
 
 import 'package:flutter/material.dart';
 
-/// 3ステップインジケーターコンポーネント。
+import '../../../../shared/constants/app_colors.dart';
+
+/// 4ステップインジケーターコンポーネント。
 ///
-/// 俳句入力の進捗（上の句・中の句・下の句）を表示する。
+/// 俳句入力の進捗（上の句・中の句・下の句・確認）を表示する。
 /// ワイヤーフレームの「手順」インジケーターを再現。
 class StepIndicator extends StatelessWidget {
   /// ステップインジケーターを作成する。
   ///
-  /// [currentStep] は現在のステップ（0, 1, 2）。
-  /// [totalSteps] は総ステップ数。デフォルトは3。
+  /// [currentStep] は現在のステップ（0, 1, 2, 3）。
+  /// [totalSteps] は総ステップ数。デフォルトは4。
   const StepIndicator({
     required this.currentStep,
-    this.totalSteps = 3,
+    this.totalSteps = 4,
     super.key,
   });
 
@@ -44,34 +46,94 @@ class StepIndicator extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('手順', style: TextStyle(fontSize: 12, color: Colors.black54)),
-        const SizedBox(width: 12),
         ...List.generate(totalSteps, (index) {
           final isActive = index == currentStep;
           final isCompleted = index < currentStep;
 
           return Row(
             children: [
-              Container(
-                width: isActive ? 16 : 12,
-                height: isActive ? 16 : 12,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isActive || isCompleted
-                      ? Colors.black
-                      : Colors.grey.shade300,
-                ),
-              ),
+              _StepDot(isActive: isActive, isCompleted: isCompleted),
               if (index < totalSteps - 1)
-                Container(
-                  width: 40,
-                  height: 2,
-                  color: isCompleted ? Colors.black : Colors.grey.shade300,
-                ),
+                _StepConnector(isCompleted: isCompleted),
             ],
           );
         }),
       ],
+    );
+  }
+}
+
+/// ステップドット
+class _StepDot extends StatelessWidget {
+  const _StepDot({required this.isActive, required this.isCompleted});
+
+  final bool isActive;
+  final bool isCompleted;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      width: isActive ? 20 : 16,
+      height: isActive ? 20 : 16,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: _getDotColor(),
+        border: isActive
+            ? Border.all(color: AppColors.white, width: 2.5)
+            : null,
+        boxShadow: (isActive || isCompleted)
+            ? [
+                BoxShadow(
+                  color: AppColors.accent.withValues(alpha: 0.4),
+                  blurRadius: 8,
+                  spreadRadius: 1,
+                ),
+              ]
+            : null,
+      ),
+    );
+  }
+
+  Color _getDotColor() {
+    if (isActive || isCompleted) {
+      return AppColors.accent;
+    } else {
+      return AppColors.white.withValues(alpha: 0.25);
+    }
+  }
+}
+
+/// ステップ間の接続線
+class _StepConnector extends StatelessWidget {
+  const _StepConnector({required this.isCompleted});
+
+  final bool isCompleted;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      width: 32,
+      height: 3,
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(2),
+        color: isCompleted
+            ? AppColors.accent
+            : AppColors.white.withValues(alpha: 0.25),
+        boxShadow: isCompleted
+            ? [
+                BoxShadow(
+                  color: AppColors.accent.withValues(alpha: 0.3),
+                  blurRadius: 4,
+                  spreadRadius: 0.5,
+                ),
+              ]
+            : null,
+      ),
     );
   }
 }

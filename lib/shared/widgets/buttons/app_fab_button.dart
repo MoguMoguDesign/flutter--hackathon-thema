@@ -17,6 +17,8 @@
 //
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../constants/app_colors.dart';
 
 /// アプリケーション共通のFloating Action Button。
@@ -47,16 +49,56 @@ class AppFabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
-      onPressed: onPressed,
-      backgroundColor: AppColors.black,
-      foregroundColor: AppColors.white,
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-      icon: Icon(icon, size: 20),
-      label: Text(
-        label,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(28),
+      child: Stack(
+        children: [
+          // 左上の装飾SVG（下レイヤー）
+          Positioned(
+            left: -25,
+            top: -5,
+            child: Transform.rotate(
+              angle: 3.14159, // 180度回転
+              child: SvgPicture.asset(
+                'assets/images/decoration.svg',
+                width: 60,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          // 右下の装飾SVG（下レイヤー）
+          Positioned(
+            right: -25,
+            bottom: -5,
+            child: SvgPicture.asset(
+              'assets/images/button_decoration.svg',
+              width: 60,
+              height: 40,
+              fit: BoxFit.cover,
+            ),
+          ),
+          // FABボタン本体（上レイヤー）
+          FloatingActionButton.extended(
+            onPressed: onPressed,
+            backgroundColor: AppColors.primaryBlue,
+            foregroundColor: AppColors.white,
+            elevation: 8,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            extendedIconLabelSpacing: 4,
+            icon: Icon(icon, size: 20),
+            label: Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                fontFamily: GoogleFonts.rocknRollOne().fontFamily,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -100,13 +101,14 @@ void main() {
       expect(button.onPressed, isNull);
     });
 
-    testWidgets('displays service name logo area', (WidgetTester tester) async {
+    testWidgets('displays service logo', (WidgetTester tester) async {
       await tester.pumpWidget(
         const ProviderScope(child: MaterialApp(home: NicknamePage())),
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('サービス名'), findsOneWidget);
+      // SVGロゴが表示されることを確認
+      expect(find.byType(SvgPicture), findsOneWidget);
     });
 
     testWidgets('allows Japanese character input', (WidgetTester tester) async {

@@ -74,9 +74,3 @@ flutter:
   # 画像などのアセットファイル
   assets:
     - assets/images/
-
-  # フォント設定
-  fonts:
-    - family: Hannari
-      fonts:
-        - asset: assets/fonts/HannariMincho-Regular.otf

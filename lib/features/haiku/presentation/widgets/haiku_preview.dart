@@ -17,6 +17,7 @@
 //
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// 俳句縦書きプレビューコンポーネント。
 ///
@@ -46,38 +47,62 @@ class HaikuPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 328, // 10文字(280px) + パディング(48px) = 328px
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 右から左へ配置（日本語縦書きの順序）
-          if (thirdLine.isNotEmpty) _VerticalText(text: thirdLine),
-          if (thirdLine.isNotEmpty) const SizedBox(width: 24),
-          if (secondLine.isNotEmpty) _VerticalText(text: secondLine),
-          if (secondLine.isNotEmpty) const SizedBox(width: 24),
-          if (firstLine.isNotEmpty) _VerticalText(text: firstLine),
-          // プレースホルダー表示
-          if (firstLine.isEmpty && secondLine.isEmpty && thirdLine.isEmpty)
-            Text(
-              '俳句がここに\n表示されます',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
+    return AspectRatio(
+      aspectRatio: 4 / 5, // 4:5の縦長
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
-        ],
+          ],
+        ),
+        padding: const EdgeInsets.all(24),
+        child: Stack(
+          children: [
+            // プレースホルダー（何も入力されていない時のみ表示）
+            if (firstLine.isEmpty && secondLine.isEmpty && thirdLine.isEmpty)
+              Center(
+                child: Text(
+                  '俳句がここに\n表示されます',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
+                ),
+              ),
+            // 固定位置の3列
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 左側：3行目（下の句）
+                SizedBox(
+                  width: 60,
+                  child: thirdLine.isNotEmpty
+                      ? _VerticalText(text: thirdLine)
+                      : const SizedBox.shrink(),
+                ),
+                // 真ん中：2行目（中の句）
+                SizedBox(
+                  width: 60,
+                  child: secondLine.isNotEmpty
+                      ? _VerticalText(text: secondLine)
+                      : const SizedBox.shrink(),
+                ),
+                // 右側：1行目（上の句）
+                SizedBox(
+                  width: 60,
+                  child: firstLine.isNotEmpty
+                      ? _VerticalText(text: firstLine)
+                      : const SizedBox.shrink(),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -96,12 +121,12 @@ class _VerticalText extends StatelessWidget {
       children: text.split('').map((char) {
         return Text(
           char,
-          style: const TextStyle(
-            fontSize: 20,
+          style: TextStyle(
+            fontSize: 28,
             fontWeight: FontWeight.w500,
             height: 1.4,
             color: Colors.black87,
-            fontFamily: 'Hannari',
+            fontFamily: GoogleFonts.rocknRollOne().fontFamily,
           ),
         );
       }).toList(),

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../app/app_router/routes.dart';
@@ -58,23 +59,11 @@ class NicknamePage extends HookConsumerWidget {
             children: [
               const Spacer(flex: 2),
               // サービス名ロゴエリア
-              Container(
+              SvgPicture.asset(
+                'assets/images/logo.svg',
                 width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Center(
-                  child: Text(
-                    'サービス名',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ),
+                height: 100,
+                fit: BoxFit.contain,
               ),
               const Spacer(flex: 1),
               // ニックネーム入力フィールド

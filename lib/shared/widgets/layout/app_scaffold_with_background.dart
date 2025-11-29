@@ -17,12 +17,12 @@
 //
 
 import 'package:flutter/material.dart';
-import '../../constants/app_colors.dart';
 
 /// 背景色と背景画像を含む統一されたScaffold。
 ///
 /// アプリケーション全体で共通の背景デザインを提供する。
 /// 背景色と背景画像をStackで組み合わせ、その上にコンテンツを表示する。
+/// モバイル以上の画面サイズでは、コンテンツの最大幅を制限して中央に配置する。
 class AppScaffoldWithBackground extends StatelessWidget {
   /// [AppScaffoldWithBackground] のコンストラクタ。
   ///
@@ -32,6 +32,7 @@ class AppScaffoldWithBackground extends StatelessWidget {
     super.key,
     this.backgroundImage = 'assets/images/background.png',
     this.floatingActionButton,
+    this.maxWidth = 600.0,
   });
 
   /// Scaffold内に表示する子ウィジェット。
@@ -46,36 +47,35 @@ class AppScaffoldWithBackground extends StatelessWidget {
   /// Floating Action Button（オプション）。
   final Widget? floatingActionButton;
 
+  /// モバイル以上の画面サイズでの最大コンテンツ幅。
+  ///
+  /// デフォルトは600px。
+  /// この幅を超える画面では、コンテンツが中央に配置される。
+  final double maxWidth;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // 背景グラデーション（白からダークグリーンへ）
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  const Color(0xFFFFFFFF), // 白
-                  AppColors.background, // ダークグリーン (#187360)
-                ],
-                stops: const [0.0, 1.0],
-              ),
-            ),
-          ),
+          // 背景色
+          Container(color: const Color(0xFF040811)),
           // PNG背景画像
           Positioned.fill(
             child: Image.asset(
               backgroundImage,
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.cover,
               alignment: Alignment.bottomCenter,
             ),
           ),
-          // コンテンツ
-          body,
+          // レスポンシブコンテンツ（最大幅制限付き）
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: body,
+            ),
+          ),
         ],
       ),
       floatingActionButton: floatingActionButton,

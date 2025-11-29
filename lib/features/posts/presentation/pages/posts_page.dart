@@ -17,6 +17,7 @@
 //
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/shared.dart';
@@ -37,32 +38,6 @@ class PostsPage extends StatelessWidget {
           slivers: [
             // スクロール時に消えるヘッダー
             const AppSliverHeader(),
-            // 装飾画像
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Center(
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        'なんか\n装飾画像',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
             // Staggered Grid
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -78,13 +53,64 @@ class PostsPage extends StatelessWidget {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 8, right: 8),
-        child: AppFilledButton(
-          label: '句を詠む',
-          leadingIcon: Icons.add,
-          onPressed: () {
-            const CreateRoute().go(context);
-          },
-          width: 160,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // 左上の装飾SVG（下レイヤー）
+            Positioned(
+              left: -20,
+              top: -12,
+              child: Transform.rotate(
+                angle: 3.14159, // 180度回転
+                child: SvgPicture.asset(
+                  'assets/images/button_decoration.svg',
+                  width: 55,
+                  height: 45,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            // 右下の装飾SVG（下レイヤー）
+            Positioned(
+              right: -20,
+              bottom: -12,
+              child: SvgPicture.asset(
+                'assets/images/button_decoration.svg',
+                width: 55,
+                height: 45,
+                fit: BoxFit.contain,
+              ),
+            ),
+            // FABボタン本体（正円・大きめ・上レイヤー）
+            SizedBox(
+              width: 96,
+              height: 96,
+              child: FloatingActionButton(
+                onPressed: () {
+                  const CreateRoute().go(context);
+                },
+                backgroundColor: AppColors.accent,
+                foregroundColor: Colors.white,
+                elevation: 8,
+                shape: const CircleBorder(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.add, size: 32),
+                    const SizedBox(height: 4),
+                    const Text(
+                      '句を詠む',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -129,7 +155,18 @@ class _SliverStaggeredGrid extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 4,
+                  ),
+                  child: Image.asset(
+                    'assets/images/decoration_white.png',
+                    width: double.infinity,
+                    height: 120,
+                    fit: BoxFit.contain,
+                  ),
+                ),
                 ...rightColumn.map(
                   (post) => Padding(
                     padding: const EdgeInsets.all(4),

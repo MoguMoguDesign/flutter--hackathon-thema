@@ -17,6 +17,8 @@
 //
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../constants/app_colors.dart';
 
 /// 副次アクション用のセカンダリボタン。
 ///
@@ -46,26 +48,16 @@ class SecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      height: 56,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+      height: 64,
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: Colors.black,
-          side: const BorderSide(color: Colors.black, width: 3.0),
+          foregroundColor: AppColors.textBlack,
+          side: const BorderSide(color: AppColors.textBlack, width: 3.0),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(32),
           ),
         ),
         child: Row(
@@ -77,7 +69,11 @@ class SecondaryButton extends StatelessWidget {
             ],
             Text(
               text,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                fontFamily: GoogleFonts.rocknRollOne().fontFamily,
+              ),
             ),
           ],
         ),

@@ -17,9 +17,8 @@
 //
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../constants/app_colors.dart';
-import '../buttons/app_filled_button.dart';
-import '../buttons/app_outlined_button.dart';
 
 /// アプリケーション全体で使用する統一された確認ダイアログ。
 ///
@@ -109,8 +108,7 @@ class AppConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color effectiveConfirmButtonColor =
-        confirmButtonColor ??
-        (isDangerous ? AppColors.error : AppColors.userPrimary);
+        confirmButtonColor ?? const Color(0xFFE53935);
 
     return AlertDialog(
       backgroundColor: AppColors.white,
@@ -133,41 +131,62 @@ class AppConfirmDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            AppFilledButton(
-              onPressed: () {
-                if (onConfirm != null) {
-                  onConfirm!();
-                } else {
-                  Navigator.of(context).pop(true);
-                }
-              },
-              label: confirmText,
-              backgroundColor: effectiveConfirmButtonColor,
-              foregroundColor: AppColors.white,
-              height: 44,
+            SizedBox(
               width: 240,
-              textStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              height: 52,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (onConfirm != null) {
+                    onConfirm!();
+                  } else {
+                    Navigator.of(context).pop(true);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: effectiveConfirmButtonColor,
+                  foregroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  elevation: 0,
+                ),
+                child: Text(
+                  confirmText,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.rocknRollOne().fontFamily,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 12),
-            AppOutlinedButton(
-              onPressed: () {
-                if (onCancel != null) {
-                  onCancel!();
-                } else {
-                  Navigator.of(context).pop(false);
-                }
-              },
-              label: cancelText,
-              foregroundColor: AppColors.textGray,
-              borderColor: AppColors.borderGray,
-              height: 44,
+            SizedBox(
               width: 240,
-              textStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              height: 52,
+              child: OutlinedButton(
+                onPressed: () {
+                  if (onCancel != null) {
+                    onCancel!();
+                  } else {
+                    Navigator.of(context).pop(false);
+                  }
+                },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.textGray,
+                  side: BorderSide(color: AppColors.borderGray, width: 2.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                ),
+                child: Text(
+                  cancelText,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.rocknRollOne().fontFamily,
+                  ),
+                ),
               ),
             ),
           ],
