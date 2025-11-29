@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutterhackthema/app/app_router/app_router.dart';
 import 'package:flutterhackthema/firebase_options.dart';
@@ -21,6 +22,13 @@ Future<void> main() async {
     // Firebase初期化（Web用設定を自動選択）
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    // Firestoreキャッシュ設定
+    // オフラインサポートを有効化し、キャッシュサイズを無制限に設定
+    FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
     );
   } catch (e, stackTrace) {
     // Firebase初期化エラーをログ出力
