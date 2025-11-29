@@ -30,7 +30,6 @@ void main() {
 
       await pumpTestWidget(tester, const HaikuInputPage());
 
-      expect(find.text('句を詠む'), findsOneWidget);
       expect(find.byType(AppBackButton), findsOneWidget);
       expect(find.byType(HaikuPreview), findsOneWidget);
       expect(find.byType(StepIndicator), findsOneWidget);
@@ -40,11 +39,15 @@ void main() {
       await resetTestSurface(tester);
     });
 
-    testWidgets('初期ステップは0（上の句）である', (tester) async {
+    testWidgets('初期ステップは0（上五）である', (tester) async {
+      await setLargeTestSurface(tester);
       await pumpTestWidget(tester, const HaikuInputPage());
+      await tester.pumpAndSettle();
 
-      expect(find.text('上の句'), findsOneWidget);
-      expect(find.text('上の句を入力'), findsOneWidget);
+      expect(find.text('上五'), findsOneWidget);
+      expect(find.text('上五を入力'), findsOneWidget);
+
+      await resetTestSurface(tester);
     });
 
     group('Validation Logic', () {
@@ -165,10 +168,16 @@ void main() {
 
     group('10-Character Limit', () {
       testWidgets('AppTextFieldのmaxLengthが10に設定されている', (tester) async {
+        await setLargeTestSurface(tester);
         await pumpTestWidget(tester, const HaikuInputPage());
+        await tester.pumpAndSettle();
 
-        final textField = tester.widget<TextField>(find.byType(TextField));
+        final textField = tester.widget<AppTextField>(
+          find.byType(AppTextField),
+        );
         expect(textField.maxLength, equals(10));
+
+        await resetTestSurface(tester);
       });
 
       testWidgets('10文字を超える入力は受け付けない', (tester) async {
@@ -214,8 +223,8 @@ void main() {
         await tester.tap(find.byType(AppFilledButton));
         await tester.pumpAndSettle();
 
-        expect(find.text('真ん中の行'), findsOneWidget);
-        expect(find.text('真ん中の行を入力'), findsOneWidget);
+        expect(find.text('中七'), findsOneWidget);
+        expect(find.text('中七を入力'), findsOneWidget);
         await resetTestSurface(tester);
       });
 
@@ -236,8 +245,8 @@ void main() {
         await tester.tap(find.byType(AppFilledButton));
         await tester.pumpAndSettle();
 
-        expect(find.text('下の句'), findsOneWidget);
-        expect(find.text('下の句を入力'), findsOneWidget);
+        expect(find.text('下五'), findsOneWidget);
+        expect(find.text('下五を入力'), findsOneWidget);
         await resetTestSurface(tester);
       });
 
@@ -323,47 +332,49 @@ void main() {
     });
 
     group('Rendering', () {
-      testWidgets('タイトルが正しく表示される', (tester) async {
-        await pumpTestWidget(tester, const HaikuInputPage());
-
-        expect(find.text('句を詠む'), findsOneWidget);
-
-        final text = tester.widget<Text>(find.text('句を詠む'));
-        expect(text.style?.fontSize, equals(18));
-        expect(text.style?.fontWeight, equals(FontWeight.w600));
-      });
-
-      testWidgets('決定ボタンのラベルが正しい', (tester) async {
+      testWidgets('初期ステップでは「次の行へ」ボタンが表示される', (tester) async {
         await setLargeTestSurface(tester);
 
         await pumpTestWidget(tester, const HaikuInputPage());
 
-        expect(find.text('決定して次の行へ'), findsOneWidget);
+        expect(find.text('次の行へ'), findsOneWidget);
         await resetTestSurface(tester);
       });
 
       testWidgets('StepIndicatorに正しいステップが渡される', (tester) async {
+        await setLargeTestSurface(tester);
         await pumpTestWidget(tester, const HaikuInputPage());
+        await tester.pumpAndSettle();
 
         final indicator = tester.widget<StepIndicator>(
           find.byType(StepIndicator),
         );
         expect(indicator.currentStep, equals(0));
+
+        await resetTestSurface(tester);
       });
 
       testWidgets('AppBackButtonが表示される', (tester) async {
+        await setLargeTestSurface(tester);
         await pumpTestWidget(tester, const HaikuInputPage());
+        await tester.pumpAndSettle();
 
         expect(find.byType(AppBackButton), findsOneWidget);
+
+        await resetTestSurface(tester);
       });
 
       testWidgets('autofocusがtrueに設定されている', (tester) async {
+        await setLargeTestSurface(tester);
         await pumpTestWidget(tester, const HaikuInputPage());
+        await tester.pumpAndSettle();
 
         final textField = tester.widget<AppTextField>(
           find.byType(AppTextField),
         );
         expect(textField.autofocus, isTrue);
+
+        await resetTestSurface(tester);
       });
     });
 

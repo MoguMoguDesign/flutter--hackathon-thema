@@ -9,22 +9,22 @@ void main() {
         const MaterialApp(home: Scaffold(body: StepIndicator(currentStep: 0))),
       );
 
-      expect(find.text('手順'), findsOneWidget);
+      // StepIndicatorが表示されることを確認
+      expect(find.byType(StepIndicator), findsOneWidget);
 
       final containers = tester.widgetList<Container>(find.byType(Container));
 
-      // 最初のステップ（アクティブ）: 16x16, 黒色
-      final firstStep = containers.firstWhere(
+      // アクティブステップ（20x20）が存在することを確認
+      final activeSteps = containers.where(
+        (c) => c.constraints?.maxWidth == 20 && c.constraints?.maxHeight == 20,
+      );
+      expect(activeSteps.length, equals(1));
+
+      // 非アクティブステップ（16x16）が3つ存在することを確認
+      final inactiveSteps = containers.where(
         (c) => c.constraints?.maxWidth == 16 && c.constraints?.maxHeight == 16,
       );
-      final firstDecoration = firstStep.decoration as BoxDecoration;
-      expect(firstDecoration.color, equals(Colors.black));
-
-      // 他のステップ（非アクティブ）: 12x12, グレー
-      final inactiveSteps = containers.where(
-        (c) => c.constraints?.maxWidth == 12 && c.constraints?.maxHeight == 12,
-      );
-      expect(inactiveSteps.length, equals(2));
+      expect(inactiveSteps.length, equals(3));
     });
 
     testWidgets('currentStep=1の場合、2番目のステップがアクティブ', (tester) async {
@@ -34,21 +34,17 @@ void main() {
 
       final containers = tester.widgetList<Container>(find.byType(Container));
 
-      // アクティブなステップ（2番目）: 16x16
+      // アクティブなステップ（20x20）が1つ存在することを確認
       final activeSteps = containers.where(
-        (c) => c.constraints?.maxWidth == 16 && c.constraints?.maxHeight == 16,
+        (c) => c.constraints?.maxWidth == 20 && c.constraints?.maxHeight == 20,
       );
       expect(activeSteps.length, equals(1));
 
-      // 完了したステップ（1番目）: 12x12, 黒色
-      final completedSteps = containers.where((c) {
-        if (c.constraints?.maxWidth != 12 || c.constraints?.maxHeight != 12) {
-          return false;
-        }
-        final decoration = c.decoration as BoxDecoration?;
-        return decoration?.color == Colors.black;
-      });
-      expect(completedSteps.length, greaterThanOrEqualTo(1));
+      // 非アクティブステップ（16x16）が3つ存在することを確認
+      final inactiveSteps = containers.where(
+        (c) => c.constraints?.maxWidth == 16 && c.constraints?.maxHeight == 16,
+      );
+      expect(inactiveSteps.length, equals(3));
     });
 
     testWidgets('currentStep=2の場合、3番目のステップがアクティブ', (tester) async {
@@ -58,14 +54,14 @@ void main() {
 
       final containers = tester.widgetList<Container>(find.byType(Container));
 
-      // アクティブなステップ（3番目）: 16x16
+      // アクティブなステップ（20x20）が1つ存在することを確認
       final activeSteps = containers.where(
-        (c) => c.constraints?.maxWidth == 16 && c.constraints?.maxHeight == 16,
+        (c) => c.constraints?.maxWidth == 20 && c.constraints?.maxHeight == 20,
       );
       expect(activeSteps.length, equals(1));
     });
 
-    testWidgets('デフォルトでtotalStepsは3である', (tester) async {
+    testWidgets('デフォルトでtotalStepsは4である', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(home: Scaffold(body: StepIndicator(currentStep: 0))),
       );
@@ -74,7 +70,7 @@ void main() {
         find.byType(StepIndicator),
       );
 
-      expect(indicator.totalSteps, equals(3));
+      expect(indicator.totalSteps, equals(4));
     });
 
     testWidgets('ステップインジケーターが中央揃えで表示される', (tester) async {

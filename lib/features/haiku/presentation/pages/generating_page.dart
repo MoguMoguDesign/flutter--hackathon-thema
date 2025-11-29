@@ -149,10 +149,7 @@ class GeneratingPage extends HookConsumerWidget {
                     const SizedBox(height: 8),
                     Text(
                       errorMessage,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
+                      style: const TextStyle(fontSize: 14, color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                   ],

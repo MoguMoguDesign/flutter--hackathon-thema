@@ -32,11 +32,8 @@ class HaikuHintDialog extends StatelessWidget {
   }) {
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) => HaikuHintDialog(
-        title: title,
-        hints: hints,
-        closeText: closeText,
-      ),
+      builder: (BuildContext context) =>
+          HaikuHintDialog(title: title, hints: hints, closeText: closeText),
     );
   }
 
@@ -66,10 +63,10 @@ class HaikuHintDialog extends StatelessWidget {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.background.withOpacity(0.1),
+                    color: AppColors.background.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppColors.background.withOpacity(0.3),
+                      color: AppColors.background.withValues(alpha: 0.3),
                       width: 1,
                     ),
                   ),
@@ -115,4 +112,3 @@ class HaikuHintDialog extends StatelessWidget {
     );
   }
 }
-

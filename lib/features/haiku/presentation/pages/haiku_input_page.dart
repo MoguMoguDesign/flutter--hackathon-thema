@@ -185,9 +185,7 @@ class HaikuInputPage extends HookConsumerWidget {
                   icon: const Icon(Icons.wb_incandescent),
                   label: const Text('季語のヒント'),
                   onPressed: handleShowHint,
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                  ),
+                  style: TextButton.styleFrom(foregroundColor: Colors.white),
                 ),
               ],
             ),
@@ -293,20 +291,21 @@ class _GenerateButton extends StatelessWidget {
     const double height = 64.0;
     const Color bgColor = Color(0xFF040811);
 
-    final ButtonStyle buttonStyle = FilledButton.styleFrom(
-      backgroundColor: bgColor,
-      foregroundColor: Colors.white,
-      minimumSize: const Size(double.infinity, height),
-      maximumSize: const Size(double.infinity, height),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(height / 2),
-      ),
-    ).copyWith(
-      overlayColor: WidgetStateProperty.all(
-        Colors.white.withOpacity(0.1),
-      ),
-    );
+    final ButtonStyle buttonStyle =
+        FilledButton.styleFrom(
+          backgroundColor: bgColor,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(double.infinity, height),
+          maximumSize: const Size(double.infinity, height),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(height / 2),
+          ),
+        ).copyWith(
+          overlayColor: WidgetStateProperty.all(
+            Colors.white.withValues(alpha: 0.1),
+          ),
+        );
 
     return SizedBox(
       width: double.infinity,
@@ -320,7 +319,7 @@ class _GenerateButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(height / 2),
               boxShadow: [
                 BoxShadow(
-                  color: bgColor.withOpacity(0.5),
+                  color: bgColor.withValues(alpha: 0.5),
                   blurRadius: 16,
                   offset: const Offset(0, 4),
                 ),
@@ -335,7 +334,11 @@ class _GenerateButton extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.auto_awesome, size: 20, color: Colors.white),
+                    const Icon(
+                      Icons.auto_awesome,
+                      size: 20,
+                      color: Colors.white,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       '背景を生成する',

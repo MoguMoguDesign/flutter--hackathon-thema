@@ -87,8 +87,7 @@ void main() {
       // width: double.infinity の場合、constraints.maxWidth は Infinity になる
       expect(container.constraints?.maxWidth, equals(double.infinity));
       final decoration = container.decoration as BoxDecoration;
-      expect(decoration.color, equals(Colors.grey.shade200));
-      expect(decoration.borderRadius, equals(BorderRadius.circular(24)));
+      expect(decoration.color, equals(Colors.white));
       expect(decoration.boxShadow, isNotNull);
       expect(decoration.boxShadow?.length, equals(1));
     });

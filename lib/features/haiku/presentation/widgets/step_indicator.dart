@@ -52,10 +52,7 @@ class StepIndicator extends StatelessWidget {
 
           return Row(
             children: [
-              _StepDot(
-                isActive: isActive,
-                isCompleted: isCompleted,
-              ),
+              _StepDot(isActive: isActive, isCompleted: isCompleted),
               if (index < totalSteps - 1)
                 _StepConnector(isCompleted: isCompleted),
             ],
@@ -68,10 +65,7 @@ class StepIndicator extends StatelessWidget {
 
 /// ステップドット
 class _StepDot extends StatelessWidget {
-  const _StepDot({
-    required this.isActive,
-    required this.isCompleted,
-  });
+  const _StepDot({required this.isActive, required this.isCompleted});
 
   final bool isActive;
   final bool isCompleted;
@@ -87,15 +81,12 @@ class _StepDot extends StatelessWidget {
         shape: BoxShape.circle,
         color: _getDotColor(),
         border: isActive
-            ? Border.all(
-                color: AppColors.white,
-                width: 2.5,
-              )
+            ? Border.all(color: AppColors.white, width: 2.5)
             : null,
         boxShadow: (isActive || isCompleted)
             ? [
                 BoxShadow(
-                  color: AppColors.accent.withOpacity(0.4),
+                  color: AppColors.accent.withValues(alpha: 0.4),
                   blurRadius: 8,
                   spreadRadius: 1,
                 ),
@@ -109,16 +100,14 @@ class _StepDot extends StatelessWidget {
     if (isActive || isCompleted) {
       return AppColors.accent;
     } else {
-      return AppColors.white.withOpacity(0.25);
+      return AppColors.white.withValues(alpha: 0.25);
     }
   }
 }
 
 /// ステップ間の接続線
 class _StepConnector extends StatelessWidget {
-  const _StepConnector({
-    required this.isCompleted,
-  });
+  const _StepConnector({required this.isCompleted});
 
   final bool isCompleted;
 
@@ -134,11 +123,11 @@ class _StepConnector extends StatelessWidget {
         borderRadius: BorderRadius.circular(2),
         color: isCompleted
             ? AppColors.accent
-            : AppColors.white.withOpacity(0.25),
+            : AppColors.white.withValues(alpha: 0.25),
         boxShadow: isCompleted
             ? [
                 BoxShadow(
-                  color: AppColors.accent.withOpacity(0.3),
+                  color: AppColors.accent.withValues(alpha: 0.3),
                   blurRadius: 4,
                   spreadRadius: 0.5,
                 ),

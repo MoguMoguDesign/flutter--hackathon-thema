@@ -156,7 +156,10 @@ class _SliverStaggeredGrid extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 4,
+                  ),
                   child: Image.asset(
                     'assets/images/decoration_white.png',
                     width: double.infinity,
