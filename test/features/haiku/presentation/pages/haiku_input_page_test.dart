@@ -20,6 +20,8 @@ Future<void> resetTestSurface(WidgetTester tester) async {
 void main() {
   group('HaikuInputPage', () {
     testWidgets('初期表示が正しくレンダリングされる', (tester) async {
+      await setLargeTestSurface(tester);
+
       await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
 
       expect(find.text('句を詠む'), findsOneWidget);
@@ -28,6 +30,8 @@ void main() {
       expect(find.byType(StepIndicator), findsOneWidget);
       expect(find.byType(AppTextField), findsOneWidget);
       expect(find.byType(AppFilledButton), findsOneWidget);
+
+      await resetTestSurface(tester);
     });
 
     testWidgets('初期ステップは0（上の句）である', (tester) async {
@@ -39,15 +43,21 @@ void main() {
 
     group('Validation Logic', () {
       testWidgets('空のテキストではボタンが無効化される', (tester) async {
+        await setLargeTestSurface(tester);
+
         await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
 
         final button = tester.widget<AppFilledButton>(
           find.byType(AppFilledButton),
         );
         expect(button.onPressed, isNull);
+
+        await resetTestSurface(tester);
       });
 
       testWidgets('1文字入力するとボタンが有効化される', (tester) async {
+        await setLargeTestSurface(tester);
+
         await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
 
         await tester.enterText(find.byType(AppTextField), 'あ');
@@ -57,6 +67,8 @@ void main() {
           find.byType(AppFilledButton),
         );
         expect(button.onPressed, isNotNull);
+
+        await resetTestSurface(tester);
       });
 
       testWidgets('10文字入力してもボタンが有効である', (tester) async {
@@ -91,6 +103,8 @@ void main() {
       });
 
       testWidgets('空白文字のみではボタンが無効化される', (tester) async {
+        await setLargeTestSurface(tester);
+
         await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
 
         await tester.enterText(find.byType(AppTextField), '   ');
@@ -100,9 +114,13 @@ void main() {
           find.byType(AppFilledButton),
         );
         expect(button.onPressed, isNull);
+
+        await resetTestSurface(tester);
       });
 
       testWidgets('前後の空白はトリミングされる', (tester) async {
+        await setLargeTestSurface(tester);
+
         await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
 
         await tester.enterText(find.byType(AppTextField), '  あいう  ');
@@ -112,9 +130,13 @@ void main() {
           find.byType(AppFilledButton),
         );
         expect(button.onPressed, isNotNull);
+
+        await resetTestSurface(tester);
       });
 
       testWidgets('入力をクリアするとボタンが無効化される', (tester) async {
+        await setLargeTestSurface(tester);
+
         await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
 
         await tester.enterText(find.byType(AppTextField), 'あいう');
@@ -130,6 +152,8 @@ void main() {
 
         button = tester.widget<AppFilledButton>(find.byType(AppFilledButton));
         expect(button.onPressed, isNull);
+
+        await resetTestSurface(tester);
       });
     });
 
@@ -158,6 +182,8 @@ void main() {
       });
 
       testWidgets('文字数カウンターが表示される', (tester) async {
+        await setLargeTestSurface(tester);
+
         await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
 
         await tester.enterText(find.byType(AppTextField), 'あいう');
@@ -165,6 +191,8 @@ void main() {
 
         // TextFieldのmaxLengthが設定されている場合、文字数カウンターが表示される
         expect(find.text('3/10'), findsOneWidget);
+
+        await resetTestSurface(tester);
       });
     });
 

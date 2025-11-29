@@ -54,7 +54,9 @@ void main() {
 
     testWidgets('10文字の句が正しく縦書き表示される', (tester) async {
       // テストビューのサイズを大きくして、HaikuPreviewのオーバーフローを防ぐ
-      await tester.binding.setSurfaceSize(const Size(800, 1200));
+      tester.view.physicalSize = const Size(800, 1200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
 
       await tester.pumpWidget(
         const MaterialApp(
@@ -73,9 +75,6 @@ void main() {
       expect(find.text('く'), findsOneWidget);
       expect(find.text('け'), findsOneWidget);
       expect(find.text('こ'), findsOneWidget);
-
-      // テストビューのサイズをリセット
-      await tester.binding.setSurfaceSize(null);
     });
 
     testWidgets('Containerのスタイルが正しく設定されている', (tester) async {
@@ -85,7 +84,8 @@ void main() {
 
       final container = tester.widget<Container>(find.byType(Container).first);
 
-      expect(container.constraints?.maxWidth, isNull); // width: double.infinity
+      // width: double.infinity の場合、constraints.maxWidth は Infinity になる
+      expect(container.constraints?.maxWidth, equals(double.infinity));
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.color, equals(Colors.grey.shade200));
       expect(decoration.borderRadius, equals(BorderRadius.circular(24)));
