@@ -1,0 +1,56 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # FVMのセットアップ
+      - name: Setup FVM
+        uses: kuhnroyal/flutter-fvm-config-action@v2
+        id: fvm-config-action
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm-config-action.outputs.FLUTTER_CHANNEL }}
+          cache: true
+          cache-key: flutter-${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+
+      # 依存関係のインストール
+      - name: Get dependencies
+        run: flutter pub get
+
+      # コード生成
+      - name: Generate code
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      # Flutter Webビルド
+      - name: Build Flutter Web
+        run: flutter build web --release --web-renderer canvaskit
+
+      # Vercelにデプロイ
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./build/web
+          vercel-args: '--prod'
+

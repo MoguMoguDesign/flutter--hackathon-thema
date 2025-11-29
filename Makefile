@@ -164,7 +164,12 @@ build-web: ## Web用アプリをビルド
 	fvm flutter build web
 
 build-web-release: ## Web用リリースアプリをビルド
-	fvm flutter build web --release
+	fvm flutter build web --release --web-renderer canvaskit
+
+# デプロイ
+deploy-preview: build-web-release ## ローカルでWebビルドをプレビュー
+	@echo "🌐 Opening preview at http://localhost:8000"
+	@cd build/web && python3 -m http.server 8000
 
 # =============================================================================
 # クリーンアップ
