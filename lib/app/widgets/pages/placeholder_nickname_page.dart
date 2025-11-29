@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_di/nickname_provider.dart';
@@ -83,8 +82,8 @@ class PlaceholderNicknamePage extends ConsumerWidget {
                         .read(temporaryNicknameProvider.notifier)
                         .setNickname(nickname);
 
-                    // 投稿一覧画面へ遷移
-                    context.go(Routes.posts);
+                    // 投稿一覧画面へ遷移（型安全なルーティング）
+                    const PostsRoute().go(context);
                   } else {
                     // エラー表示
                     ScaffoldMessenger.of(context).showSnackBar(
