@@ -9,11 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 ///
 /// Riverpodの[ProviderScope]でアプリ全体をラップして状態管理を有効化
 void main() {
-  runApp(
-    const ProviderScope(
-      child: MainApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {

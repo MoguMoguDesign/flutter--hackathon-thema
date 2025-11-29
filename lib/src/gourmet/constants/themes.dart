@@ -8,9 +8,9 @@ abstract final class Themes {
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(seedColor: mainOrange),
       textTheme: ThemeData().textTheme.apply(
-            fontFamily: kZenkakuGothicNew,
-            bodyColor: gray.shade900,
-          ),
+        fontFamily: kZenkakuGothicNew,
+        bodyColor: gray.shade900,
+      ),
     );
 
     return theme.copyWith(
@@ -61,10 +61,7 @@ abstract final class Themes {
       popupMenuTheme: PopupMenuThemeData(
         elevation: 4,
         shadowColor: mainOrange.shade300.withValues(alpha: 0.25),
-        textStyle: TextStyle(
-          color: gray.shade900,
-          fontWeight: FontWeight.bold,
-        ),
+        textStyle: TextStyle(color: gray.shade900, fontWeight: FontWeight.bold),
       ),
       cardTheme: CardThemeData(
         elevation: 4,
@@ -73,10 +70,7 @@ abstract final class Themes {
         surfaceTintColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(
-            color: Themes.mainOrange,
-            width: 2,
-          ),
+          side: const BorderSide(color: Themes.mainOrange, width: 2),
         ),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
@@ -91,10 +85,7 @@ abstract final class Themes {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
         ),
-        hintStyle: TextStyle(
-          color: gray.shade300,
-          fontSize: 16,
-        ),
+        hintStyle: TextStyle(color: gray.shade300, fontSize: 16),
       ),
       listTileTheme: ListTileThemeData(
         contentPadding: const EdgeInsets.symmetric(horizontal: 8),
@@ -104,22 +95,15 @@ abstract final class Themes {
           fontWeight: FontWeight.bold,
           fontSize: 16,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       dialogTheme: DialogThemeData(
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         alignment: Alignment.center,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 8,
-        contentTextStyle: TextStyle(
-          color: gray[900],
-          fontSize: 16,
-        ),
+        contentTextStyle: TextStyle(color: gray[900], fontSize: 16),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith(
@@ -151,9 +135,7 @@ abstract final class Themes {
                 : mainOrange,
           ),
           shape: WidgetStateProperty.all<OutlinedBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           textStyle: WidgetStateProperty.all<TextStyle>(
             TextStyle(
@@ -201,20 +183,13 @@ abstract final class Themes {
           height: 1.5,
         ),
         // デフォルト
-        bodyMedium: theme.textTheme.bodyMedium!.copyWith(
-          fontSize: 14,
-        ),
-        bodySmall: theme.textTheme.bodySmall!.copyWith(
-          fontSize: 12,
-        ),
+        bodyMedium: theme.textTheme.bodyMedium!.copyWith(fontSize: 14),
+        bodySmall: theme.textTheme.bodySmall!.copyWith(fontSize: 12),
       ),
       tabBarTheme: TabBarThemeData(
         labelColor: Colors.white,
         unselectedLabelColor: gray.shade700,
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-        ),
+        labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         unselectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 14,
@@ -222,10 +197,7 @@ abstract final class Themes {
         indicator: BoxDecoration(
           color: Themes.mainOrange,
           borderRadius: BorderRadius.circular(40),
-          border: Border.all(
-            color: Themes.gray.shade900,
-            width: 2,
-          ),
+          border: Border.all(color: Themes.gray.shade900, width: 2),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         labelPadding: const EdgeInsets.symmetric(horizontal: 16),
@@ -237,8 +209,7 @@ abstract final class Themes {
     );
   }
 
-  static const mainOrange =
-      MaterialColor(_mainOrangeValue, <int, Color>{
+  static const mainOrange = MaterialColor(_mainOrangeValue, <int, Color>{
     50: Color(0xFFfdf3e4),
     100: Color(0xFFfce0ba),
     200: Color(0xFFfacd8f),
@@ -252,8 +223,7 @@ abstract final class Themes {
   });
   static const _mainOrangeValue = 0xFFef913a;
 
-  static const gray =
-      MaterialColor(_grayPrimaryValue, <int, Color>{
+  static const gray = MaterialColor(_grayPrimaryValue, <int, Color>{
     50: Color(0xFFfff4eb),
     100: Color(0xFFf8eae1),
     200: Color(0xFFebded4),

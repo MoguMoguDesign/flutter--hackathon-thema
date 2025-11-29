@@ -38,10 +38,7 @@ class GourmetComponentTestPage extends StatelessWidget {
               AppElevatedButton(
                 text: 'プライマリボタン',
                 onPressed: () {
-                  AppSnackBar.show(
-                    context,
-                    message: 'プライマリボタンが押されました',
-                  );
+                  AppSnackBar.show(context, message: 'プライマリボタンが押されました');
                 },
               ),
               const SizedBox(height: 16),
@@ -50,10 +47,7 @@ class GourmetComponentTestPage extends StatelessWidget {
                 backgroundColor: Themes.gray.shade700,
                 borderColor: Themes.gray.shade900,
                 onPressed: () {
-                  AppSnackBar.show(
-                    context,
-                    message: 'カスタムカラーボタンが押されました',
-                  );
+                  AppSnackBar.show(context, message: 'カスタムカラーボタンが押されました');
                 },
               ),
               const SizedBox(height: 16),
@@ -61,10 +55,7 @@ class GourmetComponentTestPage extends StatelessWidget {
                 text: 'アイコン付きボタン',
                 widget: const Icon(Icons.star, color: Colors.white),
                 onPressed: () {
-                  AppSnackBar.show(
-                    context,
-                    message: 'アイコン付きボタンが押されました',
-                  );
+                  AppSnackBar.show(context, message: 'アイコン付きボタンが押されました');
                 },
               ),
               const SizedBox(height: 32),
@@ -86,10 +77,7 @@ class GourmetComponentTestPage extends StatelessWidget {
                     contentString: 'この操作を実行しますか?',
                     hasCancelButton: true,
                     onConfirmed: () {
-                      AppSnackBar.show(
-                        context,
-                        message: '確認されました',
-                      );
+                      AppSnackBar.show(context, message: '確認されました');
                     },
                   );
                 },
@@ -107,10 +95,7 @@ class GourmetComponentTestPage extends StatelessWidget {
                     hasCancelButton: true,
                     isDestructiveAction: true,
                     onConfirmed: () {
-                      AppSnackBar.show(
-                        context,
-                        message: '削除されました',
-                      );
+                      AppSnackBar.show(context, message: '削除されました');
                     },
                   );
                 },
@@ -130,10 +115,7 @@ class GourmetComponentTestPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'カードタイトル',
-                        style: context.textTheme.titleMedium,
-                      ),
+                      Text('カードタイトル', style: context.textTheme.titleMedium),
                       const SizedBox(height: 8),
                       Text(
                         'これはGuruMemoCardの例です。カスタムボーダーと影を持つカードウィジェットです。',
@@ -188,18 +170,9 @@ class GourmetComponentTestPage extends StatelessWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _ColorChip(
-                    color: Themes.mainOrange,
-                    label: 'Main Orange',
-                  ),
-                  _ColorChip(
-                    color: Themes.gray,
-                    label: 'Gray',
-                  ),
-                  _ColorChip(
-                    color: Themes.errorAlertColor,
-                    label: 'Error',
-                  ),
+                  _ColorChip(color: Themes.mainOrange, label: 'Main Orange'),
+                  _ColorChip(color: Themes.gray, label: 'Gray'),
+                  _ColorChip(color: Themes.errorAlertColor, label: 'Error'),
                 ],
               ),
               const SizedBox(height: 32),
@@ -233,10 +206,7 @@ class GourmetComponentTestPage extends StatelessWidget {
 }
 
 class _ColorChip extends StatelessWidget {
-  const _ColorChip({
-    required this.color,
-    required this.label,
-  });
+  const _ColorChip({required this.color, required this.label});
 
   final Color color;
   final String label;

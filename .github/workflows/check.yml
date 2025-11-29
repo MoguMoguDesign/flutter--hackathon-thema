@@ -1,0 +1,81 @@
+name: Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # FVMのセットアップ
+      - name: Setup FVM
+        uses: kuhnroyal/flutter-fvm-config-action@v2
+        id: fvm-config-action
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm-config-action.outputs.FLUTTER_CHANNEL }}
+          cache: true
+          cache-key: flutter-${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+
+      # Pythonのセットアップ（CLAUDE.mdルールチェック用）
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # 依存関係のインストール
+      - name: Get dependencies
+        run: flutter pub get
+
+      # キャッシュの確認（build_runner生成ファイル）
+      - name: Cache generated files
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/*.g.dart
+            **/*.freezed.dart
+            **/*.gr.dart
+          key: generated-${{ runner.os }}-${{ hashFiles('**/pubspec.lock') }}-${{ hashFiles('**/*.dart', '!**/*.g.dart', '!**/*.freezed.dart', '!**/*.gr.dart') }}
+          restore-keys: |
+            generated-${{ runner.os }}-${{ hashFiles('**/pubspec.lock') }}-
+            generated-${{ runner.os }}-
+
+      # コード生成
+      - name: Generate code
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      # 静的解析
+      - name: Analyze code
+        run: flutter analyze
+
+      # フォーマットチェック
+      - name: Check formatting
+        run: |
+          chmod +x .github/scripts/validate-formatting.sh
+          .github/scripts/validate-formatting.sh
+
+      # CLAUDE.mdルールチェック
+      - name: Check CLAUDE.md compliance
+        run: |
+          chmod +x .ai/check_claude_rules.py
+          python3 .ai/check_claude_rules.py
+
+      # テスト実行
+      - name: Run tests
+        run: flutter test --coverage

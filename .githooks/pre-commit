@@ -1,0 +1,54 @@
+#!/bin/bash
+# Pre-commit hook for Flutter Hackathon Thema project
+# Enforces CLAUDE.md rules before allowing commits
+
+set -e
+
+echo "🔍 Running CLAUDE.md compliance checks..."
+
+# Check if Python 3 is available
+if ! command -v python3 &> /dev/null; then
+    echo "❌ Error: python3 is not installed or not in PATH"
+    echo "Please install Python 3 to use this pre-commit hook"
+    exit 1
+fi
+
+# Check if jq is available for JSON processing
+if ! command -v jq &> /dev/null; then
+    echo "⚠️  Warning: jq is not installed. Using alternative method..."
+    # Generate project_files.json without jq
+    echo "📝 Updating project files list..."
+    find lib -name "*.dart" -type f | python3 -c "import sys, json; print(json.dumps([line.strip() for line in sys.stdin if line.strip()]))" > .ai/project_files.json
+else
+    # Update project files list with jq
+    echo "📝 Updating project files list..."
+    find lib -name "*.dart" -type f | jq -R -s -c 'split("\n") | map(select(length > 0))' > .ai/project_files.json
+fi
+
+# Validate Python script syntax
+echo "🔧 Validating check_claude_rules.py syntax..."
+if ! python3 -m py_compile .ai/check_claude_rules.py 2>/dev/null; then
+    echo "❌ Error: check_claude_rules.py has syntax errors"
+    echo "Please fix the Python script before committing"
+    exit 1
+fi
+
+# Run the rules checker
+echo "🚀 Running CLAUDE.md rules checker..."
+if python3 .ai/check_claude_rules.py; then
+    echo ""
+    echo "✅ Pre-commit checks passed!"
+    exit 0
+else
+    echo ""
+    echo "❌ Pre-commit checks failed!"
+    echo ""
+    echo "Please fix the issues above before committing."
+    echo ""
+    echo "To see detailed output, run:"
+    echo "  python3 .ai/check_claude_rules.py"
+    echo ""
+    echo "If you need to bypass this check (NOT recommended), use:"
+    echo "  git commit --no-verify"
+    exit 1
+fi

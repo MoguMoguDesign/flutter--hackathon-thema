@@ -14,11 +14,7 @@ import 'package:flutterhackthema/main.dart';
 void main() {
   testWidgets('MainApp smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(
-      const ProviderScope(
-        child: MainApp(),
-      ),
-    );
+    await tester.pumpWidget(const ProviderScope(child: MainApp()));
 
     // Verify that the app renders without errors
     expect(find.byType(MaterialApp), findsOneWidget);
