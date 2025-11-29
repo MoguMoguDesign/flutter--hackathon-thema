@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import 'package:flutterhackthema/src/constants/app_colors.dart';
@@ -86,7 +85,8 @@ class ErrorPage extends StatelessWidget {
               // ホームへ戻るボタン
               ElevatedButton.icon(
                 onPressed: () {
-                  context.go(Routes.nickname);
+                  // 型安全なルーティング
+                  const NicknameRoute().go(context);
                 },
                 icon: const Icon(Icons.home),
                 label: Text('ホームに戻る', style: AppTextStyles.labelMedium),
