@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutterhackthema/features/haiku/presentation/pages/haiku_input_page.dart';
 import 'package:flutterhackthema/shared/presentation/widgets/inputs/app_text_field.dart';
 import 'package:flutterhackthema/shared/presentation/widgets/navigation/back_button.dart';
@@ -17,12 +18,17 @@ Future<void> resetTestSurface(WidgetTester tester) async {
   await tester.binding.setSurfaceSize(null);
 }
 
+/// ProviderScopeでラップされたMaterialAppをpumpする
+Future<void> pumpTestWidget(WidgetTester tester, Widget widget) async {
+  await tester.pumpWidget(ProviderScope(child: MaterialApp(home: widget)));
+}
+
 void main() {
   group('HaikuInputPage', () {
     testWidgets('初期表示が正しくレンダリングされる', (tester) async {
       await setLargeTestSurface(tester);
 
-      await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+      await pumpTestWidget(tester, const HaikuInputPage());
 
       expect(find.text('句を詠む'), findsOneWidget);
       expect(find.byType(AppBackButton), findsOneWidget);
@@ -35,7 +41,7 @@ void main() {
     });
 
     testWidgets('初期ステップは0（上の句）である', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+      await pumpTestWidget(tester, const HaikuInputPage());
 
       expect(find.text('上の句'), findsOneWidget);
       expect(find.text('上の句を入力'), findsOneWidget);
@@ -45,7 +51,7 @@ void main() {
       testWidgets('空のテキストではボタンが無効化される', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         final button = tester.widget<AppFilledButton>(
           find.byType(AppFilledButton),
@@ -58,7 +64,7 @@ void main() {
       testWidgets('1文字入力するとボタンが有効化される', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), 'あ');
         await tester.pump();
@@ -74,7 +80,7 @@ void main() {
       testWidgets('10文字入力してもボタンが有効である', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), 'あいうえおかきくけこ');
         await tester.pump();
@@ -90,7 +96,7 @@ void main() {
       testWidgets('11文字入力するとボタンが無効化される', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         // 11文字入力を試みる（maxLengthで制限される）
         await tester.enterText(find.byType(AppTextField), 'あいうえおかきくけこさ');
@@ -105,7 +111,7 @@ void main() {
       testWidgets('空白文字のみではボタンが無効化される', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), '   ');
         await tester.pump();
@@ -121,7 +127,7 @@ void main() {
       testWidgets('前後の空白はトリミングされる', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), '  あいう  ');
         await tester.pump();
@@ -137,7 +143,7 @@ void main() {
       testWidgets('入力をクリアするとボタンが無効化される', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), 'あいう');
         await tester.pump();
@@ -159,7 +165,7 @@ void main() {
 
     group('10-Character Limit', () {
       testWidgets('AppTextFieldのmaxLengthが10に設定されている', (tester) async {
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         final textField = tester.widget<TextField>(find.byType(TextField));
         expect(textField.maxLength, equals(10));
@@ -168,7 +174,7 @@ void main() {
       testWidgets('10文字を超える入力は受け付けない', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         // 11文字入力を試みる
         await tester.enterText(find.byType(AppTextField), '12345678901');
@@ -184,7 +190,7 @@ void main() {
       testWidgets('文字数カウンターが表示される', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), 'あいう');
         await tester.pump();
@@ -200,7 +206,7 @@ void main() {
       testWidgets('ステップ0で決定すると次のステップに進む', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), 'あいう');
         await tester.pump();
@@ -216,7 +222,7 @@ void main() {
       testWidgets('ステップ1で決定するとステップ2に進む', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         // ステップ0
         await tester.enterText(find.byType(AppTextField), 'あいう');
@@ -238,7 +244,7 @@ void main() {
       testWidgets('各ステップで入力フィールドがクリアされる', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), 'あいう');
         await tester.pump();
@@ -253,7 +259,7 @@ void main() {
       testWidgets('入力した値がHaikuPreviewに表示される', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         // ステップ0: 上の句
         await tester.enterText(find.byType(AppTextField), 'あいう');
@@ -273,7 +279,7 @@ void main() {
       testWidgets('数字のみの入力も受け付ける', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), '12345');
         await tester.pump();
@@ -288,7 +294,7 @@ void main() {
       testWidgets('記号を含む入力も受け付ける', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), 'あ、い。う！');
         await tester.pump();
@@ -303,7 +309,7 @@ void main() {
       testWidgets('英字を含む入力も受け付ける', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         await tester.enterText(find.byType(AppTextField), 'ABCあいう');
         await tester.pump();
@@ -318,7 +324,7 @@ void main() {
 
     group('Rendering', () {
       testWidgets('タイトルが正しく表示される', (tester) async {
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         expect(find.text('句を詠む'), findsOneWidget);
 
@@ -330,14 +336,14 @@ void main() {
       testWidgets('決定ボタンのラベルが正しい', (tester) async {
         await setLargeTestSurface(tester);
 
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         expect(find.text('決定して次の行へ'), findsOneWidget);
         await resetTestSurface(tester);
       });
 
       testWidgets('StepIndicatorに正しいステップが渡される', (tester) async {
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         final indicator = tester.widget<StepIndicator>(
           find.byType(StepIndicator),
@@ -346,13 +352,13 @@ void main() {
       });
 
       testWidgets('AppBackButtonが表示される', (tester) async {
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         expect(find.byType(AppBackButton), findsOneWidget);
       });
 
       testWidgets('autofocusがtrueに設定されている', (tester) async {
-        await tester.pumpWidget(const MaterialApp(home: HaikuInputPage()));
+        await pumpTestWidget(tester, const HaikuInputPage());
 
         final textField = tester.widget<AppTextField>(
           find.byType(AppTextField),
@@ -360,5 +366,13 @@ void main() {
         expect(textField.autofocus, isTrue);
       });
     });
+
+    // Note: Firestore Integration testing is handled by unit tests
+    // (HaikuNotifier and HaikuRepository tests) due to the complexity of
+    // testing async unawaited() operations combined with go_router navigation
+    // in widget tests. The unit tests provide comprehensive coverage of:
+    // - HaikuNotifier.saveHaiku() success and error cases
+    // - HaikuRepository.create() CRUD operations
+    // - Error handling and logging throughout the stack
   });
 }

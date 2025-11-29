@@ -1,13 +1,35 @@
+// FLUTTER HACKATHON THEMA - DO NOT DELETE THIS FILE
+// This file is managed by AI development rules (CLAUDE.md)
+//
+// Architecture: Three-Layer (App → Feature → Shared)
+// State Management: hooks_riverpod 3.x with @riverpod annotation (MANDATORY)
+// Router: go_router 16.x (MANDATORY)
+// Code Generation: build_runner, riverpod_generator, freezed (REQUIRED)
+// Testing: Comprehensive coverage required
+//
+// Development Rules:
+// - Use @riverpod annotation for all providers
+// - Use HookConsumerWidget when using hooks
+// - Documentation comments in Japanese (///)
+// - Follow three-layer architecture strictly
+// - No direct Feature-to-Feature dependencies
+// - All changes must pass: analyze, format, test
+//
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 import '../widgets/haiku_hint_dialog.dart';
+import '../providers/haiku_provider.dart';
 import '../widgets/haiku_preview.dart';
 import '../widgets/step_indicator.dart';
 
@@ -15,7 +37,7 @@ import '../widgets/step_indicator.dart';
 ///
 /// 俳句を4ステップ形式で入力し、AI画像生成をリクエストする。
 /// ワイヤーフレーム: `俳句入力.png`
-class HaikuInputPage extends HookWidget {
+class HaikuInputPage extends HookConsumerWidget {
   /// 俳句入力画面を作成する。
   const HaikuInputPage({super.key});
 
@@ -23,7 +45,7 @@ class HaikuInputPage extends HookWidget {
   static const List<String> _stepHints = ['上五を入力', '中七を入力', '下五を入力', ''];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentStep = useState(0);
     final firstLine = useState('');
     final secondLine = useState('');
@@ -40,6 +62,29 @@ class HaikuInputPage extends HookWidget {
       inputController.addListener(listener);
       return () => inputController.removeListener(listener);
     }, [inputController]);
+
+    // 保存エラーをリッスン
+    ref.listen<AsyncValue<String?>>(haikuProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, stackTrace) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('保存に失敗しました: $error'),
+                backgroundColor: Colors.red,
+                action: SnackBarAction(
+                  label: '再試行',
+                  textColor: Colors.white,
+                  onPressed: () {
+                    // リトライ機能は将来的に実装
+                  },
+                ),
+              ),
+            );
+          }
+        },
+      );
+    });
 
     Future<void> handleBack() async {
       final shouldLeave = await AppConfirmDialog.show(
@@ -110,6 +155,17 @@ class HaikuInputPage extends HookWidget {
     }
 
     void handleGenerate() {
+      // Firestoreへ非同期保存 (UIをブロックしない)
+      final notifier = ref.read(haikuProvider.notifier);
+      unawaited(
+        notifier.saveHaiku(
+          firstLine: firstLine.value,
+          secondLine: secondLine.value,
+          thirdLine: thirdLine.value,
+        ),
+      );
+
+      // 即座に画面遷移
       // 4ステップ完了、生成画面へ遷移
       GeneratingRoute(
         firstLine: firstLine.value,
