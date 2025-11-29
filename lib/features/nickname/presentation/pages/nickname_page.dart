@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../app/app_router/routes.dart';
 import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
 import '../providers/nickname_provider.dart';
@@ -72,13 +72,35 @@ class NicknamePage extends HookConsumerWidget {
                 label: 'はじめる',
                 onPressed: isValid.value
                     ? () async {
-                        // ニックネームをProviderに保存（永続化）
-                        await ref
-                            .read(nicknameProvider.notifier)
-                            .setNickname(nicknameController.text.trim());
-                        // 投稿一覧画面へ遷移
-                        if (context.mounted) {
-                          context.go('/posts');
+                        try {
+                          debugPrint('ニックネーム保存開始: ${nicknameController.text.trim()}');
+
+                          // ニックネームをProviderに保存（永続化）
+                          await ref
+                              .read(nicknameProvider.notifier)
+                              .setNickname(nicknameController.text.trim());
+
+                          debugPrint('ニックネーム保存完了');
+
+                          // 投稿一覧画面へ遷移
+                          if (context.mounted) {
+                            debugPrint('遷移開始: /posts');
+                            const PostsRoute().go(context);
+                          } else {
+                            debugPrint('context.mounted = false');
+                          }
+                        } catch (e, stackTrace) {
+                          debugPrint('エラー発生: $e');
+                          debugPrint('スタックトレース: $stackTrace');
+
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('エラーが発生しました: $e'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
                         }
                       }
                     : null,

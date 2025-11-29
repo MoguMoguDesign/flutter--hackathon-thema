@@ -20,16 +20,24 @@ Future<void> main() async {
 
   try {
     // Firebase初期化（Web用設定を自動選択）
+    debugPrint('Firebase初期化開始');
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    debugPrint('Firebase初期化完了');
 
     // Firestoreキャッシュ設定
     // オフラインサポートを有効化し、キャッシュサイズを無制限に設定
-    FirebaseFirestore.instance.settings = const Settings(
-      persistenceEnabled: true,
-      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
-    );
+    try {
+      FirebaseFirestore.instance.settings = const Settings(
+        persistenceEnabled: true,
+        cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+      );
+      debugPrint('Firestoreキャッシュ設定完了');
+    } catch (e) {
+      // Web版では persistence 設定がサポートされていない場合がある
+      debugPrint('Firestoreキャッシュ設定エラー (無視): $e');
+    }
   } catch (e, stackTrace) {
     // Firebase初期化エラーをログ出力
     // TODO(#7): 本番環境ではエラーページへのリダイレクトを検討
