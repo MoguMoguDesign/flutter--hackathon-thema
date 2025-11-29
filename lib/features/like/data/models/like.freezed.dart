@@ -16,9 +16,15 @@ T _$identity<T>(T value) => value;
 mixin _$Like {
 
 /// いいねID（UUIDで自動生成）
- String get id;/// いいねしたユーザーのID
- String get userId;/// いいねされた俳句のID
- String get haikuId;/// いいねした日時
+ String get id;
+
+/// いいねしたユーザーのID
+ String get userId;
+
+/// いいねされた俳句のID
+ String get haikuId;
+
+/// いいねした日時
  DateTime get createdAt;
 /// Create a copy of Like
 /// with the given fields replaced by the non-null parameter values.

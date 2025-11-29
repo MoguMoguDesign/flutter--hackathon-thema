@@ -15,10 +15,16 @@ T _$identity<T>(T value) => value;
 mixin _$HaikuWithLikeStatus {
 
 /// 俳句本体
- Haiku get haiku;/// 現在のユーザーがいいね済みかどうか
+ Haiku get haiku;
+
+/// 現在のユーザーがいいね済みかどうか
 /// いいね機能無効時はfalse
- bool get isLikedByCurrentUser;/// いいねID（いいね済みの場合のみ）
- String? get likeId;/// いいね総数（いいね機能有効時のみ集計）
+ bool get isLikedByCurrentUser;
+
+/// いいねID（いいね済みの場合のみ）
+ String? get likeId;
+
+/// いいね総数（いいね機能有効時のみ集計）
  int get likeCount;
 /// Create a copy of HaikuWithLikeStatus
 /// with the given fields replaced by the non-null parameter values.

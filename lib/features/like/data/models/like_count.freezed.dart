@@ -16,8 +16,12 @@ T _$identity<T>(T value) => value;
 mixin _$LikeCount {
 
 /// 俳句ID
- String get haikuId;/// いいね総数
- int get count;/// 最終更新日時
+ String get haikuId;
+
+/// いいね総数
+ int get count;
+
+/// 最終更新日時
  DateTime get updatedAt;
 /// Create a copy of LikeCount
 /// with the given fields replaced by the non-null parameter values.

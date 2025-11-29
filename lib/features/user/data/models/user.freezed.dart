@@ -16,11 +16,21 @@ T _$identity<T>(T value) => value;
 mixin _$User {
 
 /// ユーザーID（UUIDで自動生成）
- String get id;/// ニックネーム（ユーザーが入力）
- String get nickname;/// 作成日時
- DateTime get createdAt;/// 最終更新日時
- DateTime get updatedAt;/// プロフィール画像URL（オプション）
- String? get profileImageUrl;/// 自己紹介（オプション）
+ String get id;
+
+/// ニックネーム（ユーザーが入力）
+ String get nickname;
+
+/// 作成日時
+ DateTime get createdAt;
+
+/// 最終更新日時
+ DateTime get updatedAt;
+
+/// プロフィール画像URL（オプション）
+ String? get profileImageUrl;
+
+/// 自己紹介（オプション）
  String? get bio;
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
