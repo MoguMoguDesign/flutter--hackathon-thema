@@ -18,15 +18,19 @@
 
 /// API 設定
 ///
-/// API キーを管理する設定クラス。
-///
-/// TODO: 本番環境では環境変数から取得するように変更する
+/// 環境変数から API キーを読み込む設定クラス。
+/// ビルド時に --dart-define=GEMINI_API_KEY=xxx で注入する。
 class ApiConfig {
   ApiConfig._();
 
   /// Gemini API キー
-  // ignore: do_not_hardcode_secrets
-  static const String geminiApiKey = 'AIzaSyATSjXts7-jC-6KQTHmo7uDv_taJZmsokM';
+  ///
+  /// ビルド時に --dart-define=GEMINI_API_KEY=xxx で注入する。
+  /// 環境変数が設定されていない場合は空文字列を返す。
+  static const String geminiApiKey = String.fromEnvironment(
+    'GEMINI_API_KEY',
+    defaultValue: '',
+  );
 
   /// Gemini API キーが設定されているかをチェック
   ///
