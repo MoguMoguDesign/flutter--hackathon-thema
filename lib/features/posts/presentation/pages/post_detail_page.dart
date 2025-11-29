@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/shared.dart';
@@ -137,7 +138,15 @@ class PostDetailPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: AppFilledButton(
                       label: 'Xでポストする',
-                      leadingIcon: Icons.close,
+                      leadingIcon: SvgPicture.asset(
+                        'assets/images/icon_x.svg',
+                        width: 20,
+                        height: 20,
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                       onPressed: handleShareToX,
                     ),
                   ),
@@ -146,7 +155,15 @@ class PostDetailPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: AppFilledButton(
                       label: 'Instagramに投稿する',
-                      leadingIcon: Icons.camera_alt_outlined,
+                      leadingIcon: SvgPicture.asset(
+                        'assets/images/icon_Instagram.svg',
+                        width: 20,
+                        height: 20,
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                       onPressed: handleShareToInstagram,
                     ),
                   ),

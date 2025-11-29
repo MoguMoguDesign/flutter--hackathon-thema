@@ -33,7 +33,8 @@ class AppFilledButton extends StatelessWidget {
   final String label;
 
   /// ボタンの先頭に表示するアイコン（オプション）。
-  final IconData? leadingIcon;
+  /// IconData または Widget（SvgPictureなど）を指定可能。
+  final dynamic leadingIcon;
 
   /// ローディング状態を示すフラグ。
   ///
@@ -85,7 +86,10 @@ class AppFilledButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               if (leadingIcon != null) ...<Widget>[
-                Icon(leadingIcon, size: 20, color: fgColor),
+                if (leadingIcon is IconData)
+                  Icon(leadingIcon as IconData, size: 20, color: fgColor)
+                else if (leadingIcon is Widget)
+                  SizedBox(width: 20, height: 20, child: leadingIcon as Widget),
                 const SizedBox(width: 8),
               ],
               Flexible(
