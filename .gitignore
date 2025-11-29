@@ -60,5 +60,8 @@ firebase-debug.*.log
 # MCP Configuration (environment-specific)
 .mcp.json
 
+# AI Development Tools (auto-generated)
+.ai/project_files.json
+
 # FVM Version Manager
 .fvm/flutter_sdk

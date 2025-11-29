@@ -1,0 +1,23 @@
+#!/bin/bash
+# Pre-commit hook for Flutter Hackathon Thema project
+# Enforces CLAUDE.md rules before allowing commits
+
+echo "🔍 Running CLAUDE.md compliance checks..."
+
+# Update project files list
+echo "📝 Updating project files list..."
+find lib -name "*.dart" -type f | jq -R -s -c 'split("\n") | map(select(length > 0))' > .ai/project_files.json
+
+# Run the rules checker
+python3 .ai/check_claude_rules.py
+
+# Check exit code
+if [ $? -eq 0 ]; then
+    echo "✅ Pre-commit checks passed!"
+    exit 0
+else
+    echo "❌ Pre-commit checks failed!"
+    echo "Please fix the issues above before committing."
+    echo "Or run: python3 .ai/check_claude_rules.py to see details"
+    exit 1
+fi
