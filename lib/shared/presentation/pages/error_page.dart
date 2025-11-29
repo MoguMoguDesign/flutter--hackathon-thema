@@ -20,11 +20,11 @@ import 'package:flutterhackthema/shared/constants/app_text_styles.dart';
 /// )
 /// ```
 class ErrorPage extends StatelessWidget {
-
   /// [ErrorPage] のコンストラクタ
   ///
   /// [error] エラー情報（オプション）
   const ErrorPage({super.key, this.error});
+
   /// エラー情報
   final Exception? error;
 

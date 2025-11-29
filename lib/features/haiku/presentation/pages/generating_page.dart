@@ -28,27 +28,30 @@ class GeneratingPage extends HookWidget {
   Widget build(BuildContext context) {
     final progress = useState<double>(0);
 
-    useEffect(() {
-      Future<void> simulateGeneration() async {
-        for (var i = 0; i <= 100; i += 5) {
-          await Future<void>.delayed(const Duration(milliseconds: 150));
+    useEffect(
+      () {
+        Future<void> simulateGeneration() async {
+          for (var i = 0; i <= 100; i += 5) {
+            await Future<void>.delayed(const Duration(milliseconds: 150));
+            if (context.mounted) {
+              progress.value = i / 100;
+            }
+          }
           if (context.mounted) {
-            progress.value = i / 100;
+            PreviewRoute(
+              firstLine: firstLine,
+              secondLine: secondLine,
+              thirdLine: thirdLine,
+              imageUrl: 'https://picsum.photos/seed/haiku/400/500',
+            ).go(context);
           }
         }
-        if (context.mounted) {
-          PreviewRoute(
-            firstLine: firstLine,
-            secondLine: secondLine,
-            thirdLine: thirdLine,
-            imageUrl: 'https://picsum.photos/seed/haiku/400/500',
-          ).go(context);
-        }
-      }
 
-      simulateGeneration();
-      return null;
-    }, [],);
+        simulateGeneration();
+        return null;
+      },
+      [],
+    );
 
     Future<void> handleBack() async {
       final shouldLeave = await ConfirmDialog.show(
@@ -111,10 +114,13 @@ class _PulsingAnimation extends HookWidget {
       duration: const Duration(milliseconds: 1500),
     );
 
-    useEffect(() {
-      controller.repeat(reverse: true);
-      return null;
-    }, [controller],);
+    useEffect(
+      () {
+        controller.repeat(reverse: true);
+        return null;
+      },
+      [controller],
+    );
 
     return AnimatedBuilder(
       animation: controller,

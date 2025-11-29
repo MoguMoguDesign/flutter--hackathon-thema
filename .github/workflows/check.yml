@@ -66,15 +66,11 @@ jobs:
 
       # フォーマットチェック
       - name: Check formatting
-        run: |
-          chmod +x .github/scripts/validate-formatting.sh
-          .github/scripts/validate-formatting.sh
+        run: .github/scripts/validate-formatting.sh
 
       # CLAUDE.mdルールチェック
       - name: Check CLAUDE.md compliance
-        run: |
-          chmod +x .ai/check_claude_rules.py
-          python3 .ai/check_claude_rules.py
+        run: python3 .ai/check_claude_rules.py
 
       # テスト実行
       - name: Run tests

@@ -79,7 +79,9 @@ class SvgBackground extends StatelessWidget {
   ///
   /// [assetPath] と [child] は必須パラメータ。
   const SvgBackground({
-    required this.assetPath, required this.child, super.key,
+    required this.assetPath,
+    required this.child,
+    super.key,
   });
 
   /// アセットパス（例: assets/images/login_background.svg）。

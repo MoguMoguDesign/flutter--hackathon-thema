@@ -7,13 +7,13 @@ part of 'routes.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-  $nicknameRoute,
-  $postsRoute,
-  $postDetailRoute,
-  $createRoute,
-  $generatingRoute,
-  $previewRoute,
-];
+      $nicknameRoute,
+      $postsRoute,
+      $postDetailRoute,
+      $createRoute,
+      $generatingRoute,
+      $previewRoute,
+    ];
 
 RouteBase get $nicknameRoute =>
     GoRouteData.$route(path: '/nickname', factory: $NicknameRoute._fromState);
@@ -62,9 +62,9 @@ mixin $PostsRoute on GoRouteData {
 }
 
 RouteBase get $postDetailRoute => GoRouteData.$route(
-  path: '/posts/:postId',
-  factory: $PostDetailRoute._fromState,
-);
+      path: '/posts/:postId',
+      factory: $PostDetailRoute._fromState,
+    );
 
 mixin $PostDetailRoute on GoRouteData {
   static PostDetailRoute _fromState(GoRouterState state) =>
@@ -114,28 +114,28 @@ mixin $CreateRoute on GoRouteData {
 }
 
 RouteBase get $generatingRoute => GoRouteData.$route(
-  path: '/create/generating',
-  factory: $GeneratingRoute._fromState,
-);
+      path: '/create/generating',
+      factory: $GeneratingRoute._fromState,
+    );
 
 mixin $GeneratingRoute on GoRouteData {
   static GeneratingRoute _fromState(GoRouterState state) => GeneratingRoute(
-    firstLine: state.uri.queryParameters['first-line']!,
-    secondLine: state.uri.queryParameters['second-line']!,
-    thirdLine: state.uri.queryParameters['third-line']!,
-  );
+        firstLine: state.uri.queryParameters['first-line']!,
+        secondLine: state.uri.queryParameters['second-line']!,
+        thirdLine: state.uri.queryParameters['third-line']!,
+      );
 
   GeneratingRoute get _self => this as GeneratingRoute;
 
   @override
   String get location => GoRouteData.$location(
-    '/create/generating',
-    queryParams: {
-      'first-line': _self.firstLine,
-      'second-line': _self.secondLine,
-      'third-line': _self.thirdLine,
-    },
-  );
+        '/create/generating',
+        queryParams: {
+          'first-line': _self.firstLine,
+          'second-line': _self.secondLine,
+          'third-line': _self.thirdLine,
+        },
+      );
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -152,30 +152,30 @@ mixin $GeneratingRoute on GoRouteData {
 }
 
 RouteBase get $previewRoute => GoRouteData.$route(
-  path: '/create/preview',
-  factory: $PreviewRoute._fromState,
-);
+      path: '/create/preview',
+      factory: $PreviewRoute._fromState,
+    );
 
 mixin $PreviewRoute on GoRouteData {
   static PreviewRoute _fromState(GoRouterState state) => PreviewRoute(
-    firstLine: state.uri.queryParameters['first-line']!,
-    secondLine: state.uri.queryParameters['second-line']!,
-    thirdLine: state.uri.queryParameters['third-line']!,
-    imageUrl: state.uri.queryParameters['image-url']!,
-  );
+        firstLine: state.uri.queryParameters['first-line']!,
+        secondLine: state.uri.queryParameters['second-line']!,
+        thirdLine: state.uri.queryParameters['third-line']!,
+        imageUrl: state.uri.queryParameters['image-url']!,
+      );
 
   PreviewRoute get _self => this as PreviewRoute;
 
   @override
   String get location => GoRouteData.$location(
-    '/create/preview',
-    queryParams: {
-      'first-line': _self.firstLine,
-      'second-line': _self.secondLine,
-      'third-line': _self.thirdLine,
-      'image-url': _self.imageUrl,
-    },
-  );
+        '/create/preview',
+        queryParams: {
+          'first-line': _self.firstLine,
+          'second-line': _self.secondLine,
+          'third-line': _self.thirdLine,
+          'image-url': _self.imageUrl,
+        },
+      );
 
   @override
   void go(BuildContext context) => context.go(location);

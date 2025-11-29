@@ -19,15 +19,18 @@ class NicknamePage extends HookConsumerWidget {
     final nicknameController = useTextEditingController();
     final isValid = useState(false);
 
-    useEffect(() {
-      void listener() {
-        final text = nicknameController.text.trim();
-        isValid.value = text.isNotEmpty && text.length <= 20;
-      }
+    useEffect(
+      () {
+        void listener() {
+          final text = nicknameController.text.trim();
+          isValid.value = text.isNotEmpty && text.length <= 20;
+        }
 
-      nicknameController.addListener(listener);
-      return () => nicknameController.removeListener(listener);
-    }, [nicknameController],);
+        nicknameController.addListener(listener);
+        return () => nicknameController.removeListener(listener);
+      },
+      [nicknameController],
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,

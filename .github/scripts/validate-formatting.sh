@@ -9,9 +9,10 @@ echo "🔍 Checking code formatting..."
 # Run dart format in dry-run mode to check for formatting issues
 # --set-exit-if-changed: Exit with code 1 if any files need formatting
 # --output none: Don't show the formatted output, just check
-dart format --set-exit-if-changed --output none .
+# Use '|| true' to prevent 'set -e' from terminating the script
+dart format --set-exit-if-changed --output none . || FORMAT_EXIT_CODE=$?
 
-if [ $? -eq 0 ]; then
+if [ "${FORMAT_EXIT_CODE:-0}" -eq 0 ]; then
     echo "✅ All files are properly formatted!"
     exit 0
 else

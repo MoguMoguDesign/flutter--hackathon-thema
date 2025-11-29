@@ -9,7 +9,6 @@ part 'like.g.dart';
 /// Feature Flags Providerでいいね機能が有効な場合のみ使用されます。
 @freezed
 class Like with _$Like {
-
   const factory Like({
     /// いいねID（UUIDで自動生成）
     required String id,

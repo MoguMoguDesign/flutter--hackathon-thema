@@ -29,14 +29,17 @@ class HaikuInputPage extends HookWidget {
     final inputController = useTextEditingController();
     final isValid = useState(false);
 
-    useEffect(() {
-      void listener() {
-        isValid.value = inputController.text.trim().isNotEmpty;
-      }
+    useEffect(
+      () {
+        void listener() {
+          isValid.value = inputController.text.trim().isNotEmpty;
+        }
 
-      inputController.addListener(listener);
-      return () => inputController.removeListener(listener);
-    }, [inputController],);
+        inputController.addListener(listener);
+        return () => inputController.removeListener(listener);
+      },
+      [inputController],
+    );
 
     Future<void> handleBack() async {
       final shouldLeave = await ConfirmDialog.show(
