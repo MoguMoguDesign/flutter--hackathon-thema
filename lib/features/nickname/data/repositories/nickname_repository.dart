@@ -1,38 +1,152 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:flutterhackthema/features/nickname/data/models/nickname_model.dart';
+import 'package:flutterhackthema/features/nickname/service/user_id_service.dart';
+import 'package:flutterhackthema/shared/data/repositories/firestore_repository.dart';
 
 /// ニックネームの永続化を管理するリポジトリ
 ///
-/// SharedPreferencesを使用してニックネームをローカルストレージに
+/// Firebase Firestoreを使用してニックネームをクラウドストレージに
 /// 保存・取得・削除する機能を提供します。
-class NicknameRepository {
-  /// SharedPreferencesで使用するニックネームのキー
-  static const String _nicknameKey = 'nickname';
+///
+/// ユーザーIDはUserIdServiceで管理され、Firestoreのドキュメントキーとして使用されます。
+///
+/// Firestoreデータ構造:
+/// ```
+/// users (collection)
+///   └── {userId} (document)
+///       ├── nickname: String
+///       └── updatedAt: Timestamp
+/// ```
+///
+/// 使用例:
+/// ```dart
+/// final repository = NicknameRepository(userIdService: UserIdService());
+/// final model = await repository.getNickname();
+/// ```
+class NicknameRepository extends FirestoreRepository<NicknameModel> {
+  /// ユーザーID管理サービス
+  final UserIdService _userIdService;
+
+  /// NicknameRepositoryを作成
+  ///
+  /// [userIdService] ユーザーID管理サービス
+  /// [firestore] Firestoreインスタンス（テスト用）
+  NicknameRepository({
+    required UserIdService userIdService,
+    FirebaseFirestore? firestore,
+  }) : _userIdService = userIdService,
+       super(collectionPath: 'users') {
+    if (firestore != null) {
+      // テスト用にFirestoreインスタンスを差し替え
+      _testFirestore = firestore;
+    }
+  }
+
+  FirebaseFirestore? _testFirestore;
+
+  @override
+  FirebaseFirestore get firestore => _testFirestore ?? super.firestore;
+
+  /// Firestoreドキュメントからモデルに変換
+  ///
+  /// [snapshot] Firestoreドキュメントスナップショット
+  ///
+  /// Returns: NicknameModel
+  @override
+  NicknameModel fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data();
+    if (data == null) {
+      throw StateError('Document data is null');
+    }
+
+    return NicknameModel.fromJson(data);
+  }
+
+  /// モデルからFirestoreドキュメントに変換
+  ///
+  /// [data] NicknameModel
+  ///
+  /// Returns: Firestoreに保存するMapデータ
+  @override
+  Map<String, dynamic> toFirestore(NicknameModel data) {
+    return data.toJson();
+  }
 
   /// 保存されているニックネームを取得
   ///
-  /// SharedPreferencesからニックネームを読み込みます。
+  /// Firestoreからニックネームを読み込みます。
   /// ニックネームが保存されていない場合は null を返します。
-  Future<String?> getNickname() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_nicknameKey);
+  ///
+  /// Returns: NicknameModel、存在しない場合はnull
+  ///
+  /// Throws:
+  /// - [FirebaseException] Firestore操作でエラーが発生した場合
+  Future<NicknameModel?> getNickname() async {
+    try {
+      final String userId = await _userIdService.getUserId();
+      return await read(userId);
+    } on FirebaseException catch (e) {
+      throw Exception('ニックネームの取得に失敗しました: ${e.message}');
+    } catch (e) {
+      throw Exception('予期しないエラーが発生しました: $e');
+    }
   }
 
   /// ニックネームを保存
   ///
   /// [nickname] 保存するニックネーム
   ///
-  /// 保存に成功した場合は true を返します。
+  /// Firestoreに保存します。既にニックネームが存在する場合は上書きします。
+  ///
+  /// Returns: 保存に成功した場合はtrue
+  ///
+  /// Throws:
+  /// - [FirebaseException] Firestore操作でエラーが発生した場合
   Future<bool> saveNickname(String nickname) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(_nicknameKey, nickname);
+    try {
+      final String userId = await _userIdService.getUserId();
+      final model = NicknameModel(
+        nickname: nickname,
+        updatedAt: DateTime.now(),
+      );
+
+      // 既存のドキュメントがあるか確認
+      final existing = await read(userId);
+
+      if (existing == null) {
+        // 新規作成
+        await create(model, docId: userId);
+      } else {
+        // 更新
+        await update(userId, model);
+      }
+
+      return true;
+    } on FirebaseException catch (e) {
+      throw Exception('ニックネームの保存に失敗しました: ${e.message}');
+    } catch (e) {
+      throw Exception('予期しないエラーが発生しました: $e');
+    }
   }
 
   /// ニックネームを削除
   ///
-  /// SharedPreferencesからニックネームを削除します。
-  /// 削除に成功した場合は true を返します。
+  /// Firestoreからニックネームを削除します。
+  ///
+  /// Returns: 削除に成功した場合はtrue
+  ///
+  /// Throws:
+  /// - [FirebaseException] Firestore操作でエラーが発生した場合
   Future<bool> clearNickname() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.remove(_nicknameKey);
+    try {
+      final String userId = await _userIdService.getUserId();
+      await delete(userId);
+      return true;
+    } on FirebaseException catch (e) {
+      throw Exception('ニックネームの削除に失敗しました: ${e.message}');
+    } catch (e) {
+      throw Exception('予期しないエラーが発生しました: $e');
+    }
   }
 }
