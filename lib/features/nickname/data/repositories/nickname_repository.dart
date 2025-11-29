@@ -87,9 +87,14 @@ class NicknameRepository extends FirestoreRepository<NicknameModel> {
       final String userId = await _userIdService.getUserId();
       return await read(userId);
     } on FirebaseException catch (e) {
+      // ドキュメントが存在しない場合（permission-denied または not-found）はnullを返す
+      if (e.code == 'permission-denied' || e.code == 'not-found') {
+        return null;
+      }
       throw Exception('ニックネームの取得に失敗しました: ${e.message}');
     } catch (e) {
-      throw Exception('予期しないエラーが発生しました: $e');
+      // 予期しないエラーの場合はnullを返す（初回アクセスの場合が多い）
+      return null;
     }
   }
 

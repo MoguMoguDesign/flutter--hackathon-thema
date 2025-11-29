@@ -73,7 +73,9 @@ class NicknamePage extends HookConsumerWidget {
                 onPressed: isValid.value
                     ? () async {
                         try {
-                          debugPrint('ニックネーム保存開始: ${nicknameController.text.trim()}');
+                          debugPrint(
+                            'ニックネーム保存開始: ${nicknameController.text.trim()}',
+                          );
 
                           // ニックネームをProviderに保存（永続化）
                           await ref

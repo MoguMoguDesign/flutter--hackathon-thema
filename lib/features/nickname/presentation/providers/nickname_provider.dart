@@ -45,10 +45,18 @@ class NicknameNotifier extends _$NicknameNotifier {
   ///
   /// Firestoreから保存されているニックネームを読み込みます。
   /// ニックネームが保存されていない場合は null を返します。
+  /// エラーが発生した場合もnullを返します（初回アクセスの場合が多い）。
   @override
   Future<String?> build() async {
-    final model = await _repository.getNickname();
-    return model?.nickname;
+    try {
+      final model = await _repository.getNickname();
+      return model?.nickname;
+    } catch (e) {
+      // エラーログを出力
+      // 初回アクセス時やドキュメントが存在しない場合はエラーが発生する可能性があるが、
+      // これは正常なケースなのでnullを返す
+      return null;
+    }
   }
 
   /// ニックネームを設定して永続化
