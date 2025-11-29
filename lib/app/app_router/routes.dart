@@ -143,6 +143,7 @@ class GeneratingRoute extends GoRouteData with $GeneratingRoute {
 /// パス: /create/preview
 /// 生成された画像と俳句のプレビューを表示する画面
 /// 投稿の確認と投稿実行を行います
+/// 画像データはImageGenerationProviderから取得します
 ///
 /// 使用例:
 /// ```dart
@@ -150,7 +151,6 @@ class GeneratingRoute extends GoRouteData with $GeneratingRoute {
 ///   firstLine: '古池や',
 ///   secondLine: '蛙飛び込む',
 ///   thirdLine: '水の音',
-///   imageUrl: 'https://example.com/image.png',
 /// ).go(context);
 /// ```
 @TypedGoRoute<PreviewRoute>(path: '/create/preview')
@@ -160,7 +160,6 @@ class PreviewRoute extends GoRouteData with $PreviewRoute {
     required this.firstLine,
     required this.secondLine,
     required this.thirdLine,
-    required this.imageUrl,
   });
 
   /// 上の句
@@ -172,16 +171,12 @@ class PreviewRoute extends GoRouteData with $PreviewRoute {
   /// 下の句
   final String thirdLine;
 
-  /// 生成された画像のURL
-  final String imageUrl;
-
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return PreviewPage(
       firstLine: firstLine,
       secondLine: secondLine,
       thirdLine: thirdLine,
-      imageUrl: imageUrl,
     );
   }
 }

@@ -161,7 +161,6 @@ mixin $PreviewRoute on GoRouteData {
     firstLine: state.uri.queryParameters['first-line']!,
     secondLine: state.uri.queryParameters['second-line']!,
     thirdLine: state.uri.queryParameters['third-line']!,
-    imageUrl: state.uri.queryParameters['image-url']!,
   );
 
   PreviewRoute get _self => this as PreviewRoute;
@@ -173,7 +172,6 @@ mixin $PreviewRoute on GoRouteData {
       'first-line': _self.firstLine,
       'second-line': _self.secondLine,
       'third-line': _self.thirdLine,
-      'image-url': _self.imageUrl,
     },
   );
 

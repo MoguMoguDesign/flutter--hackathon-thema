@@ -30,7 +30,7 @@ class HaikuPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 280,
+      height: 328, // 10文字(280px) + パディング(48px) = 328px
       decoration: BoxDecoration(
         color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(24),
@@ -83,6 +83,7 @@ class _VerticalText extends StatelessWidget {
             fontWeight: FontWeight.w500,
             height: 1.4,
             color: Colors.black87,
+            fontFamily: 'Hannari',
           ),
         );
       }).toList(),

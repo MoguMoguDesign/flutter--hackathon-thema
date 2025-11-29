@@ -30,7 +30,8 @@ class HaikuInputPage extends HookWidget {
 
     useEffect(() {
       void listener() {
-        isValid.value = inputController.text.trim().isNotEmpty;
+        final text = inputController.text.trim();
+        isValid.value = text.isNotEmpty && text.length <= 10;
       }
 
       inputController.addListener(listener);
@@ -131,6 +132,7 @@ class HaikuInputPage extends HookWidget {
                   label: _stepLabels[currentStep.value],
                   hintText: _stepHints[currentStep.value],
                   autofocus: true,
+                  maxLength: 10,
                 ),
               ),
             ),
