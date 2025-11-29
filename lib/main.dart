@@ -1,6 +1,25 @@
+// FLUTTER HACKATHON THEMA - DO NOT DELETE THIS FILE
+// This file is managed by AI development rules (CLAUDE.md)
+//
+// Architecture: Three-Layer (App → Feature → Shared)
+// State Management: hooks_riverpod 3.x with @riverpod annotation (MANDATORY)
+// Router: go_router 16.x (MANDATORY)
+// Code Generation: build_runner, riverpod_generator, freezed (REQUIRED)
+// Testing: Comprehensive coverage required
+//
+// Development Rules:
+// - Use @riverpod annotation for all providers
+// - Use HookConsumerWidget when using hooks
+// - Documentation comments in Japanese (///)
+// - Follow three-layer architecture strictly
+// - No direct Feature-to-Feature dependencies
+// - All changes must pass: analyze, format, test
+//
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutterhackthema/app/app_router/app_router.dart';
 import 'package:flutterhackthema/firebase_options.dart';
@@ -19,9 +38,24 @@ Future<void> main() async {
 
   try {
     // Firebase初期化（Web用設定を自動選択）
+    debugPrint('Firebase初期化開始');
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    debugPrint('Firebase初期化完了');
+
+    // Firestoreキャッシュ設定
+    // オフラインサポートを有効化し、キャッシュサイズを無制限に設定
+    try {
+      FirebaseFirestore.instance.settings = const Settings(
+        persistenceEnabled: true,
+        cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+      );
+      debugPrint('Firestoreキャッシュ設定完了');
+    } catch (e) {
+      // Web版では persistence 設定がサポートされていない場合がある
+      debugPrint('Firestoreキャッシュ設定エラー (無視): $e');
+    }
   } catch (e, stackTrace) {
     // Firebase初期化エラーをログ出力
     // TODO(#7): 本番環境ではエラーページへのリダイレクトを検討
