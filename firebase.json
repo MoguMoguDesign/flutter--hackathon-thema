@@ -14,7 +14,10 @@
   "firestore": {
     "rules": "firestore.rules"
   },
-  "storage": {
-    "rules": "storage.rules"
-  }
+  "storage": [
+    {
+      "bucket": "myaku-haiku.firebasestorage.app",
+      "rules": "storage.rules"
+    }
+  ]
 }
