@@ -125,5 +125,62 @@ void main() {
       );
       expect(button.onPressed, isNotNull);
     });
+
+    testWidgets('enforces max length of 20 characters', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        const ProviderScope(child: MaterialApp(home: NicknamePage())),
+      );
+      await tester.pumpAndSettle();
+
+      // Enter 25 characters - should be truncated to 20
+      await tester.enterText(
+        find.byType(TextField),
+        '1234567890123456789012345',
+      );
+      await tester.pump();
+
+      final TextField textField = tester.widget<TextField>(
+        find.byType(TextField),
+      );
+      expect(textField.controller?.text.length, lessThanOrEqualTo(20));
+    });
+
+    testWidgets('button enabled at exactly 20 characters', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        const ProviderScope(child: MaterialApp(home: NicknamePage())),
+      );
+      await tester.pumpAndSettle();
+
+      // Enter exactly 20 characters
+      await tester.enterText(find.byType(TextField), '12345678901234567890');
+      await tester.pump();
+
+      final ElevatedButton button = tester.widget<ElevatedButton>(
+        find.byType(ElevatedButton),
+      );
+      expect(button.onPressed, isNotNull);
+    });
+
+    testWidgets('button enabled with single character', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        const ProviderScope(child: MaterialApp(home: NicknamePage())),
+      );
+      await tester.pumpAndSettle();
+
+      // Enter single character (minimum valid)
+      await tester.enterText(find.byType(TextField), 'A');
+      await tester.pump();
+
+      final ElevatedButton button = tester.widget<ElevatedButton>(
+        find.byType(ElevatedButton),
+      );
+      expect(button.onPressed, isNotNull);
+    });
   });
 }
