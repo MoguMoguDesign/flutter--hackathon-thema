@@ -19,8 +19,8 @@ class HaikuInputPage extends HookWidget {
   /// 俳句入力画面を作成する。
   const HaikuInputPage({super.key});
 
-  static const List<String> _stepLabels = ['上の句', '真ん中の行', '下の句', '確認'];
-  static const List<String> _stepHints = ['上の句を入力', '真ん中の行を入力', '下の句を入力', ''];
+  static const List<String> _stepLabels = ['上五', '中七', '下五', '確認'];
+  static const List<String> _stepHints = ['上五を入力', '中七を入力', '下五を入力', ''];
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,7 @@ class HaikuInputPage extends HookWidget {
                 child: AppBackButton(onPressed: handleBack),
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
             // 縦書きプレビュー
             SliverToBoxAdapter(
               child: Padding(
@@ -154,12 +154,12 @@ class HaikuInputPage extends HookWidget {
                 ),
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
             // ステップインジケーター
             SliverToBoxAdapter(
               child: StepIndicator(currentStep: currentStep.value),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
             // 入力フィールド（ステップ3以外）
             if (currentStep.value < 3)
               SliverToBoxAdapter(
@@ -174,18 +174,31 @@ class HaikuInputPage extends HookWidget {
                   ),
                 ),
               ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
             // ステップ3以外：決定ボタン
             if (currentStep.value < 3)
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: AppFilledButton(
-                    label: '決定して次の行へ',
+                    label: currentStep.value == 2 ? '決定' : '次の行へ',
                     onPressed: isValid.value ? handleNext : null,
                   ),
                 ),
               ),
+            // ステップ1,2：ひとつ戻るボタン
+            if (currentStep.value > 0 && currentStep.value < 3) ...[
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: AppOutlinedButton(
+                    label: 'ひとつ戻る',
+                    onPressed: handlePreviousStep,
+                  ),
+                ),
+              ),
+            ],
             // ステップ3：確認画面のボタン
             if (currentStep.value == 3) ...[
               SliverToBoxAdapter(
@@ -194,12 +207,12 @@ class HaikuInputPage extends HookWidget {
                   child: _GenerateButton(onPressed: handleGenerate),
                 ),
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: AppOutlinedButton(
-                    label: '前の行に戻る',
+                    label: 'ひとつ戻る',
                     onPressed: handlePreviousStep,
                   ),
                 ),

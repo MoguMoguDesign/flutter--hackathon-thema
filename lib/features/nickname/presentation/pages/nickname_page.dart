@@ -58,7 +58,7 @@ class NicknamePage extends HookConsumerWidget {
               const SizedBox(height: 24),
               // 決定ボタン
               AppFilledButton(
-                label: '決定して次の行へ',
+                label: 'はじめる',
                 onPressed: isValid.value
                     ? () {
                         // ニックネームをProviderに保存
