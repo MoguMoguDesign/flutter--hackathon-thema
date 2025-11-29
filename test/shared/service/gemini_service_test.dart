@@ -150,9 +150,11 @@ void main() {
               ],
             },
           ]);
-          return http.Response(responseBody, 200, headers: {
-            'content-type': 'application/json; charset=utf-8',
-          });
+          return http.Response(
+            responseBody,
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
         });
 
         final service = GeminiService(httpClient: mockClient);

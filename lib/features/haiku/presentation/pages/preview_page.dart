@@ -97,9 +97,10 @@ class PreviewPage extends ConsumerWidget {
                                   ? Image.memory(
                                       imageData,
                                       fit: BoxFit.contain, // 画像全体を表示
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return _ImageErrorWidget();
-                                      },
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                            return _ImageErrorWidget();
+                                          },
                                     )
                                   : _ImageErrorWidget(),
                             ),

@@ -1,15 +1,15 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html' as html;
+import 'dart:js_interop';
 
 import 'package:flutterhackthema/shared/constants/api_config.dart';
 import 'package:flutterhackthema/shared/models/image_generation_result.dart';
 import 'package:flutterhackthema/shared/service/gemini_api_exception.dart';
+import 'package:web/web.dart' as web;
 
 /// Web専用の画像生成関数
 ///
-/// dart:html の XMLHttpRequest を使用してCORS問題を回避
+/// package:web の XMLHttpRequest を使用してCORS問題を回避
 Future<ImageGenerationResult> generateImageWeb({
   required String prompt,
   String aspectRatio = '4:5',
@@ -36,13 +36,13 @@ Future<ImageGenerationResult> generateImageWeb({
   try {
     final completer = Completer<String>();
 
-    final request = html.HttpRequest();
+    final request = web.XMLHttpRequest();
     request.open('POST', url);
     request.setRequestHeader('Content-Type', 'application/json');
 
-    request.onLoad.listen((event) {
+    request.onload = ((web.Event event) {
       if (request.status == 200) {
-        completer.complete(request.responseText ?? '');
+        completer.complete(request.responseText);
       } else {
         completer.completeError(
           ApiErrorException(
@@ -50,17 +50,17 @@ Future<ImageGenerationResult> generateImageWeb({
           ),
         );
       }
-    });
+    }).toJS;
 
-    request.onError.listen((event) {
+    request.onerror = ((web.Event event) {
       completer.completeError(const NetworkException('Network error occurred'));
-    });
+    }).toJS;
 
-    request.onTimeout.listen((event) {
+    request.ontimeout = ((web.Event event) {
       completer.completeError(const TimeoutException());
-    });
+    }).toJS;
 
-    request.send(requestBody);
+    request.send(requestBody.toJS);
 
     final responseText = await completer.future.timeout(
       Duration(seconds: ApiConfig.requestTimeoutSeconds),
