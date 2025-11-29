@@ -25,7 +25,6 @@ PRやmainブランチへのプッシュ時に、自動的に以下のチェッ�
 5. ✅ コードフォーマットチェック (`dart format`)
 6. ✅ CLAUDE.mdルールチェック (`.ai/check_claude_rules.py`)
 7. ✅ テスト実行とカバレッジ (`flutter test --coverage`)
-8. ✅ カバレッジレポートのアップロード (Codecov、オプション)
 
 **タイムアウト:** 20分
 
@@ -122,24 +121,6 @@ CI実行時間を短縮するため、以下をキャッシュしています:
 キャッシュキーは以下に基づいて生成されます:
 - `pubspec.lock`のハッシュ値
 - Dartソースファイルのハッシュ値（生成ファイルを除く）
-
-## Codecov統合（オプション）
-
-テストカバレッジをCodecovにアップロードする場合:
-
-1. [Codecov](https://codecov.io/)でリポジトリを有効化
-2. リポジトリのSecretsに`CODECOV_TOKEN`を追加
-3. 自動的にカバレッジレポートがアップロードされます
-
-**注:** Codecov統合は失敗してもCI全体は失敗しません（`fail_ci_if_error: false`）
-
-### Codecov Token の設定方法
-
-1. GitHubリポジトリの **Settings** → **Secrets and variables** → **Actions** へ移動
-2. **New repository secret** をクリック
-3. Name: `CODECOV_TOKEN`
-4. Secret: Codecovから取得したトークンを貼り付け
-5. **Add secret** をクリック
 
 ## トラブルシューティング
 
@@ -290,7 +271,6 @@ jobs:
 - [GitHub Actions公式ドキュメント](https://docs.github.com/ja/actions)
 - [Flutter CI/CDベストプラクティス](https://docs.flutter.dev/deployment/cd)
 - [FVM (Flutter Version Management)](https://fvm.app/)
-- [Codecov Documentation](https://docs.codecov.com/)
 
 ---
 

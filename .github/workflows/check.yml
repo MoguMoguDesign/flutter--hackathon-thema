@@ -79,13 +79,3 @@ jobs:
       # テスト実行
       - name: Run tests
         run: flutter test --coverage
-
-      # カバレッジレポートのアップロード（オプション）
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        if: success()
-        with:
-          files: ./coverage/lcov.info
-          fail_ci_if_error: false
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
