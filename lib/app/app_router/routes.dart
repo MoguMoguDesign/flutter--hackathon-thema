@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutterhackthema/src/component_test_page.dart';
-import 'package:flutterhackthema/src/gourmet/gourmet_component_test_page.dart';
-import 'package:flutterhackthema/src/home_page.dart';
 import 'package:go_router/go_router.dart';
 
 // 将来的にgo_router_builderでコード生成を使用する場合のために
@@ -10,31 +7,12 @@ import 'package:go_router/go_router.dart';
 
 /// ホーム画面のルート
 class HomeRoute extends GoRouteData {
+  /// [HomeRoute] のコンストラクタ
   const HomeRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const HomePage();
-  }
-}
-
-/// TCGコンポーネントテストページのルート
-class TcgComponentsRoute extends GoRouteData {
-  const TcgComponentsRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const ComponentTestPage();
-  }
-}
-
-/// Gourmetコンポーネントテストページのルート
-class GourmetComponentsRoute extends GoRouteData {
-  const GourmetComponentsRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const GourmetComponentTestPage();
+    return const Scaffold();
   }
 }
 
@@ -43,11 +21,8 @@ class GourmetComponentsRoute extends GoRouteData {
 /// 型安全なナビゲーション用:
 /// ```dart
 /// context.go(Routes.home);
-/// context.go(Routes.tcgComponents);
-/// context.go(Routes.gourmetComponents);
 /// ```
 class Routes {
+  /// ホーム画面のパス
   static const String home = '/';
-  static const String tcgComponents = '/tcg-components';
-  static const String gourmetComponents = '/gourmet-components';
 }
