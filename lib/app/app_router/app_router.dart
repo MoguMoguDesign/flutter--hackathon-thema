@@ -3,16 +3,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import 'package:flutterhackthema/app/route_guard/nickname_guard.dart';
-import 'package:flutterhackthema/app/widgets/pages/placeholder_create_post_page.dart';
-import 'package:flutterhackthema/app/widgets/pages/placeholder_nickname_page.dart';
-import 'package:flutterhackthema/app/widgets/pages/placeholder_posts_page.dart';
-import 'package:flutterhackthema/app/widgets/pages/placeholder_preview_page.dart';
 import 'package:flutterhackthema/shared/presentation/pages/error_page.dart';
 
 /// アプリケーション全体のルーティング設定
 ///
-/// go_routerを使用した型安全なルーティングを提供
-/// 将来的にgo_router_builderを使用してコード生成による型安全性を強化
+/// go_router_builderを使用した型安全なルーティングを提供
+/// TypedGoRouteアノテーションによるコード生成で型安全性を保証
 ///
 /// ルート構成:
 /// - /nickname - ニックネーム入力画面（初期ルート）
@@ -37,38 +33,11 @@ class AppRouter {
   static GoRouter createRouter(WidgetRef ref) {
     return GoRouter(
       // 初期ルートをニックネーム入力画面に設定
-      initialLocation: Routes.nickname,
+      initialLocation: '/nickname',
 
-      // ルート定義
-      routes: [
-        // ニックネーム入力画面
-        GoRoute(
-          path: Routes.nickname,
-          name: 'nickname',
-          builder: (context, state) => const PlaceholderNicknamePage(),
-        ),
-
-        // 投稿一覧画面
-        GoRoute(
-          path: Routes.posts,
-          name: 'posts',
-          builder: (context, state) => const PlaceholderPostsPage(),
-        ),
-
-        // 投稿作成画面
-        GoRoute(
-          path: Routes.create,
-          name: 'create',
-          builder: (context, state) => const PlaceholderCreatePostPage(),
-        ),
-
-        // プレビュー画面
-        GoRoute(
-          path: Routes.preview,
-          name: 'preview',
-          builder: (context, state) => const PlaceholderPreviewPage(),
-        ),
-      ],
+      // go_router_builderで生成されたルート定義を使用
+      // $appRoutes には全ての @TypedGoRoute アノテーション付きルートが含まれる
+      routes: $appRoutes,
 
       // リダイレクトガード
       // ニックネーム未設定時に /nickname へリダイレクト
