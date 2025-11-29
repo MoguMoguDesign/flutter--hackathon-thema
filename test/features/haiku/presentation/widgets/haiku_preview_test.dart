@@ -53,6 +53,9 @@ void main() {
     });
 
     testWidgets('10文字の句が正しく縦書き表示される', (tester) async {
+      // テストビューのサイズを大きくして、HaikuPreviewのオーバーフローを防ぐ
+      await tester.binding.setSurfaceSize(const Size(800, 1200));
+
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(body: HaikuPreview(firstLine: 'あいうえおかきくけこ')),
@@ -70,6 +73,9 @@ void main() {
       expect(find.text('く'), findsOneWidget);
       expect(find.text('け'), findsOneWidget);
       expect(find.text('こ'), findsOneWidget);
+
+      // テストビューのサイズをリセット
+      await tester.binding.setSurfaceSize(null);
     });
 
     testWidgets('Containerのスタイルが正しく設定されている', (tester) async {
