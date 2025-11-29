@@ -92,6 +92,7 @@ class ImageGeneration extends _$ImageGeneration {
       TimeoutException() => '生成に時間がかかりすぎました。再試行してください',
       ApiErrorException() => '画像生成に失敗しました。再試行してください',
       InvalidResponseException() => '予期しないエラーが発生しました',
+      ApiKeyMissingException() => 'APIキーが設定されていません。環境変数を確認してください',
     };
   }
 

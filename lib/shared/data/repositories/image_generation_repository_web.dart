@@ -28,10 +28,22 @@ import 'package:web/web.dart' as web;
 /// Web専用の画像生成関数
 ///
 /// package:web の XMLHttpRequest を使用してCORS問題を回避
+///
+/// Throws:
+/// - [ApiKeyMissingException] API キーが設定されていない場合
+/// - [NetworkException] ネットワークエラー発生時
+/// - [TimeoutException] タイムアウト発生時
+/// - [ApiErrorException] API がエラーを返した場合
+/// - [InvalidResponseException] レスポンス形式が不正な場合
 Future<ImageGenerationResult> generateImageWeb({
   required String prompt,
   String aspectRatio = '4:5',
 }) async {
+  // API キーの設定を確認
+  if (!ApiConfig.hasGeminiApiKey) {
+    throw const ApiKeyMissingException();
+  }
+
   final url =
       '${ApiConfig.geminiBaseUrl}/models/${ApiConfig.geminiImageModel}:'
       'streamGenerateContent?key=${ApiConfig.geminiApiKey}';

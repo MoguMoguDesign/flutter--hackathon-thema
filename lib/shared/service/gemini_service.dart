@@ -52,10 +52,21 @@ class GeminiService {
   /// Gemini サービスを作成する
   ///
   /// [httpClient] HTTP クライアント。テスト時にモックを注入可能。
-  GeminiService({http.Client? httpClient})
-    : _httpClient = httpClient ?? http.Client();
+  /// [apiKey] API キー。テスト時にモック用のキーを注入可能。
+  ///         指定しない場合は [ApiConfig.geminiApiKey] を使用する。
+  GeminiService({http.Client? httpClient, String? apiKey})
+    : _httpClient = httpClient ?? http.Client(),
+      _apiKey = apiKey;
 
   final http.Client _httpClient;
+  final String? _apiKey;
+
+  /// 使用する API キーを取得する
+  String get _effectiveApiKey => _apiKey ?? ApiConfig.geminiApiKey;
+
+  /// API キーが設定されているか確認する
+  bool get _hasApiKey =>
+      _apiKey != null ? _apiKey.isNotEmpty : ApiConfig.hasGeminiApiKey;
 
   /// 指定されたプロンプトから画像を生成する
   ///
@@ -65,6 +76,7 @@ class GeminiService {
   /// Returns: 生成された画像のbase64データとMIMEタイプ
   ///
   /// Throws:
+  /// - [ApiKeyMissingException] API キーが設定されていない場合
   /// - [NetworkException] ネットワークエラー発生時
   /// - [TimeoutException] タイムアウト発生時（60秒）
   /// - [ApiErrorException] API がエラーを返した場合
@@ -73,10 +85,13 @@ class GeminiService {
     required String prompt,
     String aspectRatio = '4:5',
   }) async {
+    // API キーの設定を確認
+    _validateApiKey();
+
     // 元のAPI URL
     final apiUrl =
         '${ApiConfig.geminiBaseUrl}/models/${ApiConfig.geminiImageModel}:'
-        'streamGenerateContent?key=${ApiConfig.geminiApiKey}';
+        'streamGenerateContent?key=$_effectiveApiKey';
 
     // Flutter Webの場合はCORSプロキシを経由
     final urlString = kIsWeb
@@ -189,6 +204,15 @@ class GeminiService {
   /// リソースを解放する
   void dispose() {
     _httpClient.close();
+  }
+
+  /// API キーの設定を確認する
+  ///
+  /// API キーが設定されていない場合は [ApiKeyMissingException] をスローする。
+  void _validateApiKey() {
+    if (!_hasApiKey) {
+      throw const ApiKeyMissingException();
+    }
   }
 }
 

@@ -57,12 +57,30 @@ void main() {
       });
     });
 
+    group('ApiKeyMissingException', () {
+      test('デフォルトメッセージを持つ', () {
+        const exception = ApiKeyMissingException();
+        expect(exception.message, contains('GEMINI_API_KEY is not configured'));
+      });
+
+      test('カスタムメッセージを持つ', () {
+        const exception = ApiKeyMissingException('API key required');
+        expect(exception.message, equals('API key required'));
+      });
+
+      test('toStringが正しくフォーマットされる', () {
+        const exception = ApiKeyMissingException('テスト');
+        expect(exception.toString(), equals('GeminiApiException: テスト'));
+      });
+    });
+
     group('型チェック', () {
       test('すべての例外がGeminiApiExceptionを実装する', () {
         expect(const NetworkException(), isA<GeminiApiException>());
         expect(const TimeoutException(), isA<GeminiApiException>());
         expect(const ApiErrorException(), isA<GeminiApiException>());
         expect(const InvalidResponseException(), isA<GeminiApiException>());
+        expect(const ApiKeyMissingException(), isA<GeminiApiException>());
       });
 
       test('すべての例外がExceptionを実装する', () {
@@ -70,6 +88,7 @@ void main() {
         expect(const TimeoutException(), isA<Exception>());
         expect(const ApiErrorException(), isA<Exception>());
         expect(const InvalidResponseException(), isA<Exception>());
+        expect(const ApiKeyMissingException(), isA<Exception>());
       });
     });
 
@@ -81,6 +100,7 @@ void main() {
             TimeoutException() => 'timeout',
             ApiErrorException() => 'api',
             InvalidResponseException() => 'invalid',
+            ApiKeyMissingException() => 'api_key_missing',
           };
         }
 
@@ -88,6 +108,10 @@ void main() {
         expect(getMessage(const TimeoutException()), equals('timeout'));
         expect(getMessage(const ApiErrorException()), equals('api'));
         expect(getMessage(const InvalidResponseException()), equals('invalid'));
+        expect(
+          getMessage(const ApiKeyMissingException()),
+          equals('api_key_missing'),
+        );
       });
     });
   });

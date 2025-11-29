@@ -1,6 +1,19 @@
 # Flutter Hackathon Thema Makefile
 # 三層アーキテクチャFlutter開発環境のセットアップと各種コマンドのショートカット
 
+# =============================================================================
+# 環境変数設定
+# =============================================================================
+
+# 環境変数ファイル
+ENV_FILE := .env
+
+# .envファイルが存在する場合は読み込む
+ifneq (,$(wildcard $(ENV_FILE)))
+    include $(ENV_FILE)
+    export
+endif
+
 .PHONY: help
 help: ## このヘルプメッセージを表示
 	@echo "Flutter Hackathon Thema Makefile コマンド一覧:"
@@ -165,6 +178,16 @@ build-web: ## Web用アプリをビルド
 
 build-web-release: ## Web用リリースアプリをビルド
 	fvm flutter build web --release --web-renderer canvaskit
+
+# 環境変数付きビルド・実行コマンド
+build-web-env: ## Web用アプリをビルド（環境変数付き）
+	fvm flutter build web --dart-define=GEMINI_API_KEY=$(GEMINI_API_KEY)
+
+build-web-release-env: ## Web用リリースアプリをビルド（環境変数付き）
+	fvm flutter build web --release --web-renderer canvaskit --dart-define=GEMINI_API_KEY=$(GEMINI_API_KEY)
+
+run-env: ## 環境変数付きでアプリを起動
+	fvm flutter run --dart-define=GEMINI_API_KEY=$(GEMINI_API_KEY)
 
 # デプロイ
 deploy-preview: build-web-release ## ローカルでWebビルドをプレビュー
