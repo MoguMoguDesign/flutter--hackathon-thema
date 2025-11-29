@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'app/app_router/app_router.dart';
 
 /// アプリケーションのエントリーポイント
 ///
@@ -15,6 +16,15 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Flutter App', home: const Scaffold());
+    return MaterialApp.router(
+      title: 'Mya句',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        useMaterial3: true,
+        fontFamily: 'Noto Sans JP',
+      ),
+      routerConfig: AppRouter.createRouter(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
