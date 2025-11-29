@@ -64,4 +64,3 @@ class AppScaffoldWithBackground extends StatelessWidget {
     );
   }
 }
-

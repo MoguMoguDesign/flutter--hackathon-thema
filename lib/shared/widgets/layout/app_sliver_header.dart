@@ -8,10 +8,7 @@ class AppSliverHeader extends StatelessWidget {
   /// SliverAppBarヘッダーを作成する。
   ///
   /// [serviceName] はヘッダーに表示するサービス名。
-  const AppSliverHeader({
-    this.serviceName = 'サービス名',
-    super.key,
-  });
+  const AppSliverHeader({this.serviceName = 'サービス名', super.key});
 
   /// ヘッダーに表示するサービス名
   final String serviceName;
@@ -30,4 +27,3 @@ class AppSliverHeader extends StatelessWidget {
     );
   }
 }
-
