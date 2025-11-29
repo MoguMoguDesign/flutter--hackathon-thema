@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 ///
 /// アプリケーション全体で共通の背景デザインを提供する。
 /// 背景色と背景画像をStackで組み合わせ、その上にコンテンツを表示する。
+/// モバイル以上の画面サイズでは、コンテンツの最大幅を制限して中央に配置する。
 class AppScaffoldWithBackground extends StatelessWidget {
   /// [AppScaffoldWithBackground] のコンストラクタ。
   ///
@@ -31,6 +32,7 @@ class AppScaffoldWithBackground extends StatelessWidget {
     super.key,
     this.backgroundImage = 'assets/images/background.png',
     this.floatingActionButton,
+    this.maxWidth = 600.0,
   });
 
   /// Scaffold内に表示する子ウィジェット。
@@ -44,6 +46,12 @@ class AppScaffoldWithBackground extends StatelessWidget {
 
   /// Floating Action Button（オプション）。
   final Widget? floatingActionButton;
+
+  /// モバイル以上の画面サイズでの最大コンテンツ幅。
+  ///
+  /// デフォルトは600px。
+  /// この幅を超える画面では、コンテンツが中央に配置される。
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +69,13 @@ class AppScaffoldWithBackground extends StatelessWidget {
               alignment: Alignment.bottomCenter,
             ),
           ),
-          // コンテンツ
-          body,
+          // レスポンシブコンテンツ（最大幅制限付き）
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: body,
+            ),
+          ),
         ],
       ),
       floatingActionButton: floatingActionButton,

@@ -25,10 +25,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// サービスロゴを左揃えで表示する。
 class AppSliverHeader extends StatelessWidget {
   /// SliverAppBarヘッダーを作成する。
-  const AppSliverHeader({
-    super.key,
-    this.actions,
-  });
+  const AppSliverHeader({super.key, this.actions});
 
   /// 右上に表示するアクションボタン。
   final List<Widget>? actions;
