@@ -17,6 +17,7 @@ class BackgroundGradientTheme extends ThemeExtension<BackgroundGradientTheme> {
   final LinearGradient scaffoldGradient;
 
   @override
+
   /// 指定した値で新しいインスタンスを返す。
   ///
   /// 省略した引数は既存の値を引き継ぐ。
@@ -27,6 +28,7 @@ class BackgroundGradientTheme extends ThemeExtension<BackgroundGradientTheme> {
   }
 
   @override
+
   /// 別のテーマとの間で線形補間を行う。
   ///
   /// 配列長の差異に強くするため、色は 3 色に正規化して補間する。
@@ -57,17 +59,17 @@ class BackgroundGradientTheme extends ThemeExtension<BackgroundGradientTheme> {
 /// 既定の背景グラデーションテーマ。
 const BackgroundGradientTheme kDefaultBackgroundGradient =
     BackgroundGradientTheme(
-      scaffoldGradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: <Color>[
-          AppColors.userPrimary,
-          AppColors.textBlack,
-          AppColors.adminPrimary,
-        ],
-        stops: <double>[0, 0.5, 1],
-      ),
-    );
+  scaffoldGradient: LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: <Color>[
+      AppColors.userPrimary,
+      AppColors.textBlack,
+      AppColors.adminPrimary,
+    ],
+    stops: <double>[0, 0.5, 1],
+  ),
+);
 
 /// SVG 背景画像を全面に敷くユーティリティウィジェット。
 ///

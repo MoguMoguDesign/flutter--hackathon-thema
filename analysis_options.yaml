@@ -1,1 +1,14 @@
-include: package:flutter_lints/flutter.yaml
+include: package:very_good_analysis/analysis_options.yaml
+
+linter:
+  rules:
+    # Freezedの生成コードでよく発生する警告を無効化
+    invalid_annotation_target: false
+
+analyzer:
+  errors:
+    # Freezedの生成コードに関するエラーを警告に変更
+    non_abstract_class_inherits_abstract_member: ignore
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
