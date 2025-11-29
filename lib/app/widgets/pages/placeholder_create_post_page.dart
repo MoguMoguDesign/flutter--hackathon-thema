@@ -73,7 +73,6 @@ class PlaceholderCreatePostPage extends StatelessWidget {
                     firstLine: 'サンプル上の句',
                     secondLine: 'サンプル中の句',
                     thirdLine: 'サンプル下の句',
-                    imageUrl: 'https://picsum.photos/400/500',
                   ).go(context);
                 },
                 icon: const Icon(Icons.preview),
