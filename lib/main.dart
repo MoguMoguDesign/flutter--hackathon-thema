@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutterhackthema/app/app_router/app_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// アプリケーションのエントリーポイント
 ///

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:flutterhackthema/features/haiku/presentation/pages/generating_page.dart';
 import 'package:flutterhackthema/features/haiku/presentation/pages/haiku_input_page.dart';
 import 'package:flutterhackthema/features/haiku/presentation/pages/preview_page.dart';
 import 'package:flutterhackthema/features/nickname/presentation/pages/nickname_page.dart';
 import 'package:flutterhackthema/features/posts/presentation/pages/post_detail_page.dart';
 import 'package:flutterhackthema/features/posts/presentation/pages/posts_page.dart';
+import 'package:go_router/go_router.dart';
 
 part 'routes.g.dart';
 

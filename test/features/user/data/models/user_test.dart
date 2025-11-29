@@ -45,7 +45,7 @@ void main() {
 
     test('should serialize to JSON correctly', () {
       // Arrange
-      final now = DateTime(2025, 1, 1);
+      final now = DateTime(2025);
       final user = User(
         id: 'test-id-123',
         nickname: '俳句太郎',
@@ -65,7 +65,7 @@ void main() {
 
     test('should deserialize from JSON correctly', () {
       // Arrange
-      final now = DateTime(2025, 1, 1);
+      final now = DateTime(2025);
       final json = {
         'id': 'test-id-123',
         'nickname': '俳句太郎',

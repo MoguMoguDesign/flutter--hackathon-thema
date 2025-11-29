@@ -9,7 +9,6 @@ part 'like.g.dart';
 /// Feature Flags Providerでいいね機能が有効な場合のみ使用されます。
 @freezed
 class Like with _$Like {
-  const Like._();
 
   const factory Like({
     /// いいねID（UUIDで自動生成）
@@ -24,6 +23,7 @@ class Like with _$Like {
     /// いいねした日時
     required DateTime createdAt,
   }) = _Like;
+  const Like._();
 
   factory Like.fromJson(Map<String, dynamic> json) => _$LikeFromJson(json);
 }

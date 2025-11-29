@@ -9,8 +9,6 @@ part 'user.g.dart';
 /// ニックネームのみで登録可能で、ユーザーIDは自動生成されます。
 @freezed
 class User with _$User {
-  const User._();
-
   const factory User({
     /// ユーザーID（UUIDで自動生成）
     required String id,
@@ -30,6 +28,7 @@ class User with _$User {
     /// 自己紹介（オプション）
     String? bio,
   }) = _User;
+  const User._();
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

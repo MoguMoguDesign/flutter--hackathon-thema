@@ -60,15 +60,15 @@ final class TemporaryNicknameProvider
   /// TODO(#10): Issue #10 完了後、このファイルを削除して
   /// lib/features/nickname/presentation/providers/nickname_provider.dart に置き換える
   const TemporaryNicknameProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'temporaryNicknameProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'temporaryNicknameProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$temporaryNicknameHash();
@@ -111,14 +111,8 @@ abstract class _$TemporaryNickname extends $Notifier<String?> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<String?, String?>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<String?, String?>,
-              String?,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<String?, String?>, String?, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

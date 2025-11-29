@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../buttons/primary_button.dart';
-import '../buttons/secondary_button.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/buttons/primary_button.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/buttons/secondary_button.dart';
 
 /// 確認ダイアログコンポーネント。
 ///

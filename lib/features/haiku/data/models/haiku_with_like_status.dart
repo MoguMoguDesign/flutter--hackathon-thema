@@ -1,6 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:flutterhackthema/features/haiku/data/models/haiku.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'haiku_with_like_status.freezed.dart';
 
@@ -10,7 +9,6 @@ part 'haiku_with_like_status.freezed.dart';
 /// いいね機能が無効な場合は、Haikuエンティティを直接使用してください。
 @freezed
 class HaikuWithLikeStatus with _$HaikuWithLikeStatus {
-  const HaikuWithLikeStatus._();
 
   const factory HaikuWithLikeStatus({
     /// 俳句本体
@@ -26,4 +24,5 @@ class HaikuWithLikeStatus with _$HaikuWithLikeStatus {
     /// いいね総数（いいね機能有効時のみ集計）
     @Default(0) int likeCount,
   }) = _HaikuWithLikeStatus;
+  const HaikuWithLikeStatus._();
 }

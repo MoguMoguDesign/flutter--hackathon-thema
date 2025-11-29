@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutterhackthema/app/app_di/nickname_provider.dart';
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import 'package:flutterhackthema/shared/constants/app_colors.dart';
 import 'package:flutterhackthema/shared/constants/app_text_styles.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// ニックネーム入力画面のプレースホルダー
 ///
@@ -25,7 +24,7 @@ class PlaceholderNicknamePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController controller = TextEditingController();
+    final controller = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +37,7 @@ class PlaceholderNicknamePage extends ConsumerWidget {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -75,7 +74,7 @@ class PlaceholderNicknamePage extends ConsumerWidget {
               // 投稿一覧へ遷移ボタン
               ElevatedButton(
                 onPressed: () {
-                  final String nickname = controller.text.trim();
+                  final nickname = controller.text.trim();
                   if (nickname.isNotEmpty) {
                     // ニックネームを設定
                     ref

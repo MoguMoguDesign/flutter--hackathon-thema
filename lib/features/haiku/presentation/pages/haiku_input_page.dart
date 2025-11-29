@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import '../../../../shared/presentation/widgets/buttons/primary_button.dart';
-import '../../../../shared/presentation/widgets/dialogs/confirm_dialog.dart';
-import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
-import '../../../../shared/presentation/widgets/navigation/app_header.dart';
-import '../../../../shared/presentation/widgets/navigation/back_button.dart';
-import '../widgets/haiku_preview.dart';
-import '../widgets/step_indicator.dart';
+import 'package:flutterhackthema/features/haiku/presentation/widgets/haiku_preview.dart';
+import 'package:flutterhackthema/features/haiku/presentation/widgets/step_indicator.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/buttons/primary_button.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/dialogs/confirm_dialog.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/inputs/app_text_field.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/navigation/app_header.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/navigation/back_button.dart';
 
 /// 俳句入力画面。
 ///
@@ -37,7 +36,7 @@ class HaikuInputPage extends HookWidget {
 
       inputController.addListener(listener);
       return () => inputController.removeListener(listener);
-    }, [inputController]);
+    }, [inputController],);
 
     Future<void> handleBack() async {
       final shouldLeave = await ConfirmDialog.show(
@@ -87,7 +86,7 @@ class HaikuInputPage extends HookWidget {
         child: Column(
           children: [
             // ヘッダー
-            const AppHeader(serviceName: 'サービス名'),
+            const AppHeader(),
             // 戻るボタン
             Align(
               alignment: Alignment.centerLeft,

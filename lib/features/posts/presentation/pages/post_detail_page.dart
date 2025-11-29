@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import '../../../../shared/presentation/widgets/navigation/app_header.dart';
-import '../../../../shared/presentation/widgets/navigation/back_button.dart';
-import '../../data/models/post.dart';
+import 'package:flutterhackthema/features/posts/data/models/post.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/navigation/app_header.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/navigation/back_button.dart';
 
 /// 投稿詳細画面。
 class PostDetailPage extends StatelessWidget {
@@ -46,7 +45,7 @@ class PostDetailPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const AppHeader(serviceName: 'サービス名'),
+            const AppHeader(),
             Align(
               alignment: Alignment.centerLeft,
               child: AppBackButton(onPressed: handleBack),

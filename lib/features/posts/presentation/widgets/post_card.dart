@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/models/post.dart';
+import 'package:flutterhackthema/features/posts/data/models/post.dart';
 
 /// 投稿カードコンポーネント。
 ///

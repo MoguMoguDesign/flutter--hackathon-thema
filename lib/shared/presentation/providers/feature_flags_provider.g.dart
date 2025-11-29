@@ -24,15 +24,15 @@ final class FeatureFlagsProvider
   ///
   /// 機能の有効/無効を動的に切り替えることができます
   const FeatureFlagsProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'featureFlagsProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'featureFlagsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$featureFlagsHash();
@@ -63,14 +63,11 @@ abstract class _$FeatureFlags extends $Notifier<FeatureFlagsState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<FeatureFlagsState, FeatureFlagsState>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<FeatureFlagsState, FeatureFlagsState>,
-              FeatureFlagsState,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<FeatureFlagsState, FeatureFlagsState>,
+        FeatureFlagsState,
+        Object?,
+        Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -83,19 +80,18 @@ const isLikeFeatureEnabledProvider = IsLikeFeatureEnabledProvider._();
 /// いいね機能が有効かどうかを取得する便利なプロバイダー
 
 final class IsLikeFeatureEnabledProvider
-    extends $FunctionalProvider<bool, bool, bool>
-    with $Provider<bool> {
+    extends $FunctionalProvider<bool, bool, bool> with $Provider<bool> {
   /// いいね機能が有効かどうかを取得する便利なプロバイダー
   const IsLikeFeatureEnabledProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'isLikeFeatureEnabledProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'isLikeFeatureEnabledProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$isLikeFeatureEnabledHash();

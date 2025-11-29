@@ -6,19 +6,19 @@ import 'package:flutterhackthema/shared/presentation/pages/error_page.dart';
 void main() {
   group('ErrorPage basic tests', () {
     testWidgets('Displays error icon', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(home: ErrorPage(error: null)));
+      await tester.pumpWidget(const MaterialApp(home: ErrorPage()));
 
       expect(find.byIcon(Icons.error_outline), findsOneWidget);
     });
 
     testWidgets('Displays error title', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(home: ErrorPage(error: null)));
+      await tester.pumpWidget(const MaterialApp(home: ErrorPage()));
 
       expect(find.text('ページが見つかりません'), findsOneWidget);
     });
 
     testWidgets('Displays home button', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(home: ErrorPage(error: null)));
+      await tester.pumpWidget(const MaterialApp(home: ErrorPage()));
 
       expect(find.text('ホームに戻る'), findsOneWidget);
       expect(find.byIcon(Icons.home), findsOneWidget);
@@ -38,7 +38,7 @@ void main() {
     });
 
     testWidgets('AppBar title is エラー', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(home: ErrorPage(error: null)));
+      await tester.pumpWidget(const MaterialApp(home: ErrorPage()));
 
       expect(find.widgetWithText(AppBar, 'エラー'), findsOneWidget);
     });

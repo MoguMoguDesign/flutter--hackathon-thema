@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutterhackthema/app/app_di/nickname_provider.dart';
 import 'package:flutterhackthema/app/app_router/routes.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// ニックネーム認証ガード
 ///
@@ -25,11 +24,11 @@ String? nicknameGuard(
   WidgetRef ref,
 ) {
   // 現在のニックネームを取得
-  final String? nickname = ref.read(temporaryNicknameProvider);
+  final nickname = ref.read(temporaryNicknameProvider);
 
   // 現在のページがニックネームページかどうかを確認
   // TypedGoRouteで生成されたlocationを使用
-  final bool isNicknamePage =
+  final isNicknamePage =
       state.matchedLocation == const NicknameRoute().location;
 
   // ニックネームが未設定 かつ ニックネームページ以外の場合

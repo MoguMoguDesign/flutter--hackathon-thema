@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'app_colors.dart';
+import 'package:flutterhackthema/shared/constants/app_colors.dart';
 
 /// 背景グラデーションテーマを提供する。
 ///
@@ -79,9 +79,7 @@ class SvgBackground extends StatelessWidget {
   ///
   /// [assetPath] と [child] は必須パラメータ。
   const SvgBackground({
-    super.key,
-    required this.assetPath,
-    required this.child,
+    required this.assetPath, required this.child, super.key,
   });
 
   /// アセットパス（例: assets/images/login_background.svg）。

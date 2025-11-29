@@ -9,7 +9,6 @@ part 'like_count.g.dart';
 /// パフォーマンス向上のため、頻繁に参照されるいいね数を事前に集計して保持します。
 @freezed
 class LikeCount with _$LikeCount {
-  const LikeCount._();
 
   const factory LikeCount({
     /// 俳句ID
@@ -21,6 +20,7 @@ class LikeCount with _$LikeCount {
     /// 最終更新日時
     required DateTime updatedAt,
   }) = _LikeCount;
+  const LikeCount._();
 
   factory LikeCount.fromJson(Map<String, dynamic> json) =>
       _$LikeCountFromJson(json);

@@ -20,13 +20,13 @@ import 'package:flutterhackthema/shared/constants/app_text_styles.dart';
 /// )
 /// ```
 class ErrorPage extends StatelessWidget {
-  /// エラー情報
-  final Exception? error;
 
   /// [ErrorPage] のコンストラクタ
   ///
   /// [error] エラー情報（オプション）
   const ErrorPage({super.key, this.error});
+  /// エラー情報
+  final Exception? error;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class ErrorPage extends StatelessWidget {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

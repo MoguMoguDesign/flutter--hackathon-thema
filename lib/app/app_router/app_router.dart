@@ -1,9 +1,8 @@
-import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import 'package:flutterhackthema/app/route_guard/nickname_guard.dart';
 import 'package:flutterhackthema/shared/presentation/pages/error_page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// アプリケーション全体のルーティング設定
 ///

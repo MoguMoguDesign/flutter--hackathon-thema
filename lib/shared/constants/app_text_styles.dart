@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutterhackthema/shared/constants/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
 
 /// アプリケーション全体で使用するテキストスタイルを定義する。
 ///

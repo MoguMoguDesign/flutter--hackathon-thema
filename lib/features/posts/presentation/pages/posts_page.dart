@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import '../../../../shared/presentation/widgets/buttons/fab_button.dart';
-import '../../../../shared/presentation/widgets/navigation/app_header.dart';
-import '../../data/models/post.dart';
-import '../widgets/post_card.dart';
+import 'package:flutterhackthema/features/posts/data/models/post.dart';
+import 'package:flutterhackthema/features/posts/presentation/widgets/post_card.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/buttons/fab_button.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/navigation/app_header.dart';
 
 /// みんなの投稿一覧画面。
 class PostsPage extends StatelessWidget {
@@ -20,7 +19,7 @@ class PostsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const AppHeader(serviceName: 'サービス名'),
+            const AppHeader(),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Center(

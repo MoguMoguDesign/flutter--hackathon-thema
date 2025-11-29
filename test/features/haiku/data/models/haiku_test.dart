@@ -32,7 +32,7 @@ void main() {
       expect(haiku.imageUrl, 'https://example.com/haiku.jpg');
       expect(haiku.createdAt, now);
       expect(haiku.updatedAt, now);
-      expect(haiku.tags, []);
+      expect(haiku.tags, <String>[]);
       expect(haiku.seasonWord, isNull);
     });
 
@@ -63,7 +63,7 @@ void main() {
 
     test('should serialize to JSON correctly', () {
       // Arrange
-      final now = DateTime(2025, 1, 1);
+      final now = DateTime(2025);
       final haiku = Haiku(
         id: 'haiku-id-123',
         userId: 'user-id-123',
@@ -95,7 +95,7 @@ void main() {
 
     test('should deserialize from JSON correctly', () {
       // Arrange
-      final now = DateTime(2025, 1, 1);
+      final now = DateTime(2025);
       final json = {
         'id': 'haiku-id-123',
         'userId': 'user-id-123',

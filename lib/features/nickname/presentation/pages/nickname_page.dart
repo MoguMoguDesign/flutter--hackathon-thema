@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutterhackthema/app/app_di/nickname_provider.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/buttons/primary_button.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/inputs/app_text_field.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:flutterhackthema/app/app_di/nickname_provider.dart';
-import '../../../../shared/presentation/widgets/buttons/primary_button.dart';
-import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
 
 /// ニックネーム入力画面。
 ///
@@ -28,7 +27,7 @@ class NicknamePage extends HookConsumerWidget {
 
       nicknameController.addListener(listener);
       return () => nicknameController.removeListener(listener);
-    }, [nicknameController]);
+    }, [nicknameController],);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -57,7 +56,7 @@ class NicknamePage extends HookConsumerWidget {
                   ),
                 ),
               ),
-              const Spacer(flex: 1),
+              const Spacer(),
               // ニックネーム入力フィールド
               AppTextField(
                 controller: nicknameController,

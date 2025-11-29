@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import '../../../../shared/presentation/widgets/buttons/primary_button.dart';
-import '../../../../shared/presentation/widgets/buttons/secondary_button.dart';
-import '../../../../shared/presentation/widgets/dialogs/confirm_dialog.dart';
-import '../../../../shared/presentation/widgets/navigation/app_header.dart';
-import '../../../../shared/presentation/widgets/navigation/back_button.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/buttons/primary_button.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/buttons/secondary_button.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/dialogs/confirm_dialog.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/navigation/app_header.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/navigation/back_button.dart';
 
 /// プレビュー・投稿確認画面。
 class PreviewPage extends StatelessWidget {
@@ -57,7 +57,7 @@ class PreviewPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const AppHeader(serviceName: 'サービス名'),
+            const AppHeader(),
             Align(
               alignment: Alignment.centerLeft,
               child: AppBackButton(onPressed: handleBack),

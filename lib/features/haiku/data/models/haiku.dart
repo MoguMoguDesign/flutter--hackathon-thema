@@ -9,8 +9,6 @@ part 'haiku.g.dart';
 /// いいね関連のフィールドは含まず、シンプルな投稿データのみを保持します。
 @freezed
 class Haiku with _$Haiku {
-  const Haiku._();
-
   const factory Haiku({
     /// 俳句ID（UUIDで自動生成）
     required String id,
@@ -48,6 +46,7 @@ class Haiku with _$Haiku {
     /// 季語（オプション）
     String? seasonWord,
   }) = _Haiku;
+  const Haiku._();
 
   factory Haiku.fromJson(Map<String, dynamic> json) => _$HaikuFromJson(json);
 }

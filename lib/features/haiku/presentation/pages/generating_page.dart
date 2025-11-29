@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import '../../../../shared/presentation/widgets/dialogs/confirm_dialog.dart';
-import '../../../../shared/presentation/widgets/feedback/progress_bar.dart';
-import '../../../../shared/presentation/widgets/navigation/app_header.dart';
-import '../../../../shared/presentation/widgets/navigation/back_button.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/dialogs/confirm_dialog.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/feedback/progress_bar.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/navigation/app_header.dart';
+import 'package:flutterhackthema/shared/presentation/widgets/navigation/back_button.dart';
 
 /// AI画像生成中画面。
 ///
@@ -26,7 +26,7 @@ class GeneratingPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = useState(0.0);
+    final progress = useState<double>(0);
 
     useEffect(() {
       Future<void> simulateGeneration() async {
@@ -48,7 +48,7 @@ class GeneratingPage extends HookWidget {
 
       simulateGeneration();
       return null;
-    }, []);
+    }, [],);
 
     Future<void> handleBack() async {
       final shouldLeave = await ConfirmDialog.show(
@@ -68,7 +68,7 @@ class GeneratingPage extends HookWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const AppHeader(serviceName: 'サービス名'),
+            const AppHeader(),
             Align(
               alignment: Alignment.centerLeft,
               child: AppBackButton(onPressed: handleBack),
@@ -114,7 +114,7 @@ class _PulsingAnimation extends HookWidget {
     useEffect(() {
       controller.repeat(reverse: true);
       return null;
-    }, [controller]);
+    }, [controller],);
 
     return AnimatedBuilder(
       animation: controller,

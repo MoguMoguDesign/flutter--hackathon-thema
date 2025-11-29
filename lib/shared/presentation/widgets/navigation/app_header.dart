@@ -21,7 +21,7 @@ class AppHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
-          bottom: BorderSide(color: Colors.grey.shade200, width: 1),
+          bottom: BorderSide(color: Colors.grey.shade200),
         ),
       ),
       child: Text(

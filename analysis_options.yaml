@@ -2,8 +2,20 @@ include: package:very_good_analysis/analysis_options.yaml
 
 linter:
   rules:
-    # Freezedの生成コードでよく発生する警告を無効化
-    invalid_annotation_target: false
+    # 公開APIドキュメントの要求を無効化（プロジェクトポリシーによる）
+    public_member_api_docs: false
+    # TODOコメントスタイルチェックを無効化（issue参照形式を使用）
+    flutter_style_todos: false
+    # セッターの使用推奨を無効化
+    use_setters_to_change_properties: false
+    # ColoredBox推奨を無効化（Container使用を許可）
+    use_colored_box: false
+    # cascade_invocations推奨を無効化
+    cascade_invocations: false
+    # isEven推奨を無効化
+    use_is_even_rather_than_modulo: false
+    # pubspec.yamlの依存関係ソートチェックを無効化（手動グループ化を許可）
+    sort_pub_dependencies: false
 
 analyzer:
   errors:
