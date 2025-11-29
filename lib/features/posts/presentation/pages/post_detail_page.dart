@@ -32,10 +32,14 @@ class PostDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final posts = Post.mockPosts();
-    final post = posts.firstWhere(
-      (p) => p.id == postId,
-      orElse: () => posts.first,
+    // TODO: Firestore integration for post details
+    final post = Post(
+      id: postId,
+      nickname: 'テストユーザー',
+      haiku: '古池や\n蛙飛び込む\n水の音',
+      imageUrl: 'https://placehold.co/400x600/png?text=Haiku+Image',
+      createdAt: DateTime.now(),
+      likeCount: 0,
     );
 
     void handleBack() {

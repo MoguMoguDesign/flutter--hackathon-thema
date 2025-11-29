@@ -18,37 +18,65 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/shared.dart';
 import '../../data/models/post.dart';
+import '../providers/posts_provider.dart';
 import '../widgets/post_card.dart';
 
 /// みんなの投稿一覧画面。
-class PostsPage extends StatelessWidget {
+class PostsPage extends HookConsumerWidget {
   const PostsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final posts = Post.mockPosts();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final postsAsync = ref.watch(postsStreamProvider);
 
     return AppScaffoldWithBackground(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            // スクロール時に消えるヘッダー
-            const AppSliverHeader(),
-            // Staggered Grid
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              sliver: _SliverStaggeredGrid(
-                posts: posts,
-                onPostTap: (post) {
-                  PostDetailRoute(postId: post.id).go(context);
-                },
+        child: postsAsync.when(
+          data: (posts) => CustomScrollView(
+            slivers: [
+              // スクロール時に消えるヘッダー
+              const AppSliverHeader(),
+              // Staggered Grid
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                sliver: _SliverStaggeredGrid(
+                  posts: posts,
+                  onPostTap: (post) {
+                    PostDetailRoute(postId: post.id).go(context);
+                  },
+                ),
               ),
+            ],
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  size: 64,
+                  color: AppColors.error,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'エラーが発生しました',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  error.toString(),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
       floatingActionButton: Padding(
