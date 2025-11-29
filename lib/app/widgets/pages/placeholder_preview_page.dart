@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import 'package:flutterhackthema/src/constants/app_colors.dart';
@@ -36,7 +35,8 @@ class PlaceholderPreviewPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () {
-            context.go(Routes.create);
+            // 型安全なルーティング
+            const CreateRoute().go(context);
           },
         ),
       ),
@@ -68,8 +68,8 @@ class PlaceholderPreviewPage extends StatelessWidget {
               // 投稿ボタン
               ElevatedButton.icon(
                 onPressed: () {
-                  // 投稿完了後、投稿一覧へ遷移
-                  context.go(Routes.posts);
+                  // 投稿完了後、投稿一覧へ遷移（型安全なルーティング）
+                  const PostsRoute().go(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('投稿しました（プレースホルダー）')),
                   );
@@ -90,7 +90,8 @@ class PlaceholderPreviewPage extends StatelessWidget {
               // 投稿作成へ戻るボタン
               TextButton(
                 onPressed: () {
-                  context.go(Routes.create);
+                  // 型安全なルーティング
+                  const CreateRoute().go(context);
                 },
                 child: Text(
                   '編集に戻る',
