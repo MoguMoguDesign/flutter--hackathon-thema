@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
+import 'package:flutterhackthema/features/haiku/presentation/providers/image_generation_provider.dart';
+import 'package:flutterhackthema/features/haiku/presentation/state/image_generation_state.dart';
 import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 
 /// プレビュー・投稿確認画面。
-class PreviewPage extends StatelessWidget {
+///
+/// 生成された画像と俳句のプレビューを表示する。
+/// 投稿の確認と投稿実行を行う。
+class PreviewPage extends ConsumerWidget {
+  /// プレビュー画面を作成する。
   const PreviewPage({
     required this.firstLine,
     required this.secondLine,
     required this.thirdLine,
-    required this.imageUrl,
     super.key,
   });
 
   final String firstLine;
   final String secondLine;
   final String thirdLine;
-  final String imageUrl;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(imageGenerationProvider);
+
+    // 画像データを取得
+    final imageData = state.maybeWhen(
+      success: (data) => data,
+      orElse: () => null,
+    );
+
     Future<void> handleBack() async {
       final shouldLeave = await AppConfirmDialog.show(
         context: context,
@@ -31,11 +44,13 @@ class PreviewPage extends StatelessWidget {
         isDangerous: true,
       );
       if (shouldLeave == true && context.mounted) {
+        ref.read(imageGenerationProvider.notifier).reset();
         const PostsRoute().go(context);
       }
     }
 
     void handleRegenerate() {
+      ref.read(imageGenerationProvider.notifier).reset();
       GeneratingRoute(
         firstLine: firstLine,
         secondLine: secondLine,
@@ -47,6 +62,7 @@ class PreviewPage extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('投稿しました！'), backgroundColor: Colors.black),
       );
+      ref.read(imageGenerationProvider.notifier).reset();
       const PostsRoute().go(context);
     }
 
@@ -69,50 +85,25 @@ class PreviewPage extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Container(
-                          width: double.infinity,
-                          color: Colors.grey.shade200,
-                          child: Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value:
-                                      loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                      : null,
-                                  strokeWidth: 2,
-                                  color: Colors.grey,
-                                ),
-                              );
-                            },
-                            errorBuilder: (context, error, stackTrace) {
-                              return Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.image_not_supported,
-                                      size: 48,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      '画像を読み込めませんでした',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey.shade500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                      child: Center(
+                        child: AspectRatio(
+                          aspectRatio: 4 / 5, // 4:5 のアスペクト比
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              width: double.infinity,
+                              color: Colors.grey.shade200,
+                              child: imageData != null
+                                  ? Image.memory(
+                                      imageData,
+                                      fit: BoxFit.contain, // 画像全体を表示
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                            return _ImageErrorWidget();
+                                          },
+                                    )
+                                  : _ImageErrorWidget(),
+                            ),
                           ),
                         ),
                       ),
@@ -141,6 +132,30 @@ class PreviewPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// 画像読み込みエラー時のウィジェット
+class _ImageErrorWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.image_not_supported,
+            size: 48,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '画像を表示できませんでした',
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
+          ),
+        ],
       ),
     );
   }

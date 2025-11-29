@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
+import 'package:flutterhackthema/features/haiku/presentation/providers/image_generation_provider.dart';
+import 'package:flutterhackthema/features/haiku/presentation/state/image_generation_state.dart';
 import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/feedback/progress_bar.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
@@ -10,7 +13,7 @@ import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 ///
 /// 俳句からAI画像を生成している間のローディング画面。
 /// ワイヤーフレーム: `生成中....png`
-class GeneratingPage extends HookWidget {
+class GeneratingPage extends HookConsumerWidget {
   /// 生成中画面を作成する。
   const GeneratingPage({
     required this.firstLine,
@@ -24,30 +27,56 @@ class GeneratingPage extends HookWidget {
   final String thirdLine;
 
   @override
-  Widget build(BuildContext context) {
-    final progress = useState(0.0);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(imageGenerationProvider);
 
+    // 画像生成を開始
     useEffect(() {
-      Future<void> simulateGeneration() async {
-        for (var i = 0; i <= 100; i += 5) {
-          await Future<void>.delayed(const Duration(milliseconds: 150));
-          if (context.mounted) {
-            progress.value = i / 100;
-          }
-        }
-        if (context.mounted) {
-          PreviewRoute(
-            firstLine: firstLine,
-            secondLine: secondLine,
-            thirdLine: thirdLine,
-            imageUrl: 'https://picsum.photos/seed/haiku/400/500',
-          ).go(context);
-        }
-      }
-
-      simulateGeneration();
+      // プロバイダーをリセットして新しい生成を開始
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref
+            .read(imageGenerationProvider.notifier)
+            .generate(
+              firstLine: firstLine,
+              secondLine: secondLine,
+              thirdLine: thirdLine,
+            );
+      });
       return null;
     }, []);
+
+    // 状態変化を監視してナビゲーション
+    ref.listen<ImageGenerationState>(imageGenerationProvider, (previous, next) {
+      next.when(
+        initial: () {},
+        loading: (_) {},
+        success: (imageData) {
+          if (context.mounted) {
+            PreviewRoute(
+              firstLine: firstLine,
+              secondLine: secondLine,
+              thirdLine: thirdLine,
+            ).go(context);
+          }
+        },
+        error: (_) {},
+      );
+    });
+
+    // 進捗を取得
+    final progress = state.when(
+      initial: () => 0.0,
+      loading: (p) => p,
+      success: (_) => 1.0,
+      error: (_) => 0.0,
+    );
+
+    // エラー状態かどうか
+    final isError = state is ImageGenerationError;
+    final errorMessage = state.maybeWhen(
+      error: (message) => message,
+      orElse: () => '',
+    );
 
     Future<void> handleBack() async {
       final shouldLeave = await AppConfirmDialog.show(
@@ -59,8 +88,19 @@ class GeneratingPage extends HookWidget {
         isDangerous: true,
       );
       if (shouldLeave == true && context.mounted) {
+        ref.read(imageGenerationProvider.notifier).reset();
         const PostsRoute().go(context);
       }
+    }
+
+    void handleRetry() {
+      ref
+          .read(imageGenerationProvider.notifier)
+          .generate(
+            firstLine: firstLine,
+            secondLine: secondLine,
+            thirdLine: thirdLine,
+          );
     }
 
     return AppScaffoldWithBackground(
@@ -79,10 +119,24 @@ class GeneratingPage extends HookWidget {
               child: Column(
                 children: [
                   const Spacer(),
-                  const Text(
-                    '挿絵を生成中...',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  Text(
+                    isError ? 'エラーが発生しました' : '挿絵を生成中...',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
+                  if (isError) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      errorMessage,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.red.shade700,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                   const SizedBox(height: 24),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -93,14 +147,27 @@ class GeneratingPage extends HookWidget {
                         color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: Center(child: _PulsingAnimation()),
+                      child: Center(
+                        child: isError
+                            ? _ErrorContent(onRetry: handleRetry)
+                            : const _PulsingAnimation(),
+                      ),
                     ),
                   ),
                   const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: AppProgressBar(progress: progress.value),
-                  ),
+                  if (!isError)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: AppProgressBar(progress: progress),
+                    ),
+                  if (isError)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: AppFilledButton(
+                        label: '再試行',
+                        onPressed: handleRetry,
+                      ),
+                    ),
                   const SizedBox(height: 48),
                 ],
               ),
@@ -112,7 +179,32 @@ class GeneratingPage extends HookWidget {
   }
 }
 
+/// エラー時のコンテンツ
+class _ErrorContent extends StatelessWidget {
+  const _ErrorContent({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.error_outline, size: 48, color: Colors.red.shade400),
+        const SizedBox(height: 12),
+        Text(
+          '画像の生成に失敗しました',
+          style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+        ),
+      ],
+    );
+  }
+}
+
+/// ローディングアニメーション
 class _PulsingAnimation extends HookWidget {
+  const _PulsingAnimation();
+
   @override
   Widget build(BuildContext context) {
     final controller = useAnimationController(
@@ -135,7 +227,7 @@ class _PulsingAnimation extends HookWidget {
               Icon(Icons.brush, size: 48, color: Colors.grey.shade500),
               const SizedBox(height: 12),
               Text(
-                '待機中アニメーション',
+                'AIが描いています...',
                 style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
               ),
             ],
