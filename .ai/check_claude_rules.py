@@ -25,14 +25,28 @@ class ClaudeRulesChecker:
     def _check_feature_branch(self):
         """Check if current branch is a feature branch"""
         try:
-            result = subprocess.run(
-                ['git', 'branch', '--show-current'],
-                capture_output=True, text=True, cwd=self.project_root
-            )
-            branch_name = result.stdout.strip()
+            # First, try GitHub Actions environment variables (for CI)
+            # GITHUB_HEAD_REF is set for PRs, GITHUB_REF for direct pushes
+            branch_name = os.environ.get('GITHUB_HEAD_REF', '')
+            if not branch_name:
+                github_ref = os.environ.get('GITHUB_REF', '')
+                if github_ref.startswith('refs/heads/'):
+                    branch_name = github_ref[len('refs/heads/'):]
+
+            # If not in GitHub Actions, use git command
+            if not branch_name:
+                result = subprocess.run(
+                    ['git', 'branch', '--show-current'],
+                    capture_output=True, text=True, cwd=self.project_root
+                )
+                branch_name = result.stdout.strip()
+
             # Feature branches start with 'feature/' or 'fix/' or 'hotfix/'
-            return branch_name.startswith(('feature/', 'fix/', 'hotfix/'))
-        except Exception:
+            is_feature = branch_name.startswith(('feature/', 'fix/', 'hotfix/'))
+            print(f"🔍 Branch detection: '{branch_name}' -> {'feature branch' if is_feature else 'main branch'}")
+            return is_feature
+        except Exception as e:
+            print(f"⚠️  Branch detection failed: {e}")
             return False
 
     def load_header_template(self):
