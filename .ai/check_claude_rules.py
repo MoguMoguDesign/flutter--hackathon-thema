@@ -192,13 +192,15 @@ class ClaudeRulesChecker:
             if total_lines > 0:
                 coverage_percent = (hit_lines / total_lines) * 100
                 if coverage_percent < 80.0:
-                    self.warnings.append(
+                    self.errors.append(
                         f"Test coverage is {coverage_percent:.1f}% (excluding auto-generated files), "
-                        f"below recommended 80%"
+                        f"below required 80%!"
                     )
-                print(f"📊 Test coverage: {coverage_percent:.1f}% ({hit_lines}/{total_lines} lines)")
+                    print(f"❌ Test coverage: {coverage_percent:.1f}% ({hit_lines}/{total_lines} lines)")
+                else:
+                    print(f"✅ Test coverage: {coverage_percent:.1f}% ({hit_lines}/{total_lines} lines)")
             else:
-                self.warnings.append("No coverage data found for source files")
+                self.errors.append("No coverage data found for source files")
         else:
             print("⚠️  No coverage data found. Run tests with coverage to generate.")
 

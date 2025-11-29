@@ -26,7 +26,7 @@ Based on the approach from [this article](https://zenn.dev/cypher256/articles/a0
   - Widget patterns (classes not methods)
   - Documentation in Japanese
   - No cross-feature dependencies
-  - Test coverage requirements
+  - Test coverage ≥80% (excluding auto-generated files)
 
 ### 4. Pre-commit Hook (`.githooks/pre-commit`)
 - Runs automatically before each commit
@@ -62,7 +62,7 @@ find lib -name "*.dart" -type f | jq -R -s -c 'split("\n") | map(select(length >
 2. **Quality**: Prevents common mistakes and anti-patterns
 3. **Documentation**: Enforces proper documentation practices
 4. **Architecture**: Maintains clean three-layer architecture boundaries
-5. **Testing**: Ensures comprehensive test coverage
+5. **Testing**: Ensures ≥80% test coverage (auto-generated files excluded)
 
 ## Troubleshooting
 
