@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_di/nickname_provider.dart';
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import 'package:flutterhackthema/src/constants/app_colors.dart';
-import 'package:flutterhackthema/src/constants/app_text_styles.dart';
+import 'package:flutterhackthema/shared/constants/app_colors.dart';
+import 'package:flutterhackthema/shared/constants/app_text_styles.dart';
 
 /// ニックネーム入力画面のプレースホルダー
 ///
