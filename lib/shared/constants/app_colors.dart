@@ -89,6 +89,14 @@ class AppColors {
   /// ボタンやアクセントカラーとして使用される。
   static const Color userPrimary = Color(0xFFFF0048);
 
+  /// アクセントカラー（ダークレッド）。
+  /// テキストフィールドのフォーカス時やアクセント要素で使用される。
+  static const Color accent = Color(0xFFD61D00);
+
+  /// プライマリボタン用の青色。
+  /// FilledボタンとOutlinedボタンで使用される。
+  static const Color primaryBlue = Color(0xFF3368CB);
+
   /// 管理者用のプライマリカラー（青）。
   /// 管理者向け機能の UI 要素で使用される。
   static const Color adminPrimary = Color(0xFF3A44FB);

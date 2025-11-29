@@ -109,22 +109,22 @@ class PostDetailPage extends StatelessWidget {
                           '${post.nickname} 作',
                           style: const TextStyle(
                             fontSize: 14,
-                            color: Colors.black87,
+                            color: Colors.white,
                           ),
                         ),
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.favorite_border,
                               size: 20,
-                              color: Colors.grey.shade600,
+                              color: Colors.white,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${post.likeCount}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
-                                color: Colors.grey.shade600,
+                                color: Colors.white,
                               ),
                             ),
                           ],

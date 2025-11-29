@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../constants/app_colors.dart';
 
 /// 背景色と背景画像を含む統一されたScaffold。
 ///
@@ -34,25 +33,13 @@ class AppScaffoldWithBackground extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // 背景グラデーション（白からダークグリーンへ）
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  const Color(0xFFFFFFFF), // 白
-                  AppColors.background, // ダークグリーン (#187360)
-                ],
-                stops: const [0.0, 1.0],
-              ),
-            ),
-          ),
+          // 背景色
+          Container(color: const Color(0xFF040811)),
           // PNG背景画像
           Positioned.fill(
             child: Image.asset(
               backgroundImage,
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.cover,
               alignment: Alignment.bottomCenter,
             ),
           ),

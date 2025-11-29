@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
+import '../widgets/haiku_hint_dialog.dart';
 import '../widgets/haiku_preview.dart';
 import '../widgets/step_indicator.dart';
 
 /// 俳句入力画面。
 ///
-/// 俳句を3行ステップ形式で入力し、AI画像生成をリクエストする。
+/// 俳句を4ステップ形式で入力し、AI画像生成をリクエストする。
 /// ワイヤーフレーム: `俳句入力.png`
 class HaikuInputPage extends HookWidget {
   /// 俳句入力画面を作成する。
   const HaikuInputPage({super.key});
 
-  static const List<String> _stepLabels = ['上の句', '真ん中の行', '下の句'];
-  static const List<String> _stepHints = ['上の句を入力', '真ん中の行を入力', '下の句を入力'];
+  static const List<String> _stepLabels = ['上の句', '真ん中の行', '下の句', '確認'];
+  static const List<String> _stepHints = ['上の句を入力', '真ん中の行を入力', '下の句を入力', ''];
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +55,23 @@ class HaikuInputPage extends HookWidget {
       }
     }
 
+    void handleShowHint() {
+      HaikuHintDialog.show(
+        context: context,
+        title: '季語のヒント',
+        hints: const [
+          '🌸 春: 桜・つばめ・霞・朧月・春風',
+          '🌻 夏: 蛍・入道雲・夕立・蝉・青葉',
+          '🍁 秋: 紅葉・虫・月・稲穂・秋風',
+          '⛄️ 冬: 雪・霜・冬星・炬燵・寒月',
+          '💡 5・7・5のリズムで詠む',
+          '🎨 心に浮かんだ情景を描く',
+          '✨ 季節の風物詩を入れる',
+        ],
+        closeText: '閉じる',
+      );
+    }
+
     void handleNext() {
       final text = inputController.text.trim();
       if (text.isEmpty) return;
@@ -66,19 +86,36 @@ class HaikuInputPage extends HookWidget {
           thirdLine.value = text;
       }
 
-      if (currentStep.value < 2) {
+      if (currentStep.value < 3) {
         // 次のステップへ
         currentStep.value++;
         inputController.clear();
         isValid.value = false;
-      } else {
-        // 3ステップ完了、生成画面へ遷移
-        GeneratingRoute(
-          firstLine: firstLine.value,
-          secondLine: secondLine.value,
-          thirdLine: thirdLine.value,
-        ).go(context);
       }
+    }
+
+    void handlePreviousStep() {
+      if (currentStep.value > 0) {
+        currentStep.value--;
+        // 前のステップの値を復元
+        switch (currentStep.value) {
+          case 0:
+            inputController.text = firstLine.value;
+          case 1:
+            inputController.text = secondLine.value;
+          case 2:
+            inputController.text = thirdLine.value;
+        }
+      }
+    }
+
+    void handleGenerate() {
+      // 4ステップ完了、生成画面へ遷移
+      GeneratingRoute(
+        firstLine: firstLine.value,
+        secondLine: secondLine.value,
+        thirdLine: thirdLine.value,
+      ).go(context);
     }
 
     return AppScaffoldWithBackground(
@@ -86,23 +123,23 @@ class HaikuInputPage extends HookWidget {
         child: CustomScrollView(
           slivers: [
             // ヘッダー
-            const AppSliverHeader(),
+            AppSliverHeader(
+              actions: [
+                TextButton.icon(
+                  icon: const Icon(Icons.wb_incandescent),
+                  label: const Text('季語のヒント'),
+                  onPressed: handleShowHint,
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ],
+            ),
             // 戻るボタン
             SliverToBoxAdapter(
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: AppBackButton(onPressed: handleBack),
-              ),
-            ),
-            // タイトル
-            const SliverToBoxAdapter(
-              child: Text(
-                '句を詠む',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
               ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
@@ -123,33 +160,142 @@ class HaikuInputPage extends HookWidget {
               child: StepIndicator(currentStep: currentStep.value),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
-            // 入力フィールド
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: AppTextField(
-                  controller: inputController,
-                  label: _stepLabels[currentStep.value],
-                  hintText: _stepHints[currentStep.value],
-                  autofocus: true,
-                  maxLength: 10,
+            // 入力フィールド（ステップ3以外）
+            if (currentStep.value < 3)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: AppTextField(
+                    controller: inputController,
+                    label: _stepLabels[currentStep.value],
+                    hintText: _stepHints[currentStep.value],
+                    autofocus: true,
+                    maxLength: 10,
+                  ),
                 ),
               ),
-            ),
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
-            // 決定ボタン
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: AppFilledButton(
-                  label: '決定して次の行へ',
-                  onPressed: isValid.value ? handleNext : null,
+            // ステップ3以外：決定ボタン
+            if (currentStep.value < 3)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: AppFilledButton(
+                    label: '決定して次の行へ',
+                    onPressed: isValid.value ? handleNext : null,
+                  ),
                 ),
               ),
-            ),
+            // ステップ3：確認画面のボタン
+            if (currentStep.value == 3) ...[
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: _GenerateButton(onPressed: handleGenerate),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: AppOutlinedButton(
+                    label: '前の行に戻る',
+                    onPressed: handlePreviousStep,
+                  ),
+                ),
+              ),
+            ],
             SliverFillRemaining(hasScrollBody: false, child: Container()),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// 背景生成ボタン（ブロブ装飾付き）
+class _GenerateButton extends StatelessWidget {
+  const _GenerateButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    const double height = 64.0;
+    const Color bgColor = Color(0xFF040811);
+
+    final ButtonStyle buttonStyle = FilledButton.styleFrom(
+      backgroundColor: bgColor,
+      foregroundColor: Colors.white,
+      minimumSize: const Size(double.infinity, height),
+      maximumSize: const Size(double.infinity, height),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(height / 2),
+      ),
+    ).copyWith(
+      overlayColor: WidgetStateProperty.all(
+        Colors.white.withOpacity(0.1),
+      ),
+    );
+
+    return SizedBox(
+      width: double.infinity,
+      height: height,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // ボタン本体
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(height / 2),
+              boxShadow: [
+                BoxShadow(
+                  color: bgColor.withOpacity(0.5),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(height / 2),
+              child: FilledButton(
+                onPressed: onPressed,
+                style: buttonStyle,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.auto_awesome, size: 20, color: Colors.white),
+                    const SizedBox(width: 8),
+                    Text(
+                      '背景を生成する',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.rocknRollOne().fontFamily,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // 右上の装飾SVG
+          Positioned(
+            right: -5,
+            top: -5,
+            child: SvgPicture.asset(
+              'assets/images/button_decoration.svg',
+              width: 50,
+              height: 50,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ],
       ),
     );
   }

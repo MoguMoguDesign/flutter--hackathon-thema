@@ -1,29 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// アプリ共通のSliverAppBarヘッダー。
 ///
 /// スクロール時に消える透明な背景のヘッダー。
-/// サービス名を左揃えで表示する。
+/// サービスロゴを左揃えで表示する。
 class AppSliverHeader extends StatelessWidget {
   /// SliverAppBarヘッダーを作成する。
-  ///
-  /// [serviceName] はヘッダーに表示するサービス名。
-  const AppSliverHeader({this.serviceName = 'サービス名', super.key});
+  const AppSliverHeader({
+    super.key,
+    this.actions,
+  });
 
-  /// ヘッダーに表示するサービス名
-  final String serviceName;
+  /// 右上に表示するアクションボタン。
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: Text(serviceName),
+      title: SvgPicture.asset(
+        'assets/images/logo.svg',
+        height: 32,
+        fit: BoxFit.contain,
+      ),
       centerTitle: false, // 左揃え
       backgroundColor: Colors.transparent,
-      foregroundColor: Colors.black,
+      foregroundColor: Colors.white,
       elevation: 0,
       floating: true,
       snap: true,
       automaticallyImplyLeading: false,
+      actions: actions,
     );
   }
 }

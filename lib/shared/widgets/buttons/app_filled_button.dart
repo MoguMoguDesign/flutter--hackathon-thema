@@ -20,7 +20,7 @@ class AppFilledButton extends StatelessWidget {
     this.backgroundColor,
     this.foregroundColor,
     this.width,
-    this.height = 56.0,
+    this.height = 64.0,
     this.textStyle,
   });
 
@@ -68,7 +68,7 @@ class AppFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color bgColor = backgroundColor ?? AppColors.userPrimary;
+    final Color bgColor = backgroundColor ?? const Color(0xFF040811);
     final Color fgColor = foregroundColor ?? AppColors.white;
 
     final Widget content = isLoading
@@ -107,7 +107,8 @@ class AppFilledButton extends StatelessWidget {
           foregroundColor: fgColor,
           disabledBackgroundColor: AppColors.borderDisabled,
           disabledForegroundColor: AppColors.textDisabled,
-          minimumSize: Size(width ?? 0, height),
+          minimumSize: Size(width ?? double.infinity, height),
+          maximumSize: Size(width ?? double.infinity, height),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(height / 2),
@@ -118,28 +119,48 @@ class AppFilledButton extends StatelessWidget {
           ),
         );
 
-    final Widget button = Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(height / 2),
-        boxShadow: [
-          BoxShadow(
-            color: bgColor.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+    final Widget button = Stack(
+      clipBehavior: Clip.none,
+      children: [
+        // ボタン本体
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(height / 2),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFFE53935).withValues(alpha: 0.5),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: FilledButton(
-        onPressed: isLoading ? null : onPressed,
-        style: buttonStyle,
-        child: content,
-      ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(height / 2),
+            child: FilledButton(
+              onPressed: isLoading ? null : onPressed,
+              style: buttonStyle,
+              child: content,
+            ),
+          ),
+        ),
+        // 右上の装飾画像（上レイヤー）
+        Positioned(
+          right: -5,
+          top: -5,
+          child: Image.asset(
+            'assets/images/button_decoration.png',
+            width: 50,
+            height: 50,
+            fit: BoxFit.contain,
+          ),
+        ),
+      ],
     );
 
     if (width != null) {
       return SizedBox(width: width, height: height, child: button);
     }
 
-    return SizedBox(height: height, child: button);
+    return SizedBox(width: double.infinity, height: height, child: button);
   }
 }

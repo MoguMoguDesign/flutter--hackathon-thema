@@ -30,13 +30,13 @@ class AppBackButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.chevron_left, size: 24, color: Colors.black87),
+            const Icon(Icons.chevron_left, size: 24, color: Colors.white),
             Text(
               label,
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: Colors.black87,
+                color: Colors.white,
               ),
             ),
           ],

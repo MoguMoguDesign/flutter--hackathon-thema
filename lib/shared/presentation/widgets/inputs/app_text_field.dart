@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../constants/app_colors.dart';
 
 /// アプリ共通のテキスト入力フィールド。
 ///
@@ -59,13 +60,13 @@ class AppTextField extends StatelessWidget {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 8),
         ],
         Container(
-          width: 320,
+          width: double.infinity,
           height: height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius),
@@ -89,6 +90,7 @@ class AppTextField extends StatelessWidget {
               hintStyle: TextStyle(fontSize: 16, color: Colors.grey.shade500),
               filled: true,
               fillColor: Colors.white,
+              counterStyle: const TextStyle(color: Colors.white),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 24,
                 vertical: 16,
@@ -103,7 +105,10 @@ class AppTextField extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(borderRadius),
-                borderSide: const BorderSide(color: Colors.black, width: 3.0),
+                borderSide: const BorderSide(
+                  color: AppColors.accent,
+                  width: 3.0,
+                ),
               ),
             ),
           ),

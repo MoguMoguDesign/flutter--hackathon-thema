@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../constants/app_colors.dart';
 
 /// 「+ 句を詠む」フローティングアクションボタン。
 ///
@@ -19,17 +21,44 @@ class FabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
-      onPressed: onPressed,
-      backgroundColor: Colors.black,
-      foregroundColor: Colors.white,
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-      icon: const Icon(Icons.add, size: 20),
-      label: Text(
-        label,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-      ),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        // FABボタン本体（正円）
+        FloatingActionButton(
+          onPressed: onPressed,
+          backgroundColor: AppColors.accent,
+          foregroundColor: Colors.white,
+          elevation: 8,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.add, size: 24),
+        ),
+        // 左上の装飾SVG（上レイヤー）
+        Positioned(
+          left: -15,
+          top: -8,
+          child: Transform.rotate(
+            angle: 3.14159, // 180度回転
+            child: SvgPicture.asset(
+              'assets/images/button_decoration.svg',
+              width: 40,
+              height: 30,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        // 右下の装飾SVG（上レイヤー）
+        Positioned(
+          right: -15,
+          bottom: -8,
+          child: SvgPicture.asset(
+            'assets/images/button_decoration.svg',
+            width: 40,
+            height: 30,
+            fit: BoxFit.contain,
+          ),
+        ),
+      ],
     );
   }
 }

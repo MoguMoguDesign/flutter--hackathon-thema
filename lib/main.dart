@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutterhackthema/app/app_router/app_router.dart';
 import 'package:flutterhackthema/firebase_options.dart';
@@ -50,11 +51,14 @@ class MainApp extends ConsumerWidget {
           surface: AppColors.background,
         ),
         useMaterial3: true,
-        fontFamily: 'Noto Sans JP',
+        fontFamily: GoogleFonts.rocknRollOne().fontFamily,
         scaffoldBackgroundColor: AppColors.background,
         snackBarTheme: SnackBarThemeData(
           backgroundColor: AppColors.textBlack,
-          contentTextStyle: const TextStyle(color: AppColors.white),
+          contentTextStyle: TextStyle(
+            color: AppColors.white,
+            fontFamily: GoogleFonts.rocknRollOne().fontFamily,
+          ),
         ),
       ),
       routerConfig: AppRouter.createRouter(ref),

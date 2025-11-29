@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// アプリ共通のヘッダーコンポーネント。
 ///
-/// サービス名を表示するシンプルなヘッダー。
+/// サービスロゴを表示するシンプルなヘッダー。
 /// 各画面の上部に配置する。
 class AppHeader extends StatelessWidget {
   /// ヘッダーを作成する。
-  ///
-  /// [serviceName] はヘッダーに表示するサービス名。デフォルトは「サービス名」。
-  const AppHeader({this.serviceName = 'サービス名', super.key});
-
-  /// ヘッダーに表示するサービス名
-  final String serviceName;
+  const AppHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +27,11 @@ class AppHeader extends StatelessWidget {
           ),
         ],
       ),
-      child: Text(
-        serviceName,
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: Colors.black87,
-        ),
+      child: SvgPicture.asset(
+        'assets/images/logo.svg',
+        height: 32,
+        fit: BoxFit.contain,
+        alignment: Alignment.centerLeft,
       ),
     );
   }

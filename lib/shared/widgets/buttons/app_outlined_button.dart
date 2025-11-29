@@ -20,7 +20,7 @@ class AppOutlinedButton extends StatelessWidget {
     this.borderColor,
     this.foregroundColor,
     this.width,
-    this.height = 56.0,
+    this.height = 64.0,
     this.textStyle,
   });
 
@@ -107,7 +107,8 @@ class AppOutlinedButton extends StatelessWidget {
           foregroundColor: fgColor,
           disabledBackgroundColor: AppColors.white,
           disabledForegroundColor: AppColors.textDisabled,
-          minimumSize: Size(width ?? 0, height),
+          minimumSize: Size(width ?? double.infinity, height),
+          maximumSize: Size(width ?? double.infinity, height),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           side: BorderSide(
             color: onPressed == null ? AppColors.borderDisabled : bColor,
@@ -122,28 +123,16 @@ class AppOutlinedButton extends StatelessWidget {
           ),
         );
 
-    final Widget button = Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(height / 2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: OutlinedButton(
-        onPressed: isLoading ? null : onPressed,
-        style: buttonStyle,
-        child: content,
-      ),
+    final Widget button = OutlinedButton(
+      onPressed: isLoading ? null : onPressed,
+      style: buttonStyle,
+      child: content,
     );
 
     if (width != null) {
       return SizedBox(width: width, height: height, child: button);
     }
 
-    return SizedBox(height: height, child: button);
+    return SizedBox(width: double.infinity, height: height, child: button);
   }
 }

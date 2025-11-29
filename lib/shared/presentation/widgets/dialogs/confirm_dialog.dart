@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../buttons/primary_button.dart';
-import '../buttons/secondary_button.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../constants/app_colors.dart';
 
 /// 確認ダイアログコンポーネント。
 ///
@@ -100,9 +100,52 @@ class ConfirmDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            PrimaryButton(text: confirmText, onPressed: onConfirm),
+            SizedBox(
+              width: double.infinity,
+              height: 104,
+              child: ElevatedButton(
+                onPressed: onConfirm,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFE53935),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(52),
+                  ),
+                  elevation: 0,
+                ),
+                child: Text(
+                  confirmText,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.rocknRollOne().fontFamily,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 12),
-            SecondaryButton(text: cancelText, onPressed: onCancel),
+            SizedBox(
+              width: double.infinity,
+              height: 104,
+              child: OutlinedButton(
+                onPressed: onCancel,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.accent,
+                  side: const BorderSide(color: AppColors.accent, width: 2.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(52),
+                  ),
+                ),
+                child: Text(
+                  cancelText,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.rocknRollOne().fontFamily,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
