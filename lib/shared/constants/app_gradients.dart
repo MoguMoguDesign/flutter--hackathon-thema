@@ -69,6 +69,20 @@ const BackgroundGradientTheme kDefaultBackgroundGradient =
       ),
     );
 
+/// グレー系の背景グラデーションテーマ。
+const BackgroundGradientTheme kGrayBackgroundGradient = BackgroundGradientTheme(
+  scaffoldGradient: LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: <Color>[
+      AppColors.gradientGrayLight,
+      AppColors.gradientGrayMid,
+      AppColors.gradientGrayDark,
+    ],
+    stops: <double>[0, 0.5, 1],
+  ),
+);
+
 /// SVG 背景画像を全面に敷くユーティリティウィジェット。
 ///
 /// 指定された SVG を画面全体に表示する。

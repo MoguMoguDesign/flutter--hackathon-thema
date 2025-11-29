@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_router/app_router.dart';
+import 'shared/constants/app_colors.dart';
 
 /// アプリケーションのエントリーポイント
 ///
@@ -23,9 +24,17 @@ class MainApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Mya句',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.black,
+          surface: AppColors.background,
+        ),
         useMaterial3: true,
         fontFamily: 'Noto Sans JP',
+        scaffoldBackgroundColor: AppColors.background,
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: AppColors.textBlack,
+          contentTextStyle: const TextStyle(color: AppColors.white),
+        ),
       ),
       routerConfig: AppRouter.createRouter(ref),
       debugShowCheckedModeBanner: false,

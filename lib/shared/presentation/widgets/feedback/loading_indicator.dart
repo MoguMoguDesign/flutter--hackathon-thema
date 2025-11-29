@@ -23,7 +23,14 @@ class LoadingIndicator extends StatelessWidget {
           height: 200,
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
           child: const Center(
             child: CircularProgressIndicator(

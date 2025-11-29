@@ -22,40 +22,52 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          color: Colors.grey.shade200,
-          child: AspectRatio(
-            aspectRatio: 4 / 5,
-            child: Image.network(
-              post.imageUrl,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                        : null,
-                    strokeWidth: 2,
-                    color: Colors.grey,
-                  ),
-                );
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey.shade300,
-                  child: const Center(
-                    child: Icon(
-                      Icons.image_not_supported,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            color: Colors.grey.shade200,
+            child: AspectRatio(
+              aspectRatio: 4 / 5,
+              child: Image.network(
+                post.imageUrl,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                          : null,
+                      strokeWidth: 2,
                       color: Colors.grey,
-                      size: 32,
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey.shade300,
+                    child: const Center(
+                      child: Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                        size: 32,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),

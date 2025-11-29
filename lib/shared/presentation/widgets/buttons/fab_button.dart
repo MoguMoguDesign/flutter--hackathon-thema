@@ -23,7 +23,7 @@ class FabButton extends StatelessWidget {
       onPressed: onPressed,
       backgroundColor: Colors.black,
       foregroundColor: Colors.white,
-      elevation: 4,
+      elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
       icon: const Icon(Icons.add, size: 20),
       label: Text(

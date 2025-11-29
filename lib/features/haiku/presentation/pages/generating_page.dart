@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
-import '../../../../shared/presentation/widgets/dialogs/confirm_dialog.dart';
+import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/feedback/progress_bar.dart';
-import '../../../../shared/presentation/widgets/navigation/app_header.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 
 /// AI画像生成中画面。
@@ -51,52 +50,61 @@ class GeneratingPage extends HookWidget {
     }, []);
 
     Future<void> handleBack() async {
-      final shouldLeave = await ConfirmDialog.show(
+      final shouldLeave = await AppConfirmDialog.show(
         context: context,
         title: 'TOPに戻りますか？',
         message: '生成を中断し、作成中の句は保存されません。',
         confirmText: '変更を破棄してTOPへ',
         cancelText: '生成を続ける',
+        isDangerous: true,
       );
-      if (shouldLeave && context.mounted) {
+      if (shouldLeave == true && context.mounted) {
         const PostsRoute().go(context);
       }
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return AppScaffoldWithBackground(
       body: SafeArea(
-        child: Column(
-          children: [
-            const AppHeader(serviceName: 'サービス名'),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: AppBackButton(onPressed: handleBack),
-            ),
-            const Spacer(),
-            const Text(
-              '挿絵を生成中...',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Container(
-                width: double.infinity,
-                height: 280,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Center(child: _PulsingAnimation()),
+        child: CustomScrollView(
+          slivers: [
+            const AppSliverHeader(),
+            SliverToBoxAdapter(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: AppBackButton(onPressed: handleBack),
               ),
             ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: AppProgressBar(progress: progress.value),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                children: [
+                  const Spacer(),
+                  const Text(
+                    '挿絵を生成中...',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                      width: double.infinity,
+                      height: 280,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Center(child: _PulsingAnimation()),
+                    ),
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: AppProgressBar(progress: progress.value),
+                  ),
+                  const SizedBox(height: 48),
+                ],
+              ),
             ),
-            const SizedBox(height: 48),
           ],
         ),
       ),
