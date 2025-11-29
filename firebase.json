@@ -1,0 +1,23 @@
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "myaku-haiku",
+          "configurations": {
+            "web": "1:609324610526:web:b02f83817ab990cfd5234f"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": [
+    {
+      "bucket": "myaku-haiku.firebasestorage.app",
+      "rules": "storage.rules"
+    }
+  ]
+}
