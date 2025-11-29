@@ -63,3 +63,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # 画像などのアセットファイル
+  assets:
+    - assets/images/

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutterhackthema/app/app_router/app_router.dart';
 import 'package:flutterhackthema/firebase_options.dart';
+import 'package:flutterhackthema/shared/constants/app_colors.dart';
 
 /// アプリケーションのエントリーポイント
 ///
@@ -44,9 +45,17 @@ class MainApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Mya句',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.black,
+          surface: AppColors.background,
+        ),
         useMaterial3: true,
         fontFamily: 'Noto Sans JP',
+        scaffoldBackgroundColor: AppColors.background,
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: AppColors.textBlack,
+          contentTextStyle: const TextStyle(color: AppColors.white),
+        ),
       ),
       routerConfig: AppRouter.createRouter(ref),
       debugShowCheckedModeBanner: false,
