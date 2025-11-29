@@ -69,7 +69,12 @@ class PlaceholderCreatePostPage extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () {
                   // 型安全なルーティング
-                  const PreviewRoute().go(context);
+                  const PreviewRoute(
+                    firstLine: 'サンプル上の句',
+                    secondLine: 'サンプル中の句',
+                    thirdLine: 'サンプル下の句',
+                    imageUrl: 'https://picsum.photos/400/500',
+                  ).go(context);
                 },
                 icon: const Icon(Icons.preview),
                 label: Text('プレビューへ', style: AppTextStyles.labelMedium),

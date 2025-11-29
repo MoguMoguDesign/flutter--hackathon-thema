@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:flutterhackthema/app/widgets/pages/placeholder_create_post_page.dart';
-import 'package:flutterhackthema/app/widgets/pages/placeholder_nickname_page.dart';
-import 'package:flutterhackthema/app/widgets/pages/placeholder_posts_page.dart';
-import 'package:flutterhackthema/app/widgets/pages/placeholder_preview_page.dart';
+import 'package:flutterhackthema/features/haiku/presentation/pages/generating_page.dart';
+import 'package:flutterhackthema/features/haiku/presentation/pages/haiku_input_page.dart';
+import 'package:flutterhackthema/features/haiku/presentation/pages/preview_page.dart';
+import 'package:flutterhackthema/features/nickname/presentation/pages/nickname_page.dart';
+import 'package:flutterhackthema/features/posts/presentation/pages/post_detail_page.dart';
+import 'package:flutterhackthema/features/posts/presentation/pages/posts_page.dart';
 
 part 'routes.g.dart';
 
@@ -25,7 +27,7 @@ class NicknameRoute extends GoRouteData with $NicknameRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const PlaceholderNicknamePage();
+    return const NicknamePage();
   }
 }
 
@@ -46,15 +48,39 @@ class PostsRoute extends GoRouteData with $PostsRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const PlaceholderPostsPage();
+    return const PostsPage();
   }
 }
 
-/// 投稿作成画面のルート定義
+/// 投稿詳細画面のルート定義
+///
+/// パス: /posts/:postId
+/// 投稿の詳細を表示する画面
+/// SNSシェアボタン付き
+///
+/// 使用例:
+/// ```dart
+/// PostDetailRoute(postId: '123').go(context);
+/// ```
+@TypedGoRoute<PostDetailRoute>(path: '/posts/:postId')
+class PostDetailRoute extends GoRouteData with $PostDetailRoute {
+  /// [PostDetailRoute] のコンストラクタ
+  const PostDetailRoute({required this.postId});
+
+  /// 投稿ID
+  final String postId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return PostDetailPage(postId: postId);
+  }
+}
+
+/// 俳句入力画面のルート定義
 ///
 /// パス: /create
 /// 俳句を入力して画像生成を行う画面
-/// DALL-E 3 APIを使用して画像を生成します
+/// 3ステップ入力（上の句・中の句・下の句）
 ///
 /// 使用例:
 /// ```dart
@@ -67,27 +93,95 @@ class CreateRoute extends GoRouteData with $CreateRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const PlaceholderCreatePostPage();
+    return const HaikuInputPage();
+  }
+}
+
+/// AI画像生成中画面のルート定義
+///
+/// パス: /create/generating
+/// AI画像を生成している間のローディング画面
+///
+/// 使用例:
+/// ```dart
+/// GeneratingRoute(
+///   firstLine: '古池や',
+///   secondLine: '蛙飛び込む',
+///   thirdLine: '水の音',
+/// ).go(context);
+/// ```
+@TypedGoRoute<GeneratingRoute>(path: '/create/generating')
+class GeneratingRoute extends GoRouteData with $GeneratingRoute {
+  /// [GeneratingRoute] のコンストラクタ
+  const GeneratingRoute({
+    required this.firstLine,
+    required this.secondLine,
+    required this.thirdLine,
+  });
+
+  /// 上の句
+  final String firstLine;
+
+  /// 中の句
+  final String secondLine;
+
+  /// 下の句
+  final String thirdLine;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return GeneratingPage(
+      firstLine: firstLine,
+      secondLine: secondLine,
+      thirdLine: thirdLine,
+    );
   }
 }
 
 /// プレビュー画面のルート定義
 ///
-/// パス: /preview
+/// パス: /create/preview
 /// 生成された画像と俳句のプレビューを表示する画面
 /// 投稿の確認と投稿実行を行います
 ///
 /// 使用例:
 /// ```dart
-/// const PreviewRoute().go(context);
+/// PreviewRoute(
+///   firstLine: '古池や',
+///   secondLine: '蛙飛び込む',
+///   thirdLine: '水の音',
+///   imageUrl: 'https://example.com/image.png',
+/// ).go(context);
 /// ```
-@TypedGoRoute<PreviewRoute>(path: '/preview')
+@TypedGoRoute<PreviewRoute>(path: '/create/preview')
 class PreviewRoute extends GoRouteData with $PreviewRoute {
   /// [PreviewRoute] のコンストラクタ
-  const PreviewRoute();
+  const PreviewRoute({
+    required this.firstLine,
+    required this.secondLine,
+    required this.thirdLine,
+    required this.imageUrl,
+  });
+
+  /// 上の句
+  final String firstLine;
+
+  /// 中の句
+  final String secondLine;
+
+  /// 下の句
+  final String thirdLine;
+
+  /// 生成された画像のURL
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const PlaceholderPreviewPage();
+    return PreviewPage(
+      firstLine: firstLine,
+      secondLine: secondLine,
+      thirdLine: thirdLine,
+      imageUrl: imageUrl,
+    );
   }
 }

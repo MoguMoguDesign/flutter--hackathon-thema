@@ -17,7 +17,7 @@ part 'nickname_provider.g.dart';
 ///
 /// TODO(#10): Issue #10 完了後、このファイルを削除して
 /// lib/features/nickname/presentation/providers/nickname_provider.dart に置き換える
-@riverpod
+@Riverpod(keepAlive: true)
 class TemporaryNickname extends _$TemporaryNickname {
   /// ニックネームの初期状態を構築
   ///

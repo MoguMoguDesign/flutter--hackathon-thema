@@ -13,8 +13,10 @@ import 'package:flutterhackthema/shared/presentation/pages/error_page.dart';
 /// ルート構成:
 /// - /nickname - ニックネーム入力画面（初期ルート）
 /// - /posts - 投稿一覧画面
-/// - /create - 投稿作成画面
-/// - /preview - プレビュー画面
+/// - /posts/:postId - 投稿詳細画面
+/// - /create - 俳句入力画面
+/// - /create/generating - AI画像生成中画面
+/// - /create/preview - プレビュー画面
 ///
 /// リダイレクトガード:
 /// - ニックネーム未設定時は /nickname へ自動リダイレクト

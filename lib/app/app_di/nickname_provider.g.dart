@@ -65,7 +65,7 @@ final class TemporaryNicknameProvider
         argument: null,
         retry: null,
         name: r'temporaryNicknameProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -86,7 +86,7 @@ final class TemporaryNicknameProvider
   }
 }
 
-String _$temporaryNicknameHash() => r'65002a74ce5ed7c525916d27411d5c9a7194aa90';
+String _$temporaryNicknameHash() => r'601d43d87c36922a611da39607f69afde75c0977';
 
 /// 一時的なニックネーム管理用Provider
 ///

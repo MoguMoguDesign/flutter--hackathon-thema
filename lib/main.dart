@@ -21,7 +21,12 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      title: 'Flutter Hackathon Thema',
+      title: 'Mya句',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        useMaterial3: true,
+        fontFamily: 'Noto Sans JP',
+      ),
       routerConfig: AppRouter.createRouter(ref),
       debugShowCheckedModeBanner: false,
     );
