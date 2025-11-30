@@ -42,7 +42,7 @@ jobs:
 
       # Flutter Webビルド
       - name: Build Flutter Web
-        run: flutter build web --release --web-renderer canvaskit
+        run: flutter build web --release --web-renderer canvaskit --dart-define=GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
 
       # Vercelにデプロイ
       - name: Deploy to Vercel
