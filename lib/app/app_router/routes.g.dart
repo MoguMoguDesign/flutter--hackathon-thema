@@ -8,7 +8,7 @@ part of 'routes.dart';
 
 List<RouteBase> get $appRoutes => [
   $nicknameRoute,
-  $postsRoute,
+  $haikuListRoute,
   $postDetailRoute,
   $createRoute,
   $generatingRoute,
@@ -38,11 +38,12 @@ mixin $NicknameRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $postsRoute =>
-    GoRouteData.$route(path: '/posts', factory: $PostsRoute._fromState);
+RouteBase get $haikuListRoute =>
+    GoRouteData.$route(path: '/posts', factory: $HaikuListRoute._fromState);
 
-mixin $PostsRoute on GoRouteData {
-  static PostsRoute _fromState(GoRouterState state) => const PostsRoute();
+mixin $HaikuListRoute on GoRouteData {
+  static HaikuListRoute _fromState(GoRouterState state) =>
+      const HaikuListRoute();
 
   @override
   String get location => GoRouteData.$location('/posts');

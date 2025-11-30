@@ -21,10 +21,10 @@ import 'package:go_router/go_router.dart';
 
 import 'package:flutterhackthema/features/haiku/presentation/pages/generating_page.dart';
 import 'package:flutterhackthema/features/haiku/presentation/pages/haiku_input_page.dart';
+import 'package:flutterhackthema/features/haiku/presentation/pages/haiku_list_page.dart';
 import 'package:flutterhackthema/features/haiku/presentation/pages/preview_page.dart';
 import 'package:flutterhackthema/features/nickname/presentation/pages/nickname_page.dart';
 import 'package:flutterhackthema/features/posts/presentation/pages/post_detail_page.dart';
-import 'package:flutterhackthema/features/posts/presentation/pages/posts_page.dart';
 
 part 'routes.g.dart';
 
@@ -49,26 +49,30 @@ class NicknameRoute extends GoRouteData with $NicknameRoute {
   }
 }
 
-/// 投稿一覧画面のルート定義
+/// 俳句一覧画面のルート定義
 ///
 /// パス: /posts
-/// 全ユーザーの投稿を一覧表示する画面
+/// 全ユーザーの俳句を一覧表示する画面
 /// Pinterest風のグリッドレイアウトで表示されます
 ///
 /// 使用例:
 /// ```dart
-/// const PostsRoute().go(context);
+/// const HaikuListRoute().go(context);
 /// ```
-@TypedGoRoute<PostsRoute>(path: '/posts')
-class PostsRoute extends GoRouteData with $PostsRoute {
-  /// [PostsRoute] のコンストラクタ
-  const PostsRoute();
+@TypedGoRoute<HaikuListRoute>(path: '/posts')
+class HaikuListRoute extends GoRouteData with $HaikuListRoute {
+  /// [HaikuListRoute] のコンストラクタ
+  const HaikuListRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const PostsPage();
+    return const HaikuListPage();
   }
 }
+
+/// @Deprecated('Use HaikuListRoute instead')
+/// 後方互換性のため残しています
+typedef PostsRoute = HaikuListRoute;
 
 /// 投稿詳細画面のルート定義
 ///
