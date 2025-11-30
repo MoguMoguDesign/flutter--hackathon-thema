@@ -87,7 +87,7 @@ class PlaceholderPreviewPage extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () {
                   // 投稿完了後、投稿一覧へ遷移（型安全なルーティング）
-                  const PostsRoute().go(context);
+                  const HaikuListRoute().go(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('投稿しました（プレースホルダー）')),
                   );

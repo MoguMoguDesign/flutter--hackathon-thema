@@ -54,7 +54,7 @@ class PlaceholderCreatePostPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () {
             // 型安全なルーティング
-            const PostsRoute().go(context);
+            const HaikuListRoute().go(context);
           },
         ),
       ),
@@ -110,7 +110,7 @@ class PlaceholderCreatePostPage extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   // 型安全なルーティング
-                  const PostsRoute().go(context);
+                  const HaikuListRoute().go(context);
                 },
                 child: Text(
                   '投稿一覧へ戻る',

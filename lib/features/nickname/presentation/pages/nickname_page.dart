@@ -94,7 +94,7 @@ class NicknamePage extends HookConsumerWidget {
                           // 投稿一覧画面へ遷移
                           if (context.mounted) {
                             debugPrint('遷移開始: /posts');
-                            const PostsRoute().go(context);
+                            const HaikuListRoute().go(context);
                           } else {
                             debugPrint('context.mounted = false');
                           }

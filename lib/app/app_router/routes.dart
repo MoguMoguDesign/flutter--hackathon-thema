@@ -70,10 +70,6 @@ class HaikuListRoute extends GoRouteData with $HaikuListRoute {
   }
 }
 
-/// @Deprecated('Use HaikuListRoute instead')
-/// 後方互換性のため残しています
-typedef PostsRoute = HaikuListRoute;
-
 /// 俳句詳細画面のルート定義
 ///
 /// パス: /posts/:haikuId
@@ -97,10 +93,6 @@ class HaikuDetailRoute extends GoRouteData with $HaikuDetailRoute {
     return HaikuDetailPage(haikuId: haikuId);
   }
 }
-
-/// @Deprecated('Use HaikuDetailRoute instead')
-/// 後方互換性のため残しています
-typedef PostDetailRoute = HaikuDetailRoute;
 
 /// 俳句入力画面のルート定義
 ///
