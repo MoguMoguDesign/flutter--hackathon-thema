@@ -36,6 +36,7 @@ dependencies:
 
   # Storage
   shared_preferences: ^2.3.4
+  path_provider: ^2.1.5
 
   # HTTP Client
   http: ^1.2.0
@@ -67,6 +68,7 @@ dev_dependencies:
   mockito: ^5.5.0
   flutter_lints: ^6.0.0
   fake_cloud_firestore: ^4.0.0
+  path_provider_platform_interface: ^2.1.2
 
 flutter:
   uses-material-design: true
