@@ -47,7 +47,7 @@ class HaikuListPage extends HookConsumerWidget {
                 sliver: _SliverStaggeredGrid(
                   haikus: haikus,
                   onHaikuTap: (haiku) {
-                    PostDetailRoute(postId: haiku.id).go(context);
+                    HaikuDetailRoute(haikuId: haiku.id).go(context);
                   },
                 ),
               ),

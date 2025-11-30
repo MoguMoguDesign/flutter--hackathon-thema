@@ -189,7 +189,7 @@ final class NicknameNotifierProvider
   NicknameNotifier create() => NicknameNotifier();
 }
 
-String _$nicknameNotifierHash() => r'7e2840a999b4ea1eea36a66afdd4ca7330b6233b';
+String _$nicknameNotifierHash() => r'8c06113da09d2af3622a38b4b27143ad0ef0b47d';
 
 /// ニックネームの状態を管理するプロバイダー
 ///

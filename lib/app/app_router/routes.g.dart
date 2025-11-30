@@ -9,7 +9,7 @@ part of 'routes.dart';
 List<RouteBase> get $appRoutes => [
   $nicknameRoute,
   $haikuListRoute,
-  $postDetailRoute,
+  $haikuDetailRoute,
   $createRoute,
   $generatingRoute,
   $previewRoute,
@@ -62,20 +62,20 @@ mixin $HaikuListRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $postDetailRoute => GoRouteData.$route(
-  path: '/posts/:postId',
-  factory: $PostDetailRoute._fromState,
+RouteBase get $haikuDetailRoute => GoRouteData.$route(
+  path: '/posts/:haikuId',
+  factory: $HaikuDetailRoute._fromState,
 );
 
-mixin $PostDetailRoute on GoRouteData {
-  static PostDetailRoute _fromState(GoRouterState state) =>
-      PostDetailRoute(postId: state.pathParameters['postId']!);
+mixin $HaikuDetailRoute on GoRouteData {
+  static HaikuDetailRoute _fromState(GoRouterState state) =>
+      HaikuDetailRoute(haikuId: state.pathParameters['haikuId']!);
 
-  PostDetailRoute get _self => this as PostDetailRoute;
+  HaikuDetailRoute get _self => this as HaikuDetailRoute;
 
   @override
   String get location =>
-      GoRouteData.$location('/posts/${Uri.encodeComponent(_self.postId)}');
+      GoRouteData.$location('/posts/${Uri.encodeComponent(_self.haikuId)}');
 
   @override
   void go(BuildContext context) => context.go(location);
