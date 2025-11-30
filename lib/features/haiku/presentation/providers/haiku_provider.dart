@@ -46,7 +46,8 @@ Stream<List<HaikuModel>> haikuListStream(Ref ref) {
 ///
 /// 俳句のFirestore保存処理とその状態を管理します。
 /// [AsyncValue]を使用して、ローディング・成功・エラー状態を表現します。
-@riverpod
+/// keepAlive: true でasync操作中のauto-disposeを防止します。
+@Riverpod(keepAlive: true)
 class HaikuNotifier extends _$HaikuNotifier {
   final Logger _logger = Logger();
 
