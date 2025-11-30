@@ -63,6 +63,7 @@ class HaikuNotifier extends _$HaikuNotifier {
   /// [firstLine] 上の句
   /// [secondLine] 真ん中の行
   /// [thirdLine] 下の句
+  /// [imageUrl] AI生成画像のFirebase Storage URL(オプション)
   ///
   /// Returns: 保存されたドキュメントのID
   ///
@@ -71,6 +72,7 @@ class HaikuNotifier extends _$HaikuNotifier {
     required String firstLine,
     required String secondLine,
     required String thirdLine,
+    String? imageUrl,
   }) async {
     _logger.i('Saving haiku to Firestore');
 
@@ -92,6 +94,7 @@ class HaikuNotifier extends _$HaikuNotifier {
         createdAt: DateTime.now(),
         likeCount: 0, // 初期値として0を設定
         nickname: nickname,
+        imageUrl: imageUrl,
       );
 
       final docId = await repository.create(haiku);

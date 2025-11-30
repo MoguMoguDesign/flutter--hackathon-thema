@@ -97,5 +97,71 @@ void main() {
       expect(haiku.id, isEmpty); // Firestoreで自動生成される
       expect(haiku.createdAt, isA<DateTime>());
     });
+
+    test('saveHaiku with imageUrl succeeds and returns document ID', () async {
+      // Arrange
+      const docId = 'test-doc-id';
+      const imageUrl = 'https://storage.example.com/image.jpg';
+      when(mockRepository.create(any)).thenAnswer((_) async => docId);
+
+      // Act
+      final notifier = container.read(haikuProvider.notifier);
+      final result = await notifier.saveHaiku(
+        firstLine: '古池や',
+        secondLine: '蛙飛び込む',
+        thirdLine: '水の音',
+        imageUrl: imageUrl,
+      );
+
+      // Assert
+      expect(result, equals(docId));
+      verify(mockRepository.create(any)).called(1);
+    });
+
+    test('saveHaiku creates HaikuModel with imageUrl', () async {
+      // Arrange
+      const imageUrl = 'https://storage.example.com/image.jpg';
+      when(mockRepository.create(any)).thenAnswer((_) async => 'doc-id');
+
+      // Act
+      final notifier = container.read(haikuProvider.notifier);
+      await notifier.saveHaiku(
+        firstLine: '閑さや',
+        secondLine: '岩にしみ入る',
+        thirdLine: '蝉の声',
+        imageUrl: imageUrl,
+      );
+
+      // Assert
+      final captured = verify(mockRepository.create(captureAny)).captured;
+      final haiku = captured.first as HaikuModel;
+
+      expect(haiku.imageUrl, equals(imageUrl));
+      expect(haiku.firstLine, equals('閑さや'));
+      expect(haiku.secondLine, equals('岩にしみ入る'));
+      expect(haiku.thirdLine, equals('蝉の声'));
+    });
+
+    test(
+      'saveHaiku without imageUrl creates HaikuModel with null imageUrl',
+      () async {
+        // Arrange
+        when(mockRepository.create(any)).thenAnswer((_) async => 'doc-id');
+
+        // Act
+        final notifier = container.read(haikuProvider.notifier);
+        await notifier.saveHaiku(
+          firstLine: '古池や',
+          secondLine: '蛙飛び込む',
+          thirdLine: '水の音',
+        );
+
+        // Assert
+        final captured = verify(mockRepository.create(captureAny)).captured;
+        final haiku = captured.first as HaikuModel;
+
+        expect(haiku.imageUrl, isNull);
+      },
+    );
   });
 }
