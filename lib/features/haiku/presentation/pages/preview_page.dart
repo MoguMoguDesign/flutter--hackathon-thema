@@ -16,12 +16,11 @@
 // - All changes must pass: analyze, format, test
 //
 
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
+import 'package:flutterhackthema/features/haiku/presentation/providers/haiku_provider.dart';
 import 'package:flutterhackthema/features/haiku/presentation/providers/image_generation_provider.dart';
 import 'package:flutterhackthema/features/haiku/presentation/providers/image_save_provider.dart';
 import 'package:flutterhackthema/features/haiku/presentation/state/image_generation_state.dart';
@@ -63,6 +62,12 @@ class PreviewPage extends ConsumerWidget {
       orElse: () => null,
     );
 
+    // 投稿処理中かどうか
+    final bool isPosting = saveState.maybeWhen(
+      saving: () => true,
+      orElse: () => false,
+    );
+
     Future<void> handleBack() async {
       final shouldLeave = await AppConfirmDialog.show(
         context: context,
@@ -89,34 +94,87 @@ class PreviewPage extends ConsumerWidget {
       ).go(context);
     }
 
-    void handlePost() {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('投稿しました！'), backgroundColor: Colors.black),
-      );
-      ref.read(imageGenerationProvider.notifier).reset();
-      ref.read(imageSaveProvider.notifier).reset();
-      const HaikuListRoute().go(context);
-    }
-
-    Future<void> handleSave() async {
-      if (imageData == null) return;
-
-      final url = await ref
-          .read(imageSaveProvider.notifier)
-          .saveImage(
-            imageData: imageData,
-            firstLine: firstLine,
-            secondLine: secondLine,
-            thirdLine: thirdLine,
+    /// 俳句を投稿する
+    ///
+    /// 1. Firebase Storageに画像を保存
+    /// 2. Firestoreに俳句データを保存
+    /// 3. 状態をリセットして一覧画面に遷移
+    Future<void> handlePost() async {
+      if (imageData == null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('画像データがありません'),
+              backgroundColor: Colors.red,
+            ),
           );
+        }
+        return;
+      }
 
-      if (url != null && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('画像を保存しました'),
-            backgroundColor: Colors.green,
-          ),
+      // async操作前にnotifier参照を取得（disposeエラー回避）
+      final imageSaveNotifier = ref.read(imageSaveProvider.notifier);
+      final haikuNotifier = ref.read(haikuProvider.notifier);
+      final imageGenNotifier = ref.read(imageGenerationProvider.notifier);
+
+      // 1. Firebase Storageに画像を保存
+      final imageUrl = await imageSaveNotifier.saveImage(
+        imageData: imageData,
+        firstLine: firstLine,
+        secondLine: secondLine,
+        thirdLine: thirdLine,
+      );
+
+      if (imageUrl == null) {
+        // imageSaveProviderがエラー状態を設定済み
+        // ImageSaveState.errorからメッセージを取得して表示
+        final currentSaveState = ref.read(imageSaveProvider);
+        final errorMessage = currentSaveState.maybeWhen(
+          error: (message) => message,
+          orElse: () => '画像の保存に失敗しました',
         );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+          );
+        }
+        return;
+      }
+
+      // 2. Firestoreに俳句データを保存
+      try {
+        await haikuNotifier.saveHaiku(
+          firstLine: firstLine,
+          secondLine: secondLine,
+          thirdLine: thirdLine,
+          imageUrl: imageUrl,
+        );
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('投稿しました!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('投稿に失敗しました: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      // 3. 状態をリセットして一覧画面に遷移
+      imageGenNotifier.reset();
+      imageSaveNotifier.reset();
+      if (context.mounted) {
+        const HaikuListRoute().go(context);
       }
     }
 
@@ -164,27 +222,23 @@ class PreviewPage extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  _SaveButtonSection(
-                    saveState: saveState,
-                    imageData: imageData,
-                    onSave: handleSave,
-                  ),
-                  const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: AppOutlinedButton(
                       label: '生成をやり直す',
                       leadingIcon: Icons.refresh,
-                      onPressed: handleRegenerate,
+                      onPressed: isPosting ? null : handleRegenerate,
                     ),
                   ),
                   const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: AppFilledButton(
-                      label: 'Mya句に投稿する',
-                      onPressed: handlePost,
-                    ),
+                    child: isPosting
+                        ? const _PostingIndicator()
+                        : AppFilledButton(
+                            label: 'Mya句に投稿する',
+                            onPressed: imageData != null ? handlePost : null,
+                          ),
                   ),
                   const SizedBox(height: 32),
                 ],
@@ -197,73 +251,30 @@ class PreviewPage extends ConsumerWidget {
   }
 }
 
-/// 画像保存ボタンセクション
+/// 投稿中インジケーター
 ///
-/// 保存状態に応じてボタン、ローディング、成功、エラー表示を切り替える。
-class _SaveButtonSection extends StatelessWidget {
-  const _SaveButtonSection({
-    required this.saveState,
-    required this.imageData,
-    required this.onSave,
-  });
-
-  final ImageSaveState saveState;
-  final Uint8List? imageData;
-  final VoidCallback onSave;
+/// 投稿処理中に表示されるローディングインジケーター。
+class _PostingIndicator extends StatelessWidget {
+  const _PostingIndicator();
 
   @override
   Widget build(BuildContext context) {
-    return saveState.when(
-      initial: () => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: AppOutlinedButton(
-          label: '画像を保存',
-          leadingIcon: Icons.save,
-          onPressed: imageData != null ? onSave : null,
-        ),
-      ),
-      saving: () => const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        child: SizedBox(
-          height: 24,
-          width: 24,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-      ),
-      success: (_) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.check_circle, color: Colors.green.shade600),
-            const SizedBox(width: 8),
-            Text(
-              '保存済み',
-              style: TextStyle(
-                color: Colors.green.shade600,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-      error: (message) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: [
-            Text(
-              message,
-              style: TextStyle(color: Colors.red.shade600, fontSize: 12),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            AppOutlinedButton(
-              label: '再試行',
-              leadingIcon: Icons.refresh,
-              onPressed: onSave,
-            ),
-          ],
-        ),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 20,
+            width: 20,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+          SizedBox(width: 12),
+          Text(
+            '投稿中...',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ],
       ),
     );
   }

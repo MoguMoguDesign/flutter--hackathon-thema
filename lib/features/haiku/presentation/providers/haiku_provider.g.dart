@@ -115,6 +115,7 @@ String _$haikuListStreamHash() => r'6d26ca5f57c81b59771ef7ab0e710db9da4bd3d6';
 ///
 /// 俳句のFirestore保存処理とその状態を管理します。
 /// [AsyncValue]を使用して、ローディング・成功・エラー状態を表現します。
+/// keepAlive: true でasync操作中のauto-disposeを防止します。
 
 @ProviderFor(HaikuNotifier)
 const haikuProvider = HaikuNotifierProvider._();
@@ -123,19 +124,21 @@ const haikuProvider = HaikuNotifierProvider._();
 ///
 /// 俳句のFirestore保存処理とその状態を管理します。
 /// [AsyncValue]を使用して、ローディング・成功・エラー状態を表現します。
+/// keepAlive: true でasync操作中のauto-disposeを防止します。
 final class HaikuNotifierProvider
     extends $AsyncNotifierProvider<HaikuNotifier, String?> {
   /// 俳句保存の状態管理プロバイダー
   ///
   /// 俳句のFirestore保存処理とその状態を管理します。
   /// [AsyncValue]を使用して、ローディング・成功・エラー状態を表現します。
+  /// keepAlive: true でasync操作中のauto-disposeを防止します。
   const HaikuNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'haikuProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -148,12 +151,13 @@ final class HaikuNotifierProvider
   HaikuNotifier create() => HaikuNotifier();
 }
 
-String _$haikuNotifierHash() => r'99af5fce5c6fdb36d212d65c7880db9da3d78246';
+String _$haikuNotifierHash() => r'92b84a828f1efd96ec8619c9565f19cd66f57ecd';
 
 /// 俳句保存の状態管理プロバイダー
 ///
 /// 俳句のFirestore保存処理とその状態を管理します。
 /// [AsyncValue]を使用して、ローディング・成功・エラー状態を表現します。
+/// keepAlive: true でasync操作中のauto-disposeを防止します。
 
 abstract class _$HaikuNotifier extends $AsyncNotifier<String?> {
   FutureOr<String?> build();

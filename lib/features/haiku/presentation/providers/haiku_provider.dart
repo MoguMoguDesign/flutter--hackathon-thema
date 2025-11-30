@@ -46,7 +46,8 @@ Stream<List<HaikuModel>> haikuListStream(Ref ref) {
 ///
 /// 俳句のFirestore保存処理とその状態を管理します。
 /// [AsyncValue]を使用して、ローディング・成功・エラー状態を表現します。
-@riverpod
+/// keepAlive: true でasync操作中のauto-disposeを防止します。
+@Riverpod(keepAlive: true)
 class HaikuNotifier extends _$HaikuNotifier {
   final Logger _logger = Logger();
 
@@ -63,6 +64,7 @@ class HaikuNotifier extends _$HaikuNotifier {
   /// [firstLine] 上の句
   /// [secondLine] 真ん中の行
   /// [thirdLine] 下の句
+  /// [imageUrl] AI生成画像のFirebase Storage URL(オプション)
   ///
   /// Returns: 保存されたドキュメントのID
   ///
@@ -71,18 +73,21 @@ class HaikuNotifier extends _$HaikuNotifier {
     required String firstLine,
     required String secondLine,
     required String thirdLine,
+    String? imageUrl,
   }) async {
     _logger.i('Saving haiku to Firestore');
+
+    // async操作前にref参照を取得（disposeエラー回避）
+    final repository = ref.read(haikuRepositoryProvider);
+    final nicknameFuture = ref.read(userNicknameProvider.future);
 
     // ローディング状態に設定
     state = const AsyncValue.loading();
 
     // AsyncValue.guardで例外を安全に処理
     state = await AsyncValue.guard(() async {
-      final repository = ref.read(haikuRepositoryProvider);
-
       // 現在のユーザーのニックネームを取得（App層経由）
-      final String? nickname = await ref.read(userNicknameProvider.future);
+      final String? nickname = await nicknameFuture;
 
       final haiku = HaikuModel(
         id: '', // Firestoreで自動生成
@@ -92,6 +97,7 @@ class HaikuNotifier extends _$HaikuNotifier {
         createdAt: DateTime.now(),
         likeCount: 0, // 初期値として0を設定
         nickname: nickname,
+        imageUrl: imageUrl,
       );
 
       final docId = await repository.create(haiku);
