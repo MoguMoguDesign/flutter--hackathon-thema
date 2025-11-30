@@ -202,9 +202,15 @@ class HaikuInputPage extends HookConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: HaikuPreview(
-                  firstLine: firstLine.value,
-                  secondLine: currentStep.value >= 1 ? secondLine.value : '',
-                  thirdLine: currentStep.value >= 2 ? thirdLine.value : '',
+                  firstLine: currentStep.value == 0
+                      ? inputController.text
+                      : firstLine.value,
+                  secondLine: currentStep.value == 1
+                      ? inputController.text
+                      : (currentStep.value >= 1 ? secondLine.value : ''),
+                  thirdLine: currentStep.value == 2
+                      ? inputController.text
+                      : (currentStep.value >= 2 ? thirdLine.value : ''),
                 ),
               ),
             ),
