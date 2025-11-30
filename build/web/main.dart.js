@@ -26855,7 +26855,7 @@ _.e=f},
 ZO:function ZO(){},
 aHr(a,b){var s=0,r=A.D(t.na),q,p=2,o=[],n,m,l,k,j,i,h,g,f,e
 var $async$aHr=A.z(function(c,d){if(c===1){o.push(d)
-s=p}while(true)switch(s){case 0:i="https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:streamGenerateContent?key=AIzaSyATPBW0D4auB_gyGOmAOXaJeSdjB7VjuOc"
+s=p}while(true)switch(s){case 0:i="https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:streamGenerateContent?key=AIzaSyCDlGtirlBLryQnxEh2wlgmeEnUqVusUKs"
 h=t.N
 g=t.K
 f=B.bq.mz(A.ai(["contents",A.b([A.ai(["role","user","parts",A.b([A.ai(["text",b],h,h)],t.m0)],h,g)],t.Mq),"generationConfig",A.ai(["responseModalities",A.b(["IMAGE","TEXT"],t.s),"imageConfig",A.ai(["aspectRatio",a],h,h)],h,g)],h,g))
