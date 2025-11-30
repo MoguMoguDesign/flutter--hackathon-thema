@@ -18,12 +18,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
+import 'package:flutterhackthema/features/haiku/data/models/haiku_model.dart';
+import 'package:flutterhackthema/features/haiku/presentation/providers/haiku_save_notifier.dart';
 import 'package:flutterhackthema/features/haiku/presentation/providers/image_generation_provider.dart';
+import 'package:flutterhackthema/features/haiku/presentation/state/haiku_save_state.dart';
 import 'package:flutterhackthema/features/haiku/presentation/state/image_generation_state.dart';
 import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
+
+/// UUID生成用のインスタンス
+const _uuid = Uuid();
 
 /// プレビュー・投稿確認画面。
 ///
@@ -44,13 +51,67 @@ class PreviewPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(imageGenerationProvider);
+    final imageGenerationState = ref.watch(imageGenerationProvider);
+    final saveState = ref.watch(haikuSaveProvider);
 
     // 画像データを取得
-    final imageData = state.maybeWhen(
+    final imageData = imageGenerationState.maybeWhen(
       success: (data) => data,
       orElse: () => null,
     );
+
+    // 保存状態を監視してナビゲーション
+    ref.listen<HaikuSaveState>(haikuSaveProvider, (previous, next) {
+      next.when(
+        initial: () {},
+        savingToCache: (haiku) {},
+        cachedLocally: (haiku, localImagePath) {
+          // ローカル保存完了時にSnackBarを表示
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('ローカルに保存しました'),
+                duration: Duration(seconds: 1),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        },
+        savingToFirebase: (haiku, localImagePath) {},
+        saved: (haiku, localImagePath, firebaseImageUrl) {
+          // 完全保存完了時に成功メッセージを表示してリストページへ
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('俳句を投稿しました！'),
+                backgroundColor: Colors.black,
+              ),
+            );
+            ref.read(imageGenerationProvider.notifier).reset();
+            ref.read(haikuSaveProvider.notifier).reset();
+            const HaikuListRoute().go(context);
+          }
+        },
+        error: (message, haiku, localImagePath) {
+          // エラー時にダイアログを表示
+          if (context.mounted) {
+            showDialog<void>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('保存エラー'),
+                content: Text(message),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('閉じる'),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+      );
+    });
 
     Future<void> handleBack() async {
       final shouldLeave = await AppConfirmDialog.show(
@@ -63,6 +124,7 @@ class PreviewPage extends ConsumerWidget {
       );
       if (shouldLeave == true && context.mounted) {
         ref.read(imageGenerationProvider.notifier).reset();
+        ref.read(haikuSaveProvider.notifier).reset();
         const HaikuListRoute().go(context);
       }
     }
@@ -76,13 +138,39 @@ class PreviewPage extends ConsumerWidget {
       ).go(context);
     }
 
-    void handlePost() {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('投稿しました！'), backgroundColor: Colors.black),
+    Future<void> handlePost() async {
+      if (imageData == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('画像データがありません'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      // HaikuModelを作成
+      final haiku = HaikuModel(
+        id: _uuid.v4(),
+        userId: 'anonymous', // TODO: 認証機能実装後にユーザーIDを取得
+        imageUrl: '', // Firebase保存後に更新される
+        firstLine: firstLine,
+        secondLine: secondLine,
+        thirdLine: thirdLine,
+        createdAt: DateTime.now(),
       );
-      ref.read(imageGenerationProvider.notifier).reset();
-      const HaikuListRoute().go(context);
+
+      // 俳句と画像を保存
+      try {
+        await ref.read(haikuSaveProvider.notifier).saveHaiku(haiku, imageData);
+      } catch (e) {
+        // エラーは ref.listen で処理される
+      }
     }
+
+    // 保存中かどうか
+    final isSaving = saveState.isProcessing;
+    final isCached = saveState.isCached;
 
     return AppScaffoldWithBackground(
       body: SafeArea(
@@ -92,7 +180,13 @@ class PreviewPage extends ConsumerWidget {
             SliverToBoxAdapter(
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: AppBackButton(onPressed: handleBack),
+                child: AppBackButton(
+                  onPressed: () {
+                    if (!isSaving) {
+                      handleBack();
+                    }
+                  },
+                ),
               ),
             ),
             SliverFillRemaining(
@@ -128,20 +222,49 @@ class PreviewPage extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
+                  // 保存状態インジケーター
+                  if (isSaving)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            isCached ? 'Firebaseに保存中...' : 'ローカルに保存中...',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (isSaving) const SizedBox(height: 24),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: AppOutlinedButton(
                       label: '生成をやり直す',
                       leadingIcon: Icons.refresh,
-                      onPressed: handleRegenerate,
+                      onPressed: isSaving ? null : handleRegenerate,
                     ),
                   ),
                   const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: AppFilledButton(
-                      label: 'Mya句に投稿する',
-                      onPressed: handlePost,
+                      label: isSaving ? '保存中...' : 'Mya句に投稿する',
+                      onPressed: isSaving ? null : handlePost,
                     ),
                   ),
                   const SizedBox(height: 32),
