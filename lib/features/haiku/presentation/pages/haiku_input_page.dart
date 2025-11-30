@@ -16,8 +16,6 @@
 // - All changes must pass: analyze, format, test
 //
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,7 +27,6 @@ import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/inputs/app_text_field.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 import '../widgets/haiku_hint_dialog.dart';
-import '../providers/haiku_provider.dart';
 import '../widgets/haiku_preview.dart';
 import '../widgets/step_indicator.dart';
 
@@ -64,29 +61,6 @@ class HaikuInputPage extends HookConsumerWidget {
       inputController.addListener(listener);
       return () => inputController.removeListener(listener);
     }, [inputController]);
-
-    // 保存エラーをリッスン
-    ref.listen<AsyncValue<String?>>(haikuProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, stackTrace) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('保存に失敗しました: $error'),
-                backgroundColor: Colors.red,
-                action: SnackBarAction(
-                  label: '再試行',
-                  textColor: Colors.white,
-                  onPressed: () {
-                    // リトライ機能は将来的に実装
-                  },
-                ),
-              ),
-            );
-          }
-        },
-      );
-    });
 
     Future<void> handleBack() async {
       final shouldLeave = await AppConfirmDialog.show(
@@ -161,18 +135,7 @@ class HaikuInputPage extends HookConsumerWidget {
     }
 
     void handleGenerate() {
-      // Firestoreへ非同期保存 (UIをブロックしない)
-      final notifier = ref.read(haikuProvider.notifier);
-      unawaited(
-        notifier.saveHaiku(
-          firstLine: firstLine.value,
-          secondLine: secondLine.value,
-          thirdLine: thirdLine.value,
-        ),
-      );
-
-      // 即座に画面遷移
-      // 4ステップ完了、生成画面へ遷移
+      // 画面遷移のみ（Firestore保存はPreviewPageで行う）
       GeneratingRoute(
         firstLine: firstLine.value,
         secondLine: secondLine.value,
