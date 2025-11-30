@@ -72,4 +72,38 @@ class HaikuRepository extends FirestoreRepository<HaikuModel> {
 
     return json;
   }
+
+  /// いいね数をインクリメントする
+  ///
+  /// [haikuId] いいね対象の俳句ID
+  ///
+  /// Firestoreの`FieldValue.increment()`を使用して
+  /// アトミックにいいね数を増やします。
+  ///
+  /// Throws:
+  /// - [FirebaseException] Firestore操作でエラーが発生した場合
+  Future<void> incrementLikeCount(String haikuId) async {
+    final stopwatch = Stopwatch()..start();
+
+    try {
+      _logger.i('Incrementing like count for haiku: $haikuId');
+
+      await collection.doc(haikuId).update({
+        'likeCount': FieldValue.increment(1),
+      });
+
+      stopwatch.stop();
+      _logger.i(
+        'Like count incremented successfully (${stopwatch.elapsedMilliseconds}ms)',
+      );
+    } catch (e, stackTrace) {
+      stopwatch.stop();
+      _logger.e(
+        'Failed to increment like count',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
 }

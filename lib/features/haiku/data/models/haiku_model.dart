@@ -46,6 +46,12 @@ class HaikuModel {
   /// ユーザーID (オプショナル: 将来的な認証対応)
   final String? userId;
 
+  /// いいね数
+  final int? likeCount;
+
+  /// 作者のニックネーム (オプショナル: 匿名の場合はnull)
+  final String? nickname;
+
   /// 俳句モデルを作成する
   const HaikuModel({
     required this.id,
@@ -55,6 +61,8 @@ class HaikuModel {
     required this.createdAt,
     this.imageUrl,
     this.userId,
+    this.likeCount,
+    this.nickname,
   });
 
   /// FirestoreのMapからHaikuModelを生成
@@ -73,6 +81,8 @@ class HaikuModel {
     DateTime? createdAt,
     String? imageUrl,
     String? userId,
+    int? likeCount,
+    String? nickname,
   }) {
     return HaikuModel(
       id: id ?? this.id,
@@ -82,6 +92,8 @@ class HaikuModel {
       createdAt: createdAt ?? this.createdAt,
       imageUrl: imageUrl ?? this.imageUrl,
       userId: userId ?? this.userId,
+      likeCount: likeCount ?? this.likeCount,
+      nickname: nickname ?? this.nickname,
     );
   }
 
@@ -96,7 +108,9 @@ class HaikuModel {
           thirdLine == other.thirdLine &&
           createdAt == other.createdAt &&
           imageUrl == other.imageUrl &&
-          userId == other.userId;
+          userId == other.userId &&
+          likeCount == other.likeCount &&
+          nickname == other.nickname;
 
   @override
   int get hashCode =>
@@ -106,10 +120,12 @@ class HaikuModel {
       thirdLine.hashCode ^
       createdAt.hashCode ^
       imageUrl.hashCode ^
-      userId.hashCode;
+      userId.hashCode ^
+      likeCount.hashCode ^
+      nickname.hashCode;
 
   @override
   String toString() {
-    return 'HaikuModel(id: $id, firstLine: $firstLine, secondLine: $secondLine, thirdLine: $thirdLine, createdAt: $createdAt, imageUrl: $imageUrl, userId: $userId)';
+    return 'HaikuModel(id: $id, firstLine: $firstLine, secondLine: $secondLine, thirdLine: $thirdLine, createdAt: $createdAt, imageUrl: $imageUrl, userId: $userId, likeCount: $likeCount, nickname: $nickname)';
   }
 }
