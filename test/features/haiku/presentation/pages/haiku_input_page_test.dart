@@ -385,5 +385,152 @@ void main() {
     // - HaikuNotifier.saveHaiku() success and error cases
     // - HaikuRepository.create() CRUD operations
     // - Error handling and logging throughout the stack
+
+    group('Realtime Preview Display', () {
+      testWidgets('ステップ0で入力中のテキストがfirstLineにリアルタイム表示される', (tester) async {
+        await setLargeTestSurface(tester);
+        await pumpTestWidget(tester, const HaikuInputPage());
+
+        // Type text
+        await tester.enterText(find.byType(AppTextField), 'あいう');
+        await tester.pump();
+
+        final preview = tester.widget<HaikuPreview>(find.byType(HaikuPreview));
+        expect(preview.firstLine, equals('あいう'));
+        expect(preview.secondLine, isEmpty);
+        expect(preview.thirdLine, isEmpty);
+
+        await resetTestSurface(tester);
+      });
+
+      testWidgets('ステップ1で入力中のテキストがsecondLineにリアルタイム表示される', (tester) async {
+        await setLargeTestSurface(tester);
+        await pumpTestWidget(tester, const HaikuInputPage());
+
+        // Complete step 0
+        await tester.enterText(find.byType(AppTextField), 'あいう');
+        await tester.pump();
+        await tester.tap(find.byType(AppFilledButton));
+        await tester.pumpAndSettle();
+
+        // Type in step 1
+        await tester.enterText(find.byType(AppTextField), 'かき');
+        await tester.pump();
+
+        final preview = tester.widget<HaikuPreview>(find.byType(HaikuPreview));
+        expect(preview.firstLine, equals('あいう')); // Confirmed value
+        expect(preview.secondLine, equals('かき')); // Realtime input
+        expect(preview.thirdLine, isEmpty);
+
+        await resetTestSurface(tester);
+      });
+
+      testWidgets('ステップ2で入力中のテキストがthirdLineにリアルタイム表示される', (tester) async {
+        await setLargeTestSurface(tester);
+        await pumpTestWidget(tester, const HaikuInputPage());
+
+        // Complete step 0
+        await tester.enterText(find.byType(AppTextField), 'あいう');
+        await tester.pump();
+        await tester.tap(find.byType(AppFilledButton));
+        await tester.pumpAndSettle();
+
+        // Complete step 1
+        await tester.enterText(find.byType(AppTextField), 'かきくけこ');
+        await tester.pump();
+        await tester.tap(find.byType(AppFilledButton));
+        await tester.pumpAndSettle();
+
+        // Type in step 2
+        await tester.enterText(find.byType(AppTextField), 'さしす');
+        await tester.pump();
+
+        final preview = tester.widget<HaikuPreview>(find.byType(HaikuPreview));
+        expect(preview.firstLine, equals('あいう')); // Confirmed value
+        expect(preview.secondLine, equals('かきくけこ')); // Confirmed value
+        expect(preview.thirdLine, equals('さしす')); // Realtime input
+
+        await resetTestSurface(tester);
+      });
+    });
+
+    group('Step Transition Behavior', () {
+      testWidgets('決定ボタン押下後、入力中のテキストが確定値として保存される', (tester) async {
+        await setLargeTestSurface(tester);
+        await pumpTestWidget(tester, const HaikuInputPage());
+
+        // Type and verify realtime display
+        await tester.enterText(find.byType(AppTextField), 'あいう');
+        await tester.pump();
+
+        var preview = tester.widget<HaikuPreview>(find.byType(HaikuPreview));
+        expect(preview.firstLine, equals('あいう'));
+
+        // Confirm
+        await tester.tap(find.byType(AppFilledButton));
+        await tester.pumpAndSettle();
+
+        // Verify confirmed value is preserved
+        preview = tester.widget<HaikuPreview>(find.byType(HaikuPreview));
+        expect(preview.firstLine, equals('あいう'));
+        expect(preview.secondLine, isEmpty);
+
+        await resetTestSurface(tester);
+      });
+
+      testWidgets('ステップ遷移時、新しいステップの入力フィールドがクリアされる', (tester) async {
+        await setLargeTestSurface(tester);
+        await pumpTestWidget(tester, const HaikuInputPage());
+
+        // Complete step 0
+        await tester.enterText(find.byType(AppTextField), 'あいう');
+        await tester.pump();
+        await tester.tap(find.byType(AppFilledButton));
+        await tester.pumpAndSettle();
+
+        // Verify input field is cleared
+        final textField = tester.widget<TextField>(find.byType(TextField));
+        expect(textField.controller?.text, isEmpty);
+
+        // Verify preview shows only confirmed firstLine
+        final preview = tester.widget<HaikuPreview>(find.byType(HaikuPreview));
+        expect(preview.firstLine, equals('あいう'));
+        expect(preview.secondLine, isEmpty);
+
+        await resetTestSurface(tester);
+      });
+    });
+
+    group('Edge Cases', () {
+      testWidgets('空の入力でプレビューが適切に表示される', (tester) async {
+        await setLargeTestSurface(tester);
+        await pumpTestWidget(tester, const HaikuInputPage());
+
+        // Start with empty input
+        final preview = tester.widget<HaikuPreview>(find.byType(HaikuPreview));
+        expect(preview.firstLine, isEmpty);
+        expect(preview.secondLine, isEmpty);
+        expect(preview.thirdLine, isEmpty);
+
+        // Verify placeholder is shown
+        expect(find.text('俳句がここに\n表示されます'), findsOneWidget);
+
+        await resetTestSurface(tester);
+      });
+
+      testWidgets('特殊文字が正しく縦書き表示される', (tester) async {
+        await setLargeTestSurface(tester);
+        await pumpTestWidget(tester, const HaikuInputPage());
+
+        // Test with special characters
+        await tester.enterText(find.byType(AppTextField), '桜咲く');
+        await tester.pump();
+
+        final preview = tester.widget<HaikuPreview>(find.byType(HaikuPreview));
+        expect(preview.firstLine, equals('桜咲く'));
+
+        await resetTestSurface(tester);
+      });
+    });
   });
 }

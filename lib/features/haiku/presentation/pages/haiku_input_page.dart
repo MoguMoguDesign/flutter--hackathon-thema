@@ -51,11 +51,13 @@ class HaikuInputPage extends HookConsumerWidget {
     final secondLine = useState('');
     final thirdLine = useState('');
     final inputController = useTextEditingController();
+    final currentInputText = useState('');
     final isValid = useState(false);
 
     useEffect(() {
       void listener() {
         final text = inputController.text.trim();
+        currentInputText.value = inputController.text;
         isValid.value = text.isNotEmpty && text.length <= 10;
       }
 
@@ -135,6 +137,7 @@ class HaikuInputPage extends HookConsumerWidget {
         // 次のステップへ
         currentStep.value++;
         inputController.clear();
+        currentInputText.value = '';
         isValid.value = false;
       }
     }
@@ -146,10 +149,13 @@ class HaikuInputPage extends HookConsumerWidget {
         switch (currentStep.value) {
           case 0:
             inputController.text = firstLine.value;
+            currentInputText.value = firstLine.value;
           case 1:
             inputController.text = secondLine.value;
+            currentInputText.value = secondLine.value;
           case 2:
             inputController.text = thirdLine.value;
+            currentInputText.value = thirdLine.value;
         }
       }
     }
@@ -202,9 +208,15 @@ class HaikuInputPage extends HookConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: HaikuPreview(
-                  firstLine: firstLine.value,
-                  secondLine: currentStep.value >= 1 ? secondLine.value : '',
-                  thirdLine: currentStep.value >= 2 ? thirdLine.value : '',
+                  firstLine: currentStep.value == 0
+                      ? currentInputText.value
+                      : firstLine.value,
+                  secondLine: currentStep.value == 1
+                      ? currentInputText.value
+                      : (currentStep.value >= 1 ? secondLine.value : ''),
+                  thirdLine: currentStep.value == 2
+                      ? currentInputText.value
+                      : (currentStep.value >= 2 ? thirdLine.value : ''),
                 ),
               ),
             ),
