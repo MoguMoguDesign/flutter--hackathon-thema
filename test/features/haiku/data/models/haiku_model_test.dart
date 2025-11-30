@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutterhackthema/features/haiku/data/models/haiku_model.dart';
+import 'package:flutterhackthema/features/haiku/data/models/save_status.dart';
 
 void main() {
   group('HaikuModel', () {
@@ -108,6 +109,131 @@ void main() {
       // Assert
       expect(haiku1, equals(haiku2));
       expect(haiku1.hashCode, equals(haiku2.hashCode));
+    });
+
+    test('localImagePath field works correctly', () {
+      // Arrange & Act
+      final haiku = HaikuModel(
+        id: 'test-id',
+        firstLine: '古池や',
+        secondLine: '蛙飛び込む',
+        thirdLine: '水の音',
+        createdAt: DateTime(2025, 1, 1),
+        localImagePath: '/path/to/local/image.png',
+      );
+
+      // Assert
+      expect(haiku.localImagePath, equals('/path/to/local/image.png'));
+    });
+
+    test('saveStatus field works correctly', () {
+      // Arrange & Act
+      final haiku = HaikuModel(
+        id: 'test-id',
+        firstLine: '古池や',
+        secondLine: '蛙飛び込む',
+        thirdLine: '水の音',
+        createdAt: DateTime(2025, 1, 1),
+        saveStatus: SaveStatus.localOnly,
+      );
+
+      // Assert
+      expect(haiku.saveStatus, equals(SaveStatus.localOnly));
+    });
+
+    test('copyWith updates localImagePath correctly', () {
+      // Arrange
+      final original = HaikuModel(
+        id: 'test-id',
+        firstLine: '古池や',
+        secondLine: '蛙飛び込む',
+        thirdLine: '水の音',
+        createdAt: DateTime(2025, 1, 1),
+      );
+
+      // Act
+      final updated = original.copyWith(localImagePath: '/new/path/image.png');
+
+      // Assert
+      expect(updated.localImagePath, equals('/new/path/image.png'));
+      expect(original.localImagePath, isNull);
+    });
+
+    test('copyWith updates saveStatus correctly', () {
+      // Arrange
+      final original = HaikuModel(
+        id: 'test-id',
+        firstLine: '古池や',
+        secondLine: '蛙飛び込む',
+        thirdLine: '水の音',
+        createdAt: DateTime(2025, 1, 1),
+        saveStatus: SaveStatus.localOnly,
+      );
+
+      // Act
+      final updated = original.copyWith(saveStatus: SaveStatus.saved);
+
+      // Assert
+      expect(updated.saveStatus, equals(SaveStatus.saved));
+      expect(original.saveStatus, equals(SaveStatus.localOnly));
+    });
+
+    test('localImagePath and saveStatus are excluded from JSON', () {
+      // Arrange
+      final haiku = HaikuModel(
+        id: 'test-id',
+        firstLine: '古池や',
+        secondLine: '蛙飛び込む',
+        thirdLine: '水の音',
+        createdAt: DateTime(2025, 1, 1),
+        localImagePath: '/path/to/local.png',
+        saveStatus: SaveStatus.localOnly,
+      );
+
+      // Act
+      final json = haiku.toJson();
+
+      // Assert
+      expect(json.containsKey('localImagePath'), isFalse);
+      expect(json.containsKey('saveStatus'), isFalse);
+    });
+
+    test('equality includes localImagePath and saveStatus', () {
+      // Arrange
+      final haiku1 = HaikuModel(
+        id: 'test-id',
+        firstLine: '古池や',
+        secondLine: '蛙飛び込む',
+        thirdLine: '水の音',
+        createdAt: DateTime(2025, 1, 1),
+        localImagePath: '/path/to/local.png',
+        saveStatus: SaveStatus.localOnly,
+      );
+
+      final haiku2 = HaikuModel(
+        id: 'test-id',
+        firstLine: '古池や',
+        secondLine: '蛙飛び込む',
+        thirdLine: '水の音',
+        createdAt: DateTime(2025, 1, 1),
+        localImagePath: '/path/to/local.png',
+        saveStatus: SaveStatus.localOnly,
+      );
+
+      final haiku3 = HaikuModel(
+        id: 'test-id',
+        firstLine: '古池や',
+        secondLine: '蛙飛び込む',
+        thirdLine: '水の音',
+        createdAt: DateTime(2025, 1, 1),
+        localImagePath: '/different/path.png',
+        saveStatus: SaveStatus.saved,
+      );
+
+      // Assert
+      expect(haiku1, equals(haiku2));
+      expect(haiku1.hashCode, equals(haiku2.hashCode));
+      expect(haiku1, isNot(equals(haiku3)));
     });
   });
 }

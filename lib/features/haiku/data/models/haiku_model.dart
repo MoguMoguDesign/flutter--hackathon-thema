@@ -17,6 +17,7 @@
 //
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutterhackthema/features/haiku/data/models/save_status.dart';
 
 part 'haiku_model.g.dart';
 
@@ -46,6 +47,16 @@ class HaikuModel {
   /// ユーザーID (オプショナル: 将来的な認証対応)
   final String? userId;
 
+  /// ローカルキャッシュの画像パス (オプショナル)
+  /// Firebaseへの保存前に一時的にローカルに保存される画像のパス
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final String? localImagePath;
+
+  /// 保存状態 (オプショナル)
+  /// Firestoreへの保存状態を管理するためのステータス
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final SaveStatus? saveStatus;
+
   /// 俳句モデルを作成する
   const HaikuModel({
     required this.id,
@@ -55,6 +66,8 @@ class HaikuModel {
     required this.createdAt,
     this.imageUrl,
     this.userId,
+    this.localImagePath,
+    this.saveStatus,
   });
 
   /// FirestoreのMapからHaikuModelを生成
@@ -73,6 +86,8 @@ class HaikuModel {
     DateTime? createdAt,
     String? imageUrl,
     String? userId,
+    String? localImagePath,
+    SaveStatus? saveStatus,
   }) {
     return HaikuModel(
       id: id ?? this.id,
@@ -82,6 +97,8 @@ class HaikuModel {
       createdAt: createdAt ?? this.createdAt,
       imageUrl: imageUrl ?? this.imageUrl,
       userId: userId ?? this.userId,
+      localImagePath: localImagePath ?? this.localImagePath,
+      saveStatus: saveStatus ?? this.saveStatus,
     );
   }
 
@@ -96,7 +113,9 @@ class HaikuModel {
           thirdLine == other.thirdLine &&
           createdAt == other.createdAt &&
           imageUrl == other.imageUrl &&
-          userId == other.userId;
+          userId == other.userId &&
+          localImagePath == other.localImagePath &&
+          saveStatus == other.saveStatus;
 
   @override
   int get hashCode =>
@@ -106,10 +125,12 @@ class HaikuModel {
       thirdLine.hashCode ^
       createdAt.hashCode ^
       imageUrl.hashCode ^
-      userId.hashCode;
+      userId.hashCode ^
+      localImagePath.hashCode ^
+      saveStatus.hashCode;
 
   @override
   String toString() {
-    return 'HaikuModel(id: $id, firstLine: $firstLine, secondLine: $secondLine, thirdLine: $thirdLine, createdAt: $createdAt, imageUrl: $imageUrl, userId: $userId)';
+    return 'HaikuModel(id: $id, firstLine: $firstLine, secondLine: $secondLine, thirdLine: $thirdLine, createdAt: $createdAt, imageUrl: $imageUrl, userId: $userId, localImagePath: $localImagePath, saveStatus: $saveStatus)';
   }
 }
