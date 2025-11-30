@@ -187,5 +187,79 @@ void main() {
         expect(results, isEmpty);
       });
     });
+
+    group('incrementLikeCount', () {
+      test('increments like count by 1', () async {
+        // Arrange
+        const docId = 'like-test';
+        final haiku = HaikuModel(
+          id: docId,
+          firstLine: '古池や',
+          secondLine: '蛙飛び込む',
+          thirdLine: '水の音',
+          createdAt: DateTime(2025, 1, 1),
+          likeCount: 5,
+        );
+        await repository.create(haiku, docId: docId);
+
+        // Act
+        await repository.incrementLikeCount(docId);
+
+        // Assert
+        final result = await repository.read(docId);
+        expect(result!.likeCount, equals(6));
+      });
+
+      test('increments like count from 0', () async {
+        // Arrange
+        const docId = 'like-test-zero';
+        final haiku = HaikuModel(
+          id: docId,
+          firstLine: '閑さや',
+          secondLine: '岩にしみ入る',
+          thirdLine: '蝉の声',
+          createdAt: DateTime(2025, 1, 1),
+          likeCount: 0,
+        );
+        await repository.create(haiku, docId: docId);
+
+        // Act
+        await repository.incrementLikeCount(docId);
+
+        // Assert
+        final result = await repository.read(docId);
+        expect(result!.likeCount, equals(1));
+      });
+
+      test('throws error for non-existent haiku', () async {
+        // Act & Assert
+        expect(
+          () => repository.incrementLikeCount('non-existent'),
+          throwsA(isA<FirebaseException>()),
+        );
+      });
+
+      test('handles backward compatibility with null likeCount', () async {
+        // Arrange
+        const docId = 'backward-compat-test';
+        final haiku = HaikuModel(
+          id: docId,
+          firstLine: '菜の花や',
+          secondLine: '月は東に',
+          thirdLine: '日は西に',
+          createdAt: DateTime(2025, 1, 1),
+          likeCount: null, // Simulate old data without likeCount
+        );
+        await repository.create(haiku, docId: docId);
+
+        // Act
+        await repository.incrementLikeCount(docId);
+
+        // Assert
+        final result = await repository.read(docId);
+        // FakeFirebaseFirestore will increment from 0 when field doesn't exist
+        expect(result!.likeCount, equals(1));
+      });
+    });
   });
 }

@@ -57,6 +57,12 @@ class HaikuModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final SaveStatus? saveStatus;
 
+  /// いいね数
+  final int? likeCount;
+
+  /// 作者のニックネーム (オプショナル: 匿名の場合はnull)
+  final String? nickname;
+
   /// 俳句モデルを作成する
   const HaikuModel({
     required this.id,
@@ -68,6 +74,8 @@ class HaikuModel {
     this.userId,
     this.localImagePath,
     this.saveStatus,
+    this.likeCount,
+    this.nickname,
   });
 
   /// FirestoreのMapからHaikuModelを生成
@@ -88,6 +96,8 @@ class HaikuModel {
     String? userId,
     String? localImagePath,
     SaveStatus? saveStatus,
+    int? likeCount,
+    String? nickname,
   }) {
     return HaikuModel(
       id: id ?? this.id,
@@ -99,6 +109,8 @@ class HaikuModel {
       userId: userId ?? this.userId,
       localImagePath: localImagePath ?? this.localImagePath,
       saveStatus: saveStatus ?? this.saveStatus,
+      likeCount: likeCount ?? this.likeCount,
+      nickname: nickname ?? this.nickname,
     );
   }
 
@@ -115,7 +127,9 @@ class HaikuModel {
           imageUrl == other.imageUrl &&
           userId == other.userId &&
           localImagePath == other.localImagePath &&
-          saveStatus == other.saveStatus;
+          saveStatus == other.saveStatus &&
+          likeCount == other.likeCount &&
+          nickname == other.nickname;
 
   @override
   int get hashCode =>
@@ -127,10 +141,12 @@ class HaikuModel {
       imageUrl.hashCode ^
       userId.hashCode ^
       localImagePath.hashCode ^
-      saveStatus.hashCode;
+      saveStatus.hashCode ^
+      likeCount.hashCode ^
+      nickname.hashCode;
 
   @override
   String toString() {
-    return 'HaikuModel(id: $id, firstLine: $firstLine, secondLine: $secondLine, thirdLine: $thirdLine, createdAt: $createdAt, imageUrl: $imageUrl, userId: $userId, localImagePath: $localImagePath, saveStatus: $saveStatus)';
+    return 'HaikuModel(id: $id, firstLine: $firstLine, secondLine: $secondLine, thirdLine: $thirdLine, createdAt: $createdAt, imageUrl: $imageUrl, userId: $userId, localImagePath: $localImagePath, saveStatus: $saveStatus, likeCount: $likeCount, nickname: $nickname)';
   }
 }

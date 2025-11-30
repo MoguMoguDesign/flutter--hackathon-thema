@@ -19,6 +19,7 @@
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:flutterhackthema/app/app_di/user_providers.dart';
 import '../../data/models/haiku_model.dart';
 import '../../data/repositories/haiku_repository.dart';
 
@@ -80,12 +81,17 @@ class HaikuNotifier extends _$HaikuNotifier {
     state = await AsyncValue.guard(() async {
       final repository = ref.read(haikuRepositoryProvider);
 
+      // 現在のユーザーのニックネームを取得（App層経由）
+      final String? nickname = await ref.read(userNicknameProvider.future);
+
       final haiku = HaikuModel(
         id: '', // Firestoreで自動生成
         firstLine: firstLine,
         secondLine: secondLine,
         thirdLine: thirdLine,
         createdAt: DateTime.now(),
+        likeCount: 0, // 初期値として0を設定
+        nickname: nickname,
       );
 
       final docId = await repository.create(haiku);

@@ -14,6 +14,8 @@ HaikuModel _$HaikuModelFromJson(Map<String, dynamic> json) => HaikuModel(
   createdAt: DateTime.parse(json['createdAt'] as String),
   imageUrl: json['imageUrl'] as String?,
   userId: json['userId'] as String?,
+  likeCount: (json['likeCount'] as num?)?.toInt(),
+  nickname: json['nickname'] as String?,
 );
 
 Map<String, dynamic> _$HaikuModelToJson(HaikuModel instance) =>
@@ -25,4 +27,6 @@ Map<String, dynamic> _$HaikuModelToJson(HaikuModel instance) =>
       'createdAt': instance.createdAt.toIso8601String(),
       'imageUrl': instance.imageUrl,
       'userId': instance.userId,
+      'likeCount': instance.likeCount,
+      'nickname': instance.nickname,
     };

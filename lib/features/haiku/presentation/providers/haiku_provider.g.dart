@@ -148,7 +148,7 @@ final class HaikuNotifierProvider
   HaikuNotifier create() => HaikuNotifier();
 }
 
-String _$haikuNotifierHash() => r'331109db8278aad7f6169c2fa20fa35214b11eaf';
+String _$haikuNotifierHash() => r'99af5fce5c6fdb36d212d65c7880db9da3d78246';
 
 /// 俳句保存の状態管理プロバイダー
 ///
