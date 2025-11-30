@@ -17,6 +17,8 @@
 //
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+
 import '../../data/models/haiku_model.dart';
 
 /// 俳句カードコンポーネント
@@ -29,6 +31,9 @@ class HaikuCard extends StatelessWidget {
   /// [haiku] は表示する俳句データ。
   /// [onTap] はカードがタップされた時のコールバック。
   const HaikuCard({required this.haiku, required this.onTap, super.key});
+
+  /// ロガーインスタンス
+  static final Logger _logger = Logger();
 
   /// 表示する俳句データ
   final HaikuModel haiku;
@@ -75,6 +80,12 @@ class HaikuCard extends StatelessWidget {
                         );
                       },
                       errorBuilder: (context, error, stackTrace) {
+                        _logger.e(
+                          'Failed to load haiku image',
+                          error: error,
+                          stackTrace: stackTrace,
+                        );
+                        _logger.d('ImageURL: ${haiku.imageUrl}');
                         return _buildFallbackCard();
                       },
                     )

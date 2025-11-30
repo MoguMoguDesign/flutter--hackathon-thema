@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logger/logger.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/shared.dart';
@@ -32,6 +33,9 @@ class HaikuDetailPage extends HookConsumerWidget {
   ///
   /// [haikuId] は表示する俳句のID
   const HaikuDetailPage({required this.haikuId, super.key});
+
+  /// ロガーインスタンス
+  static final Logger _logger = Logger();
 
   /// 表示する俳句のID
   final String haikuId;
@@ -147,6 +151,12 @@ class HaikuDetailPage extends HookConsumerWidget {
                           );
                         },
                         errorBuilder: (context, error, stackTrace) {
+                          _logger.e(
+                            'Failed to load haiku detail image',
+                            error: error,
+                            stackTrace: stackTrace,
+                          );
+                          _logger.d('ImageURL: ${haiku.imageUrl}');
                           return _buildFallbackImage(haiku);
                         },
                       )
