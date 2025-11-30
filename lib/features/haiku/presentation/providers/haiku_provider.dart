@@ -76,15 +76,17 @@ class HaikuNotifier extends _$HaikuNotifier {
   }) async {
     _logger.i('Saving haiku to Firestore');
 
+    // async操作前にref参照を取得（disposeエラー回避）
+    final repository = ref.read(haikuRepositoryProvider);
+    final nicknameFuture = ref.read(userNicknameProvider.future);
+
     // ローディング状態に設定
     state = const AsyncValue.loading();
 
     // AsyncValue.guardで例外を安全に処理
     state = await AsyncValue.guard(() async {
-      final repository = ref.read(haikuRepositoryProvider);
-
       // 現在のユーザーのニックネームを取得（App層経由）
-      final String? nickname = await ref.read(userNicknameProvider.future);
+      final String? nickname = await nicknameFuture;
 
       final haiku = HaikuModel(
         id: '', // Firestoreで自動生成
