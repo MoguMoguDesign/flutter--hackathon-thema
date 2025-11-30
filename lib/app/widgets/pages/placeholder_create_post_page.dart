@@ -35,7 +35,7 @@ import 'package:flutterhackthema/shared/constants/app_text_styles.dart';
 /// 機能:
 /// - 俳句の入力
 /// - プレビュー画面への遷移
-/// - 投稿一覧への戻る
+/// - 俳句一覧への戻る
 class PlaceholderCreatePostPage extends StatelessWidget {
   /// [PlaceholderCreatePostPage] のコンストラクタ
   const PlaceholderCreatePostPage({super.key});
@@ -106,14 +106,14 @@ class PlaceholderCreatePostPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // 投稿一覧へ戻るボタン
+              // 俳句一覧へ戻るボタン
               TextButton(
                 onPressed: () {
                   // 型安全なルーティング
                   const HaikuListRoute().go(context);
                 },
                 child: Text(
-                  '投稿一覧へ戻る',
+                  '俳句一覧へ戻る',
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.adminPrimary,
                   ),
