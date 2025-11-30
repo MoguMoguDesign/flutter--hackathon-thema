@@ -19,6 +19,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -59,7 +60,15 @@ class HaikuImageCacheService {
   /// [haikuId] 俳句のID（ファイル名として使用）
   /// [imageData] 保存する画像データ
   /// 戻り値: 保存されたファイルのパス
+  ///
+  /// Web環境ではローカルキャッシュは使用せず、ダミーパスを返します。
   Future<String> saveImage(String haikuId, Uint8List imageData) async {
+    // Web環境ではpath_providerが使えないため、ダミーパスを返す
+    if (kIsWeb) {
+      _logger.d('Web環境: ローカルキャッシュをスキップ (${imageData.length} bytes)');
+      return 'web://$haikuId.png';
+    }
+
     try {
       final cacheDir = await _getCacheDirectory();
       final filePath = '${cacheDir.path}/$haikuId.png';
@@ -83,7 +92,15 @@ class HaikuImageCacheService {
   ///
   /// [haikuId] 俳句のID
   /// 戻り値: 画像データ（存在しない場合はnull）
+  ///
+  /// Web環境では常にnullを返します（キャッシュなし）。
   Future<Uint8List?> loadImage(String haikuId) async {
+    // Web環境ではキャッシュを使用しない
+    if (kIsWeb) {
+      _logger.d('Web環境: キャッシュ読み込みをスキップ');
+      return null;
+    }
+
     try {
       final cacheDir = await _getCacheDirectory();
       final filePath = '${cacheDir.path}/$haikuId.png';
@@ -114,7 +131,14 @@ class HaikuImageCacheService {
   ///
   /// [haikuId] 俳句のID
   /// 戻り値: ファイルパス（存在しない場合はnull）
+  ///
+  /// Web環境では常にnullを返します。
   Future<String?> getImagePath(String haikuId) async {
+    // Web環境ではファイルパスが存在しない
+    if (kIsWeb) {
+      return null;
+    }
+
     try {
       final cacheDir = await _getCacheDirectory();
       final filePath = '${cacheDir.path}/$haikuId.png';
@@ -135,7 +159,15 @@ class HaikuImageCacheService {
   ///
   /// [haikuId] 俳句のID
   /// 戻り値: 削除に成功した場合true
+  ///
+  /// Web環境では常にtrueを返します（何もしない）。
   Future<bool> deleteImage(String haikuId) async {
+    // Web環境では何もしない
+    if (kIsWeb) {
+      _logger.d('Web環境: キャッシュ削除をスキップ');
+      return true;
+    }
+
     try {
       final cacheDir = await _getCacheDirectory();
       final filePath = '${cacheDir.path}/$haikuId.png';
@@ -163,7 +195,15 @@ class HaikuImageCacheService {
   ///
   /// アプリ起動時や容量削減のために使用します。
   /// 戻り値: 削除されたファイル数
+  ///
+  /// Web環境では常に0を返します（何もしない）。
   Future<int> clearAllCache() async {
+    // Web環境では何もしない
+    if (kIsWeb) {
+      _logger.d('Web環境: キャッシュクリアをスキップ');
+      return 0;
+    }
+
     try {
       final cacheDir = await _getCacheDirectory();
 
@@ -193,7 +233,14 @@ class HaikuImageCacheService {
   /// キャッシュディレクトリのサイズを取得（バイト単位）
   ///
   /// 戻り値: キャッシュディレクトリの合計サイズ
+  ///
+  /// Web環境では常に0を返します。
   Future<int> getCacheSize() async {
+    // Web環境ではキャッシュサイズは0
+    if (kIsWeb) {
+      return 0;
+    }
+
     try {
       final cacheDir = await _getCacheDirectory();
 
@@ -224,7 +271,14 @@ class HaikuImageCacheService {
   /// キャッシュされている画像の数を取得
   ///
   /// 戻り値: キャッシュファイル数
+  ///
+  /// Web環境では常に0を返します。
   Future<int> getCacheCount() async {
+    // Web環境ではキャッシュ数は0
+    if (kIsWeb) {
+      return 0;
+    }
+
     try {
       final cacheDir = await _getCacheDirectory();
 
