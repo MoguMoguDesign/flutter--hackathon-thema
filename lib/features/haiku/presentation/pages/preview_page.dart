@@ -16,12 +16,16 @@
 // - All changes must pass: analyze, format, test
 //
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import 'package:flutterhackthema/features/haiku/presentation/providers/image_generation_provider.dart';
+import 'package:flutterhackthema/features/haiku/presentation/providers/image_save_provider.dart';
 import 'package:flutterhackthema/features/haiku/presentation/state/image_generation_state.dart';
+import 'package:flutterhackthema/features/haiku/presentation/state/image_save_state.dart';
 import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 
@@ -29,6 +33,7 @@ import '../../../../shared/presentation/widgets/navigation/back_button.dart';
 ///
 /// 生成された画像と俳句のプレビューを表示する。
 /// 投稿の確認と投稿実行を行う。
+/// Firebase Storageへの画像保存機能を提供する。
 class PreviewPage extends ConsumerWidget {
   /// プレビュー画面を作成する。
   const PreviewPage({
@@ -38,16 +43,22 @@ class PreviewPage extends ConsumerWidget {
     super.key,
   });
 
+  /// 上の句
   final String firstLine;
+
+  /// 中の句
   final String secondLine;
+
+  /// 下の句
   final String thirdLine;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(imageGenerationProvider);
+    final generationState = ref.watch(imageGenerationProvider);
+    final saveState = ref.watch(imageSaveProvider);
 
     // 画像データを取得
-    final imageData = state.maybeWhen(
+    final imageData = generationState.maybeWhen(
       success: (data) => data,
       orElse: () => null,
     );
@@ -63,12 +74,14 @@ class PreviewPage extends ConsumerWidget {
       );
       if (shouldLeave == true && context.mounted) {
         ref.read(imageGenerationProvider.notifier).reset();
+        ref.read(imageSaveProvider.notifier).reset();
         const HaikuListRoute().go(context);
       }
     }
 
     void handleRegenerate() {
       ref.read(imageGenerationProvider.notifier).reset();
+      ref.read(imageSaveProvider.notifier).reset();
       GeneratingRoute(
         firstLine: firstLine,
         secondLine: secondLine,
@@ -81,7 +94,30 @@ class PreviewPage extends ConsumerWidget {
         const SnackBar(content: Text('投稿しました！'), backgroundColor: Colors.black),
       );
       ref.read(imageGenerationProvider.notifier).reset();
+      ref.read(imageSaveProvider.notifier).reset();
       const HaikuListRoute().go(context);
+    }
+
+    Future<void> handleSave() async {
+      if (imageData == null) return;
+
+      final url = await ref
+          .read(imageSaveProvider.notifier)
+          .saveImage(
+            imageData: imageData,
+            firstLine: firstLine,
+            secondLine: secondLine,
+            thirdLine: thirdLine,
+          );
+
+      if (url != null && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('画像を保存しました'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
     }
 
     return AppScaffoldWithBackground(
@@ -128,6 +164,12 @@ class PreviewPage extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
+                  _SaveButtonSection(
+                    saveState: saveState,
+                    imageData: imageData,
+                    onSave: handleSave,
+                  ),
+                  const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: AppOutlinedButton(
@@ -147,6 +189,78 @@ class PreviewPage extends ConsumerWidget {
                   const SizedBox(height: 32),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 画像保存ボタンセクション
+///
+/// 保存状態に応じてボタン、ローディング、成功、エラー表示を切り替える。
+class _SaveButtonSection extends StatelessWidget {
+  const _SaveButtonSection({
+    required this.saveState,
+    required this.imageData,
+    required this.onSave,
+  });
+
+  final ImageSaveState saveState;
+  final Uint8List? imageData;
+  final VoidCallback onSave;
+
+  @override
+  Widget build(BuildContext context) {
+    return saveState.when(
+      initial: () => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: AppOutlinedButton(
+          label: '画像を保存',
+          leadingIcon: Icons.save,
+          onPressed: imageData != null ? onSave : null,
+        ),
+      ),
+      saving: () => const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        child: SizedBox(
+          height: 24,
+          width: 24,
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      ),
+      success: (_) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.check_circle, color: Colors.green.shade600),
+            const SizedBox(width: 8),
+            Text(
+              '保存済み',
+              style: TextStyle(
+                color: Colors.green.shade600,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+      error: (message) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          children: [
+            Text(
+              message,
+              style: TextStyle(color: Colors.red.shade600, fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            AppOutlinedButton(
+              label: '再試行',
+              leadingIcon: Icons.refresh,
+              onPressed: onSave,
             ),
           ],
         ),
