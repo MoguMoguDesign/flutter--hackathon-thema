@@ -14,6 +14,9 @@ ifneq (,$(wildcard $(ENV_FILE)))
     export
 endif
 
+# Gemini API エンドポイント
+GEMINI_API_URL := https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+
 .PHONY: help
 help: ## このヘルプメッセージを表示
 	@echo "Flutter Hackathon Thema Makefile コマンド一覧:"
@@ -57,6 +60,36 @@ setup-lcov-macos: ## lcov（カバレッジツール）をインストール
 upgrade-flutter: ## Flutterを最新バージョンにアップグレード
 	fvm flutter upgrade
 	fvm install
+
+# =============================================================================
+# API キー検証
+# =============================================================================
+
+.PHONY: check-api-key
+
+check-api-key: ## Gemini APIキーの有効性をチェック
+	@if [ -z "$(GEMINI_API_KEY)" ]; then \
+		echo "❌ エラー: GEMINI_API_KEY が設定されていません"; \
+		echo ""; \
+		echo "💡 解決方法:"; \
+		echo "   1. .env ファイルを作成"; \
+		echo "   2. GEMINI_API_KEY=your_api_key を追加"; \
+		echo "   3. APIキーは https://aistudio.google.com/app/apikey から取得"; \
+		exit 1; \
+	fi
+	@echo "🔍 Gemini APIキーを検証中..."
+	@RESPONSE=$$(curl -s -X POST "$(GEMINI_API_URL)?key=$(GEMINI_API_KEY)" \
+		-H "Content-Type: application/json" \
+		-d '{"contents":[{"parts":[{"text":"test"}]}]}'); \
+	if echo "$$RESPONSE" | grep -q '"error"'; then \
+		echo "❌ APIキーが無効です"; \
+		echo ""; \
+		echo "エラー詳細:"; \
+		echo "$$RESPONSE" | head -10; \
+		exit 1; \
+	else \
+		echo "✅ APIキーは有効です"; \
+	fi
 
 # =============================================================================
 # 依存関係管理
@@ -174,20 +207,20 @@ build-ios-release: ## iOS用リリースアプリをビルド
 
 # Webビルド
 build-web: ## Web用アプリをビルド
-	fvm flutter build web
-
-build-web-release: ## Web用リリースアプリをビルド
-	fvm flutter build web --release --web-renderer canvaskit
-
-# 環境変数付きビルド・実行コマンド
-build-web-env: ## Web用アプリをビルド（環境変数付き）
 	fvm flutter build web --dart-define=GEMINI_API_KEY=$(GEMINI_API_KEY)
 
-build-web-release-env: ## Web用リリースアプリをビルド（環境変数付き）
+build-web-release: ## Web用リリースアプリをビルド
 	fvm flutter build web --release --web-renderer canvaskit --dart-define=GEMINI_API_KEY=$(GEMINI_API_KEY)
 
-run-env: ## 環境変数付きでアプリを起動
-	fvm flutter run --dart-define=GEMINI_API_KEY=$(GEMINI_API_KEY)
+# 環境変数付きビルド・実行コマンド
+build-web-env: check-api-key ## Web用アプリをビルド（環境変数付き）
+	fvm flutter build web --dart-define=GEMINI_API_KEY=$(GEMINI_API_KEY)
+
+build-web-release-env: check-api-key ## Web用リリースアプリをビルド（環境変数付き）
+	fvm flutter build web --release --web-renderer canvaskit --dart-define=GEMINI_API_KEY=$(GEMINI_API_KEY)
+
+run-env: check-api-key ## 環境変数付きでアプリを起動（Gemini API使用時はこちら）
+	fvm flutter run --dart-define=GEMINI_API_KEY=$(GEMINI_API_KEY) -d chrome
 
 # デプロイ
 deploy-preview: build-web-release ## ローカルでWebビルドをプレビュー
