@@ -30,8 +30,8 @@ import 'package:flutterhackthema/shared/presentation/pages/error_page.dart';
 ///
 /// ルート構成:
 /// - /nickname - ニックネーム入力画面（初期ルート）
-/// - /posts - 投稿一覧画面
-/// - /posts/:postId - 投稿詳細画面
+/// - /posts - 俳句一覧画面 (HaikuListRoute)
+/// - /posts/:haikuId - 俳句詳細画面 (HaikuDetailRoute)
 /// - /create - 俳句入力画面
 /// - /create/generating - AI画像生成中画面
 /// - /create/preview - プレビュー画面

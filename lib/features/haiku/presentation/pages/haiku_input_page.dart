@@ -96,7 +96,7 @@ class HaikuInputPage extends HookConsumerWidget {
         isDangerous: true,
       );
       if (shouldLeave == true && context.mounted) {
-        const PostsRoute().go(context);
+        const HaikuListRoute().go(context);
       }
     }
 

@@ -22,24 +22,32 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/shared.dart';
 import '../../../../shared/presentation/widgets/navigation/back_button.dart';
-import '../../data/models/post.dart';
+import '../../data/models/haiku_model.dart';
 
-/// 投稿詳細画面。
-class PostDetailPage extends StatelessWidget {
-  const PostDetailPage({required this.postId, super.key});
+/// 俳句詳細画面
+class HaikuDetailPage extends StatelessWidget {
+  /// 俳句詳細画面を作成する
+  ///
+  /// [haikuId] は表示する俳句のID
+  const HaikuDetailPage({required this.haikuId, super.key});
 
-  final String postId;
+  /// 表示する俳句のID
+  final String haikuId;
 
   @override
   Widget build(BuildContext context) {
-    final posts = Post.mockPosts();
-    final post = posts.firstWhere(
-      (p) => p.id == postId,
-      orElse: () => posts.first,
+    // TODO: Firestore integration for haiku details
+    final haiku = HaikuModel(
+      id: haikuId,
+      firstLine: '古池や',
+      secondLine: '蛙飛び込む',
+      thirdLine: '水の音',
+      createdAt: DateTime.now(),
+      imageUrl: 'https://placehold.co/400x600/png?text=Haiku+Image',
     );
 
     void handleBack() {
-      const PostsRoute().go(context);
+      const HaikuListRoute().go(context);
     }
 
     void handleShareToX() {
@@ -82,39 +90,37 @@ class PostDetailPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       child: AspectRatio(
                         aspectRatio: 4 / 5,
-                        child: Image.network(
-                          post.imageUrl,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Container(
-                              color: Colors.grey.shade200,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  value:
-                                      loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                      : null,
-                                  strokeWidth: 2,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: Colors.grey.shade200,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.image_not_supported,
-                                  color: Colors.grey,
-                                  size: 48,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                        child: haiku.imageUrl != null
+                            ? Image.network(
+                                haiku.imageUrl!,
+                                fit: BoxFit.cover,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Container(
+                                        color: Colors.grey.shade200,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            value:
+                                                loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
+                                                : null,
+                                            strokeWidth: 2,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return _buildFallbackImage(haiku);
+                                },
+                              )
+                            : _buildFallbackImage(haiku),
                       ),
                     ),
                   ),
@@ -125,28 +131,11 @@ class PostDetailPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${post.nickname} 作',
+                          haiku.userId ?? '匿名',
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.white,
                           ),
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.favorite_border,
-                              size: 20,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${post.likeCount}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
@@ -190,6 +179,55 @@ class PostDetailPage extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// 画像がない場合のフォールバック表示
+  Widget _buildFallbackImage(HaikuModel haiku) {
+    return Container(
+      color: Colors.grey.shade300,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                haiku.firstLine,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                  height: 1.8,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                haiku.secondLine,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                  height: 1.8,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                haiku.thirdLine,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                  height: 1.8,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -61,6 +61,56 @@ final class HaikuRepositoryProvider
 
 String _$haikuRepositoryHash() => r'a9744e8f7b6ae91b2dc3ae176440224ca2071bf8';
 
+/// 俳句一覧のストリームプロバイダー
+///
+/// Firestoreから俳句一覧をリアルタイムで監視します
+
+@ProviderFor(haikuListStream)
+const haikuListStreamProvider = HaikuListStreamProvider._();
+
+/// 俳句一覧のストリームプロバイダー
+///
+/// Firestoreから俳句一覧をリアルタイムで監視します
+
+final class HaikuListStreamProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<HaikuModel>>,
+          List<HaikuModel>,
+          Stream<List<HaikuModel>>
+        >
+    with $FutureModifier<List<HaikuModel>>, $StreamProvider<List<HaikuModel>> {
+  /// 俳句一覧のストリームプロバイダー
+  ///
+  /// Firestoreから俳句一覧をリアルタイムで監視します
+  const HaikuListStreamProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'haikuListStreamProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$haikuListStreamHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<HaikuModel>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<HaikuModel>> create(Ref ref) {
+    return haikuListStream(ref);
+  }
+}
+
+String _$haikuListStreamHash() => r'6d26ca5f57c81b59771ef7ab0e710db9da4bd3d6';
+
 /// 俳句保存の状態管理プロバイダー
 ///
 /// 俳句のFirestore保存処理とその状態を管理します。

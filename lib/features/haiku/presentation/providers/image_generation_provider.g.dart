@@ -95,7 +95,7 @@ final class ImageGenerationProvider
   }
 }
 
-String _$imageGenerationHash() => r'cbb109a8ca65682cd26a2e4816dab645462b5a6a';
+String _$imageGenerationHash() => r'0b8105bfe2308a97f17a159b5d5ea7398546e88d';
 
 /// 画像生成プロバイダー
 ///

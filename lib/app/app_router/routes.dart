@@ -20,11 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flutterhackthema/features/haiku/presentation/pages/generating_page.dart';
+import 'package:flutterhackthema/features/haiku/presentation/pages/haiku_detail_page.dart';
 import 'package:flutterhackthema/features/haiku/presentation/pages/haiku_input_page.dart';
+import 'package:flutterhackthema/features/haiku/presentation/pages/haiku_list_page.dart';
 import 'package:flutterhackthema/features/haiku/presentation/pages/preview_page.dart';
 import 'package:flutterhackthema/features/nickname/presentation/pages/nickname_page.dart';
-import 'package:flutterhackthema/features/posts/presentation/pages/post_detail_page.dart';
-import 'package:flutterhackthema/features/posts/presentation/pages/posts_page.dart';
 
 part 'routes.g.dart';
 
@@ -49,48 +49,48 @@ class NicknameRoute extends GoRouteData with $NicknameRoute {
   }
 }
 
-/// 投稿一覧画面のルート定義
+/// 俳句一覧画面のルート定義
 ///
 /// パス: /posts
-/// 全ユーザーの投稿を一覧表示する画面
+/// 全ユーザーの俳句を一覧表示する画面
 /// Pinterest風のグリッドレイアウトで表示されます
 ///
 /// 使用例:
 /// ```dart
-/// const PostsRoute().go(context);
+/// const HaikuListRoute().go(context);
 /// ```
-@TypedGoRoute<PostsRoute>(path: '/posts')
-class PostsRoute extends GoRouteData with $PostsRoute {
-  /// [PostsRoute] のコンストラクタ
-  const PostsRoute();
+@TypedGoRoute<HaikuListRoute>(path: '/posts')
+class HaikuListRoute extends GoRouteData with $HaikuListRoute {
+  /// [HaikuListRoute] のコンストラクタ
+  const HaikuListRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const PostsPage();
+    return const HaikuListPage();
   }
 }
 
-/// 投稿詳細画面のルート定義
+/// 俳句詳細画面のルート定義
 ///
-/// パス: /posts/:postId
-/// 投稿の詳細を表示する画面
+/// パス: /posts/:haikuId
+/// 俳句の詳細を表示する画面
 /// SNSシェアボタン付き
 ///
 /// 使用例:
 /// ```dart
-/// PostDetailRoute(postId: '123').go(context);
+/// HaikuDetailRoute(haikuId: '123').go(context);
 /// ```
-@TypedGoRoute<PostDetailRoute>(path: '/posts/:postId')
-class PostDetailRoute extends GoRouteData with $PostDetailRoute {
-  /// [PostDetailRoute] のコンストラクタ
-  const PostDetailRoute({required this.postId});
+@TypedGoRoute<HaikuDetailRoute>(path: '/posts/:haikuId')
+class HaikuDetailRoute extends GoRouteData with $HaikuDetailRoute {
+  /// [HaikuDetailRoute] のコンストラクタ
+  const HaikuDetailRoute({required this.haikuId});
 
-  /// 投稿ID
-  final String postId;
+  /// 俳句ID
+  final String haikuId;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return PostDetailPage(postId: postId);
+    return HaikuDetailPage(haikuId: haikuId);
   }
 }
 

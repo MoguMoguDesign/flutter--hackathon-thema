@@ -91,10 +91,10 @@ class NicknamePage extends HookConsumerWidget {
 
                           debugPrint('ニックネーム保存完了');
 
-                          // 投稿一覧画面へ遷移
+                          // 俳句一覧画面へ遷移
                           if (context.mounted) {
                             debugPrint('遷移開始: /posts');
-                            const PostsRoute().go(context);
+                            const HaikuListRoute().go(context);
                           } else {
                             debugPrint('context.mounted = false');
                           }

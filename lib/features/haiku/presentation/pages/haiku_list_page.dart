@@ -18,37 +18,65 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutterhackthema/app/app_router/routes.dart';
 import '../../../../shared/shared.dart';
-import '../../data/models/post.dart';
-import '../widgets/post_card.dart';
+import '../../data/models/haiku_model.dart';
+import '../providers/haiku_provider.dart';
+import '../widgets/haiku_card.dart';
 
-/// みんなの投稿一覧画面。
-class PostsPage extends StatelessWidget {
-  const PostsPage({super.key});
+/// みんなの俳句一覧画面
+class HaikuListPage extends HookConsumerWidget {
+  const HaikuListPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final posts = Post.mockPosts();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final haikusAsync = ref.watch(haikuListStreamProvider);
 
     return AppScaffoldWithBackground(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            // スクロール時に消えるヘッダー
-            const AppSliverHeader(),
-            // Staggered Grid
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              sliver: _SliverStaggeredGrid(
-                posts: posts,
-                onPostTap: (post) {
-                  PostDetailRoute(postId: post.id).go(context);
-                },
+        child: haikusAsync.when(
+          data: (haikus) => CustomScrollView(
+            slivers: [
+              // スクロール時に消えるヘッダー
+              const AppSliverHeader(),
+              // Staggered Grid
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                sliver: _SliverStaggeredGrid(
+                  haikus: haikus,
+                  onHaikuTap: (haiku) {
+                    HaikuDetailRoute(haikuId: haiku.id).go(context);
+                  },
+                ),
               ),
+            ],
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  size: 64,
+                  color: AppColors.error,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'エラーが発生しました',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  error.toString(),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
       floatingActionButton: Padding(
@@ -118,21 +146,21 @@ class PostsPage extends StatelessWidget {
 }
 
 class _SliverStaggeredGrid extends StatelessWidget {
-  const _SliverStaggeredGrid({required this.posts, required this.onPostTap});
+  const _SliverStaggeredGrid({required this.haikus, required this.onHaikuTap});
 
-  final List<Post> posts;
-  final void Function(Post) onPostTap;
+  final List<HaikuModel> haikus;
+  final void Function(HaikuModel) onHaikuTap;
 
   @override
   Widget build(BuildContext context) {
-    final leftColumn = <Post>[];
-    final rightColumn = <Post>[];
+    final leftColumn = <HaikuModel>[];
+    final rightColumn = <HaikuModel>[];
 
-    for (var i = 0; i < posts.length; i++) {
+    for (var i = 0; i < haikus.length; i++) {
       if (i % 2 == 0) {
-        leftColumn.add(posts[i]);
+        leftColumn.add(haikus[i]);
       } else {
-        rightColumn.add(posts[i]);
+        rightColumn.add(haikus[i]);
       }
     }
 
@@ -144,9 +172,12 @@ class _SliverStaggeredGrid extends StatelessWidget {
             child: Column(
               children: leftColumn
                   .map(
-                    (post) => Padding(
+                    (haiku) => Padding(
                       padding: const EdgeInsets.all(4),
-                      child: PostCard(post: post, onTap: () => onPostTap(post)),
+                      child: HaikuCard(
+                        haiku: haiku,
+                        onTap: () => onHaikuTap(haiku),
+                      ),
                     ),
                   )
                   .toList(),
@@ -168,9 +199,12 @@ class _SliverStaggeredGrid extends StatelessWidget {
                   ),
                 ),
                 ...rightColumn.map(
-                  (post) => Padding(
+                  (haiku) => Padding(
                     padding: const EdgeInsets.all(4),
-                    child: PostCard(post: post, onTap: () => onPostTap(post)),
+                    child: HaikuCard(
+                      haiku: haiku,
+                      onTap: () => onHaikuTap(haiku),
+                    ),
                   ),
                 ),
               ],

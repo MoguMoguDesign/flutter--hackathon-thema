@@ -32,6 +32,15 @@ HaikuRepository haikuRepository(Ref ref) {
   return HaikuRepository();
 }
 
+/// 俳句一覧のストリームプロバイダー
+///
+/// Firestoreから俳句一覧をリアルタイムで監視します
+@riverpod
+Stream<List<HaikuModel>> haikuListStream(Ref ref) {
+  final repository = ref.watch(haikuRepositoryProvider);
+  return repository.watchAll();
+}
+
 /// 俳句保存の状態管理プロバイダー
 ///
 /// 俳句のFirestore保存処理とその状態を管理します。

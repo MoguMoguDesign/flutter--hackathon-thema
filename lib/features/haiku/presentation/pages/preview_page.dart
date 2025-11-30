@@ -63,7 +63,7 @@ class PreviewPage extends ConsumerWidget {
       );
       if (shouldLeave == true && context.mounted) {
         ref.read(imageGenerationProvider.notifier).reset();
-        const PostsRoute().go(context);
+        const HaikuListRoute().go(context);
       }
     }
 
@@ -81,7 +81,7 @@ class PreviewPage extends ConsumerWidget {
         const SnackBar(content: Text('投稿しました！'), backgroundColor: Colors.black),
       );
       ref.read(imageGenerationProvider.notifier).reset();
-      const PostsRoute().go(context);
+      const HaikuListRoute().go(context);
     }
 
     return AppScaffoldWithBackground(

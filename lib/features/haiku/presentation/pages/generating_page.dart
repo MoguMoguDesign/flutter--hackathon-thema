@@ -107,7 +107,7 @@ class GeneratingPage extends HookConsumerWidget {
       );
       if (shouldLeave == true && context.mounted) {
         ref.read(imageGenerationProvider.notifier).reset();
-        const PostsRoute().go(context);
+        const HaikuListRoute().go(context);
       }
     }
 

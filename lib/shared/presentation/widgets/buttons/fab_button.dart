@@ -22,7 +22,7 @@ import '../../../constants/app_colors.dart';
 
 /// 「+ 句を詠む」フローティングアクションボタン。
 ///
-/// 投稿一覧画面の右下に配置する新規作成ボタン。
+/// 俳句一覧画面の右下に配置する新規作成ボタン。
 /// テキスト付きのFABスタイル。
 class FabButton extends StatelessWidget {
   /// FABボタンを作成する。
