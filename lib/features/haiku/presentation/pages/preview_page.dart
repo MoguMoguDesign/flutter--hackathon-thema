@@ -112,15 +112,18 @@ class PreviewPage extends ConsumerWidget {
         return;
       }
 
+      // async操作前にnotifier参照を取得（disposeエラー回避）
+      final imageSaveNotifier = ref.read(imageSaveProvider.notifier);
+      final haikuNotifier = ref.read(haikuProvider.notifier);
+      final imageGenNotifier = ref.read(imageGenerationProvider.notifier);
+
       // 1. Firebase Storageに画像を保存
-      final imageUrl = await ref
-          .read(imageSaveProvider.notifier)
-          .saveImage(
-            imageData: imageData,
-            firstLine: firstLine,
-            secondLine: secondLine,
-            thirdLine: thirdLine,
-          );
+      final imageUrl = await imageSaveNotifier.saveImage(
+        imageData: imageData,
+        firstLine: firstLine,
+        secondLine: secondLine,
+        thirdLine: thirdLine,
+      );
 
       if (imageUrl == null) {
         // imageSaveProviderがエラー状態を設定済み
@@ -140,14 +143,12 @@ class PreviewPage extends ConsumerWidget {
 
       // 2. Firestoreに俳句データを保存
       try {
-        await ref
-            .read(haikuProvider.notifier)
-            .saveHaiku(
-              firstLine: firstLine,
-              secondLine: secondLine,
-              thirdLine: thirdLine,
-              imageUrl: imageUrl,
-            );
+        await haikuNotifier.saveHaiku(
+          firstLine: firstLine,
+          secondLine: secondLine,
+          thirdLine: thirdLine,
+          imageUrl: imageUrl,
+        );
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -170,8 +171,8 @@ class PreviewPage extends ConsumerWidget {
       }
 
       // 3. 状態をリセットして一覧画面に遷移
-      ref.read(imageGenerationProvider.notifier).reset();
-      ref.read(imageSaveProvider.notifier).reset();
+      imageGenNotifier.reset();
+      imageSaveNotifier.reset();
       if (context.mounted) {
         const HaikuListRoute().go(context);
       }
