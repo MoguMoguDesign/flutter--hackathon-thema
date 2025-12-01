@@ -63,14 +63,16 @@ String _$haikuRepositoryHash() => r'a9744e8f7b6ae91b2dc3ae176440224ca2071bf8';
 
 /// 俳句一覧のストリームプロバイダー
 ///
-/// Firestoreから俳句一覧をリアルタイムで監視します
+/// Firestoreから俳句一覧をリアルタイムで監視します。
+/// 投稿日時の降順（新しい順）でソートされます。
 
 @ProviderFor(haikuListStream)
 const haikuListStreamProvider = HaikuListStreamProvider._();
 
 /// 俳句一覧のストリームプロバイダー
 ///
-/// Firestoreから俳句一覧をリアルタイムで監視します
+/// Firestoreから俳句一覧をリアルタイムで監視します。
+/// 投稿日時の降順（新しい順）でソートされます。
 
 final class HaikuListStreamProvider
     extends
@@ -82,7 +84,8 @@ final class HaikuListStreamProvider
     with $FutureModifier<List<HaikuModel>>, $StreamProvider<List<HaikuModel>> {
   /// 俳句一覧のストリームプロバイダー
   ///
-  /// Firestoreから俳句一覧をリアルタイムで監視します
+  /// Firestoreから俳句一覧をリアルタイムで監視します。
+  /// 投稿日時の降順（新しい順）でソートされます。
   const HaikuListStreamProvider._()
     : super(
         from: null,
@@ -109,7 +112,7 @@ final class HaikuListStreamProvider
   }
 }
 
-String _$haikuListStreamHash() => r'6d26ca5f57c81b59771ef7ab0e710db9da4bd3d6';
+String _$haikuListStreamHash() => r'beeb6149accd86083ff8f94f0b07b334a39e8adb';
 
 /// 俳句保存の状態管理プロバイダー
 ///
