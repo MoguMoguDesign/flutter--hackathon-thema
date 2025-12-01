@@ -35,11 +35,13 @@ HaikuRepository haikuRepository(Ref ref) {
 
 /// 俳句一覧のストリームプロバイダー
 ///
-/// Firestoreから俳句一覧をリアルタイムで監視します
+/// Firestoreから俳句一覧をリアルタイムで監視します。
+/// 投稿日時の降順（新しい順）でソートされます。
 @riverpod
 Stream<List<HaikuModel>> haikuListStream(Ref ref) {
   final repository = ref.watch(haikuRepositoryProvider);
-  return repository.watchAll();
+  final query = repository.collection.orderBy('createdAt', descending: true);
+  return repository.watchAll(query: query);
 }
 
 /// 俳句保存の状態管理プロバイダー
