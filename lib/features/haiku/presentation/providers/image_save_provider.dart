@@ -126,6 +126,14 @@ class ImageSave extends _$ImageSave {
     };
   }
 
+  /// 投稿中状態に設定する
+  ///
+  /// Firebase Functionsで画像は既に保存済みのため、
+  /// 投稿処理中のUI表示のみに使用。
+  void setPosting() {
+    state = const ImageSaveState.saving();
+  }
+
   /// 状態をリセットする
   void reset() {
     state = const ImageSaveState.initial();

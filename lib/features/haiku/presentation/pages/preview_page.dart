@@ -56,17 +56,17 @@ class PreviewPage extends ConsumerWidget {
     final generationState = ref.watch(imageGenerationProvider);
     final saveState = ref.watch(imageSaveProvider);
 
-    // 画像データを取得
-    final imageData = generationState.maybeWhen(
-      success: (data) => data,
-      orElse: () => null,
-    );
+    // 画像URLを取得 (Firebase Storageに既に保存済み)
+    final imageUrl = switch (generationState) {
+      ImageGenerationSuccess(:final imageUrl) => imageUrl,
+      _ => null,
+    };
 
     // 投稿処理中かどうか
-    final bool isPosting = saveState.maybeWhen(
-      saving: () => true,
-      orElse: () => false,
-    );
+    final bool isPosting = switch (saveState) {
+      ImageSaveSaving() => true,
+      _ => false,
+    };
 
     Future<void> handleBack() async {
       final shouldLeave = await AppConfirmDialog.show(
@@ -96,11 +96,10 @@ class PreviewPage extends ConsumerWidget {
 
     /// 俳句を投稿する
     ///
-    /// 1. Firebase Storageに画像を保存
-    /// 2. Firestoreに俳句データを保存
-    /// 3. 状態をリセットして一覧画面に遷移
+    /// Firebase Functionsで画像は既にStorageに保存済みのため、
+    /// Firestoreに俳句データを保存して一覧画面に遷移する。
     Future<void> handlePost() async {
-      if (imageData == null) {
+      if (imageUrl == null) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -117,31 +116,11 @@ class PreviewPage extends ConsumerWidget {
       final haikuNotifier = ref.read(haikuProvider.notifier);
       final imageGenNotifier = ref.read(imageGenerationProvider.notifier);
 
-      // 1. Firebase Storageに画像を保存
-      final imageUrl = await imageSaveNotifier.saveImage(
-        imageData: imageData,
-        firstLine: firstLine,
-        secondLine: secondLine,
-        thirdLine: thirdLine,
-      );
+      // 投稿状態を設定
+      imageSaveNotifier.setPosting();
 
-      if (imageUrl == null) {
-        // imageSaveProviderがエラー状態を設定済み
-        // ImageSaveState.errorからメッセージを取得して表示
-        final currentSaveState = ref.read(imageSaveProvider);
-        final errorMessage = currentSaveState.maybeWhen(
-          error: (message) => message,
-          orElse: () => '画像の保存に失敗しました',
-        );
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
-          );
-        }
-        return;
-      }
-
-      // 2. Firestoreに俳句データを保存
+      // Firestoreに俳句データを保存
+      // (画像はFunctions側で既にStorageに保存済み)
       try {
         await haikuNotifier.saveHaiku(
           firstLine: firstLine,
@@ -167,10 +146,11 @@ class PreviewPage extends ConsumerWidget {
             ),
           );
         }
+        imageSaveNotifier.reset();
         return;
       }
 
-      // 3. 状態をリセットして一覧画面に遷移
+      // 状態をリセットして一覧画面に遷移
       imageGenNotifier.reset();
       imageSaveNotifier.reset();
       if (context.mounted) {
@@ -205,10 +185,29 @@ class PreviewPage extends ConsumerWidget {
                             child: Container(
                               width: double.infinity,
                               color: Colors.grey.shade200,
-                              child: imageData != null
-                                  ? Image.memory(
-                                      imageData,
-                                      fit: BoxFit.contain, // 画像全体を表示
+                              child: imageUrl != null
+                                  ? Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.contain,
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                value:
+                                                    loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            );
+                                          },
                                       errorBuilder:
                                           (context, error, stackTrace) {
                                             return _ImageErrorWidget();
@@ -237,7 +236,7 @@ class PreviewPage extends ConsumerWidget {
                         ? const _PostingIndicator()
                         : AppFilledButton(
                             label: 'Mya句に投稿する',
-                            onPressed: imageData != null ? handlePost : null,
+                            onPressed: imageUrl != null ? handlePost : null,
                           ),
                   ),
                   const SizedBox(height: 32),

@@ -12,7 +12,8 @@ part of 'image_generation_provider.dart';
 ///
 /// 俳句から画像を生成する状態管理を提供する。
 /// HaikuPromptService を使用してプロンプトを生成し、
-/// ImageGenerationRepository を使用して画像を生成する。
+/// FirebaseFunctionsService を使用して画像を生成・保存する。
+/// 生成された画像はFirebase Storageに保存され、URLが返される。
 ///
 /// 使用例:
 /// ```dart
@@ -34,7 +35,8 @@ const imageGenerationProvider = ImageGenerationProvider._();
 ///
 /// 俳句から画像を生成する状態管理を提供する。
 /// HaikuPromptService を使用してプロンプトを生成し、
-/// ImageGenerationRepository を使用して画像を生成する。
+/// FirebaseFunctionsService を使用して画像を生成・保存する。
+/// 生成された画像はFirebase Storageに保存され、URLが返される。
 ///
 /// 使用例:
 /// ```dart
@@ -54,7 +56,8 @@ final class ImageGenerationProvider
   ///
   /// 俳句から画像を生成する状態管理を提供する。
   /// HaikuPromptService を使用してプロンプトを生成し、
-  /// ImageGenerationRepository を使用して画像を生成する。
+  /// FirebaseFunctionsService を使用して画像を生成・保存する。
+  /// 生成された画像はFirebase Storageに保存され、URLが返される。
   ///
   /// 使用例:
   /// ```dart
@@ -95,13 +98,14 @@ final class ImageGenerationProvider
   }
 }
 
-String _$imageGenerationHash() => r'0b8105bfe2308a97f17a159b5d5ea7398546e88d';
+String _$imageGenerationHash() => r'142ec906bbc74d900a6457e4c064e11f38f86834';
 
 /// 画像生成プロバイダー
 ///
 /// 俳句から画像を生成する状態管理を提供する。
 /// HaikuPromptService を使用してプロンプトを生成し、
-/// ImageGenerationRepository を使用して画像を生成する。
+/// FirebaseFunctionsService を使用して画像を生成・保存する。
+/// 生成された画像はFirebase Storageに保存され、URLが返される。
 ///
 /// 使用例:
 /// ```dart

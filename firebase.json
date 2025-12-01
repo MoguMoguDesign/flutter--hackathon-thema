@@ -12,12 +12,34 @@
     }
   },
   "firestore": {
-    "rules": "firestore.rules"
+    "database": "(default)",
+    "location": "asia-northeast1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   },
-  "storage": [
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "functions": [
     {
-      "bucket": "myaku-haiku.firebasestorage.app",
-      "rules": "storage.rules"
+      "source": "functions",
+      "codebase": "default",
+      "runtime": "python313",
+      "ignore": [
+        "venv",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
     }
-  ]
+  ],
+  "emulators": {
+    "dataconnect": {
+      "dataDir": "dataconnect/.dataconnect/pgliteData"
+    }
+  },
+  "dataconnect": {
+    "source": "dataconnect"
+  }
 }
