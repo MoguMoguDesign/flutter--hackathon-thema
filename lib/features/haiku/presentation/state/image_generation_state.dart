@@ -16,8 +16,6 @@
 // - All changes must pass: analyze, format, test
 //
 
-import 'dart:typed_data';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'image_generation_state.freezed.dart';
@@ -26,6 +24,7 @@ part 'image_generation_state.freezed.dart';
 ///
 /// 画像生成の進行状態を表現する。
 /// 初期状態、生成中、成功、エラーの4つの状態を持つ。
+/// Firebase Functions経由で画像を生成し、URLを受け取る。
 ///
 /// 使用例:
 /// ```dart
@@ -33,7 +32,7 @@ part 'image_generation_state.freezed.dart';
 /// state.when(
 ///   initial: () => print('初期状態'),
 ///   loading: (progress) => print('生成中: ${progress * 100}%'),
-///   success: (imageData) => print('成功'),
+///   success: (imageUrl) => print('成功: $imageUrl'),
 ///   error: (message) => print('エラー: $message'),
 /// );
 /// ```
@@ -54,8 +53,8 @@ class ImageGenerationState with _$ImageGenerationState {
   /// 生成成功状態
   ///
   /// 画像生成が成功した状態。
-  /// [imageData] 生成された画像データ
-  const factory ImageGenerationState.success(Uint8List imageData) =
+  /// [imageUrl] Firebase Storageに保存された画像のURL
+  const factory ImageGenerationState.success(String imageUrl) =
       ImageGenerationSuccess;
 
   /// エラー状態

@@ -128,12 +128,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( double progress)?  loading,TResult Function( Uint8List imageData)?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( double progress)?  loading,TResult Function( String imageUrl)?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ImageGenerationInitial() when initial != null:
 return initial();case ImageGenerationLoading() when loading != null:
 return loading(_that.progress);case ImageGenerationSuccess() when success != null:
-return success(_that.imageData);case ImageGenerationError() when error != null:
+return success(_that.imageUrl);case ImageGenerationError() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( double progress)  loading,required TResult Function( Uint8List imageData)  success,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( double progress)  loading,required TResult Function( String imageUrl)  success,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case ImageGenerationInitial():
 return initial();case ImageGenerationLoading():
 return loading(_that.progress);case ImageGenerationSuccess():
-return success(_that.imageData);case ImageGenerationError():
+return success(_that.imageUrl);case ImageGenerationError():
 return error(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( double progress)?  loading,TResult? Function( Uint8List imageData)?  success,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( double progress)?  loading,TResult? Function( String imageUrl)?  success,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case ImageGenerationInitial() when initial != null:
 return initial();case ImageGenerationLoading() when loading != null:
 return loading(_that.progress);case ImageGenerationSuccess() when success != null:
-return success(_that.imageData);case ImageGenerationError() when error != null:
+return success(_that.imageUrl);case ImageGenerationError() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -291,10 +291,10 @@ as double,
 
 
 class ImageGenerationSuccess implements ImageGenerationState {
-  const ImageGenerationSuccess(this.imageData);
+  const ImageGenerationSuccess(this.imageUrl);
   
 
- final  Uint8List imageData;
+ final  String imageUrl;
 
 /// Create a copy of ImageGenerationState
 /// with the given fields replaced by the non-null parameter values.
@@ -306,16 +306,16 @@ $ImageGenerationSuccessCopyWith<ImageGenerationSuccess> get copyWith => _$ImageG
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImageGenerationSuccess&&const DeepCollectionEquality().equals(other.imageData, imageData));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImageGenerationSuccess&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(imageData));
+int get hashCode => Object.hash(runtimeType,imageUrl);
 
 @override
 String toString() {
-  return 'ImageGenerationState.success(imageData: $imageData)';
+  return 'ImageGenerationState.success(imageUrl: $imageUrl)';
 }
 
 
@@ -326,7 +326,7 @@ abstract mixin class $ImageGenerationSuccessCopyWith<$Res> implements $ImageGene
   factory $ImageGenerationSuccessCopyWith(ImageGenerationSuccess value, $Res Function(ImageGenerationSuccess) _then) = _$ImageGenerationSuccessCopyWithImpl;
 @useResult
 $Res call({
- Uint8List imageData
+ String imageUrl
 });
 
 
@@ -343,10 +343,10 @@ class _$ImageGenerationSuccessCopyWithImpl<$Res>
 
 /// Create a copy of ImageGenerationState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? imageData = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? imageUrl = null,}) {
   return _then(ImageGenerationSuccess(
-null == imageData ? _self.imageData : imageData // ignore: cast_nullable_to_non_nullable
-as Uint8List,
+null == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

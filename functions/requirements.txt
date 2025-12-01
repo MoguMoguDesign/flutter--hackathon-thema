@@ -1,0 +1,4 @@
+# Firebase Functions Python dependencies
+firebase-functions>=0.4.0
+firebase-admin>=6.0.0
+google-generativeai>=0.8.0

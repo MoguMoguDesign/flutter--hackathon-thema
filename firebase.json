@@ -19,5 +19,12 @@
       "bucket": "myaku-haiku.firebasestorage.app",
       "rules": "storage.rules"
     }
+  ],
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "runtime": "python312"
+    }
   ]
 }

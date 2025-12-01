@@ -20,8 +20,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:flutterhackthema/features/haiku/presentation/state/image_generation_state.dart';
 import 'package:flutterhackthema/features/haiku/service/haiku_prompt_service.dart';
-import 'package:flutterhackthema/shared/data/repositories/image_generation_repository.dart';
-import 'package:flutterhackthema/shared/service/gemini_api_exception.dart';
+import 'package:flutterhackthema/shared/service/firebase_functions_exception.dart';
+import 'package:flutterhackthema/shared/service/firebase_functions_service.dart';
 
 part 'image_generation_provider.g.dart';
 
@@ -29,7 +29,8 @@ part 'image_generation_provider.g.dart';
 ///
 /// 俳句から画像を生成する状態管理を提供する。
 /// HaikuPromptService を使用してプロンプトを生成し、
-/// ImageGenerationRepository を使用して画像を生成する。
+/// FirebaseFunctionsService を使用して画像を生成・保存する。
+/// 生成された画像はFirebase Storageに保存され、URLが返される。
 ///
 /// 使用例:
 /// ```dart
@@ -52,6 +53,9 @@ class ImageGeneration extends _$ImageGeneration {
 
   /// 俳句から画像を生成する
   ///
+  /// Firebase Functions経由でGemini APIを呼び出し、
+  /// 生成された画像をFirebase Storageに保存してURLを取得する。
+  ///
   /// [firstLine] 上の句
   /// [secondLine] 中の句
   /// [thirdLine] 下の句
@@ -73,27 +77,21 @@ class ImageGeneration extends _$ImageGeneration {
 
       state = const ImageGenerationState.loading(0.3);
 
-      // 画像生成
-      final repository = ref.read(imageGenerationRepositoryProvider);
-      final result = await repository.generateImage(prompt: prompt);
+      // Firebase Functions経由で画像生成・保存
+      final functionsService = ref.read(firebaseFunctionsServiceProvider);
+      final imageUrl = await functionsService.generateAndSaveImage(
+        prompt: prompt,
+        firstLine: firstLine,
+        secondLine: secondLine,
+        thirdLine: thirdLine,
+      );
 
-      state = ImageGenerationState.success(result.imageData);
-    } on GeminiApiException catch (e) {
-      state = ImageGenerationState.error(_mapErrorMessage(e));
+      state = ImageGenerationState.success(imageUrl);
+    } on FunctionsException catch (e) {
+      state = ImageGenerationState.error(e.message);
     } catch (e) {
       state = const ImageGenerationState.error('予期しないエラーが発生しました');
     }
-  }
-
-  /// 例外をユーザー向けメッセージに変換する
-  String _mapErrorMessage(GeminiApiException e) {
-    return switch (e) {
-      NetworkException() => 'ネットワーク接続を確認してください',
-      TimeoutException() => '生成に時間がかかりすぎました。再試行してください',
-      ApiErrorException() => '画像生成に失敗しました。再試行してください',
-      InvalidResponseException() => '予期しないエラーが発生しました',
-      ApiKeyMissingException() => 'APIキーが設定されていません。環境変数を確認してください',
-    };
   }
 
   /// 状態をリセットする
