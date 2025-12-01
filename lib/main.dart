@@ -25,6 +25,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutterhackthema/app/app_router/app_router.dart';
 import 'package:flutterhackthema/firebase_options.dart';
 import 'package:flutterhackthema/shared/constants/app_colors.dart';
+import 'package:flutterhackthema/shared/service/auth_service.dart';
 
 /// アプリケーションのエントリーポイント
 ///
@@ -56,6 +57,18 @@ Future<void> main() async {
     } catch (e) {
       // Web版では persistence 設定がサポートされていない場合がある
       debugPrint('Firestoreキャッシュ設定エラー (無視): $e');
+    }
+
+    // 匿名認証でサインイン
+    // Firebase Functions呼び出しに認証が必要なため、起動時に認証を実行
+    try {
+      debugPrint('匿名認証開始');
+      final authService = AuthService();
+      final user = await authService.ensureAuthenticated();
+      debugPrint('匿名認証完了: uid=${user.uid}');
+    } catch (e) {
+      // 匿名認証が無効の場合はログ出力のみ（Firebase Consoleで有効化が必要）
+      debugPrint('匿名認証エラー (Firebase Consoleで有効化が必要): $e');
     }
   } catch (e, stackTrace) {
     // Firebase初期化エラーをログ出力
